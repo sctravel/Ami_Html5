@@ -1,0 +1,26 @@
+{
+  "name": "AMI_HTML5",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "start": "node app.js"
+  },
+  "dependencies": {
+    "express": "3.4.8",
+    "config": "*",
+    "ejs":"*",
+    "stylus":"*",
+    "async":"*",
+    "mysql":"*",
+    "memory-cache":"*",
+    "nodemailer": "0.3.x",
+    "dateformat":"*",
+    "passport":"*",
+    "passport-local":"*",
+    "passport-facebook":"*",
+    "passport-facebook-token":"*",
+    "connect-flash":"*",
+    "log4js":"*",
+    "request":"*"
+  }
+}

@@ -1,0 +1,15 @@
+Caught exception: ReferenceError: serverOptions is not defined
+Express server listening on port 3000
+Express server listening on port 3000
+GET /
+Express server listening on port 3000
+GET /
+GET /
+Express server listening on port 3000
+GET /
+GET /assets/css/style.css
+GET /assets/css/simple-sidebar.css
+GET /bootstrap/dist/css/bootstrap.min.css
+GET /bootstrap/dist/fonts/glyphicons-halflings-regular.woff2
+GET /bootstrap/dist/js/bootstrap.min.js
+GET /jquery/dist/jquery.js
