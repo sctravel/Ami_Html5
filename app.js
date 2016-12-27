@@ -125,6 +125,13 @@ app.get('/', function (req,res){
     res.render('index',{user: req.user});
 });
 
+app.get('/audio', function (req,res){
+    console.log(req.user);
+    req.session.lastPage = '/';
+
+    res.render('recorder',{user: req.user});
+});
+
 
 app.get('/contactus', function (req,res){
     req.session.lastPage = '/contactus';
