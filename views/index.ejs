@@ -1,4 +1,5 @@
-<html lang="en" ng-app="willGiveApp" xmlns="http://www.w3.org/1999/html">
+<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -6,11 +7,15 @@
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
 </head>
 <body style="">
+
 <div style="padding-top: 5%; height:auto; min-height: 90%;  margin: 0 auto -50px">
     <div class="container" >
         <h2 class="form-signin-heading text-center " style="font-family : Nevis">AMI Paces Login</h2>
         <hr class="greenLine" >
+        <% include partials/videoPlayer.ejs %>
+        <hr class="greenLine" >
 
+        <% include partials/timer.ejs %>
         <div class="form-signin text-center" style="padding-top: 10px">
             <form id="userSignInForm"  action="/services/login/signin" method="post">
                 <div id="signInReporter" style="padding-bottom: 2%"></div>
@@ -47,6 +52,7 @@
         </div>
     </div>
     <h3 class="form-signin-heading text-center " style="font-family : Nevis">Be in a QUIET place</h3>
+    <hr/>
 </div>
 <script src="/jquery/dist/jquery.min.js"></script>
 <script src="/jquery-validation/dist/jquery.validate.js"></script>
@@ -109,6 +115,18 @@
      })
      });*/
 </script>
+
+
+<script>
+    startTimer(10);
+    function test() {
+        alert("test video on end!");
+    }
+    addVideoOnEndFunction(test);
+    startVideo("/assets/Video/HotDogSquare.mp4");
+
+</script>
+<% include partials/footer.ejs%>
 </body>
 
 </html>

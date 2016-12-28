@@ -1,0 +1,60 @@
+<style type="text/css">
+    svg {
+        display: block;
+        margin: 50px auto;
+    }
+
+    #loader
+    { fill: #0088cc }
+
+    #border
+    { fill: #00517a }
+</style>
+
+<svg id="timer" timeout="10" r="50" width="100" height="100" viewbox="0 0 100 100">
+    <path id="border" transform="translate(50, 50)"/>
+    <path id="loader" transform="translate(50, 50) scale(.84)"/>
+</svg>
+
+<script>
+    var timerId = null;
+    var timer = document.getElementById('timer')
+    var loader = document.getElementById('loader')
+    var border = document.getElementById('border')
+    var radius = timer.getAttribute("r")
+    var π = Math.PI
+    function startTimer(timeout) {
+
+         var α = 0
+            , t = timeout / 360 * 1000; //draw 1 degree every t milli-seconds
+
+        (function draw() {
+            α++;
+            if (α >= 360) {
+                $('#next').click(); // timeout, auto click next button
+            }
+            α %= 360;
+            var r = ( α * π / 180 )
+                , x = Math.sin(r) * radius
+                , y = Math.cos(r) * -radius
+                , mid = ( α > 180 ) ? 1 : 0
+                , anim = 'M 0 0 v -'+radius+' A '+radius+' '+radius+' 1 '
+                + mid + ' 1 '
+                + x + ' '
+                + y + ' z';
+            //[x,y].forEach(function( d ){
+            //  d = Math.round( d * 1e3 ) / 1e3;
+            //});
+
+            loader.setAttribute('d', anim);
+            border.setAttribute('d', anim);
+
+            timerId = setTimeout(draw, t); // Redraw
+        })();
+    }
+    function stopTimer() {
+        if(timerId!=null) {
+            clearTimeout(timerId);
+        }
+    }
+</script>

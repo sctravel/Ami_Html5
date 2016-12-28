@@ -1,0 +1,29 @@
+<div id="videoContent" class="text-center">
+    <video id="video" width="400" height="400" autoplay></video>
+</div>
+<script>
+    function startVideo(source) {
+        var video = document.getElementById('video');
+
+        // Get access to the camera!
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Not adding `{ audio: true }` since we only want video now
+            navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(stream) {
+                video.src = source;
+                video.play();
+            }, function(error){
+                alert("Please make sure your camera and micphone are correctly set up.");
+            });
+        } else {
+            alert("Please make sure your browser support camera and micphone.");
+        }
+
+        var video = document.getElementById('video');
+    }
+
+    function addVideoOnEndFunction(func) {
+        var video = document.getElementById('video');
+        video.onended = func;
+    }
+
+</script>
