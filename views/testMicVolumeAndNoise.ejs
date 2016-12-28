@@ -61,23 +61,22 @@
 
     </style>
 </head>
-<body background="assets/images/background.png">
+<body>
 <div id="hiddenVoice">
     <div id="viz">
         <canvas id="analyser" width="1024" height="500"></canvas>
-        <canvas id="wavedisplay" width="1024" height="500"></canvas>
-    </div>
-    <div id="controls">
+
+
         <img id="record" src="images/mic128.png" onclick="toggleRecording(this);">
         <a id="save" href="#"><img src="images/save.svg"></a>
         <div id="button">
-            <button id="next" type="button" class="text-center" font-size="16px">Next</button>
+            <button id="next" type="button" class="btn btn-primary text-center" onclick="window.location.href='/interview'">Next</button>
         </div>
     </div>
 </div>
 
 <script>
-    function initAudio() {
+    function initAndTestAudio() {
         if (!navigator.getUserMedia)
             navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
         if (!navigator.cancelAnimationFrame)
@@ -110,7 +109,8 @@
                 alert("no mic!!");
             });
     }
-    initAudio();
+
+    initAndTestAudio();
 
     $('#next').click(function () {
         window.location.href = "/interview";
