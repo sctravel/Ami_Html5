@@ -1,0 +1,110 @@
+CREATE TABLE types (
+  type          integer unsigned NOT NULL PRIMARY KEY,
+  format       varchar(255) DEFAULT NULL, -- response type, could be: 'audio', 'video', 'image', 'text', 'xml', etc.
+  name          varchar(64) default NULL, -- type name
+  itext         varchar(64) NOT NULL, -- instruction (or banner) text
+  audio         varchar(255) NOT NULL,
+  video         varchar(255) default NULL,
+  timeout       real default NULL, -- timeout is in seconds. zero or NULL means waiting for users' action
+  replay        integer default 0,
+  addition      varchar(1024) default NULL,
+  note          varchar(255) DEFAULT NULL
+);
+CREATE INDEX types_type ON types (type);
+
+sqlite> .separator "\t"
+sqlite> .import no_yes.csv types
+
+type	name    itext	audio	timeout	itimeout	etimeout	mtimeout	rformat	note
+1044	Repeat  REPEAT	1044-B.mp3	0	0	0	30	audio	nothing
+
+-- Items
+CREATE TABLE items (
+  type          integer unsigned NOT NULL,
+  item          integer unsigned NOT NULL,
+  itimeout      real default NULL, -- i, e, m are the init, end, max timeout.
+  etimeout      real default NULL,
+  mtimeout      real default NULL,
+  itext         varchar(1024) default NULL, -- instruction (or banner) text.
+  screen        varchar(1024) default NULL,
+  audio         varchar(1024) default NULL,
+  video         varchar(1024) default NULL,
+  initargs      varchar(1024) default NULL,
+  activenext    varchar(8) default NULL,
+  difficulty    real default NULL,
+  subtype       integer unsigned default NULL,
+  audiotext    varchar(1024) default NULL,
+  enabled       varchar(8) default 'YES',
+  flag          integer default NULL,
+  xrinfo        varchar(1024) default NULL, -- the information for transcribers and raters
+  UNIQUE        (type, item),
+  FOREIGN KEY(type) REFERENCES types(type)
+);
+CREATE INDEX items_type ON items (type);
+CREATE INDEX items_item ON items (item);
+
+-- Tests
+CREATE TABLE tests (
+test          integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+name          varchar(1024) default NULL,
+note          varchar(1024) default NULL
+);
+CREATE INDEX tests_name ON tests (name);
+
+-- Test items
+CREATE TABLE testitems (
+test          integer NOT NULL,
+type          integer unsigned NOT NULL,
+item          integer unsigned NOT NULL,
+seq           integer unsigned NOT NULL,
+UNIQUE        (test, type, item),
+FOREIGN KEY(test) REFERENCES tests(test),
+FOREIGN KEY(type) REFERENCES types(type),
+FOREIGN KEY(type, item) REFERENCES items (type, item) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE INDEX testitems_type ON testitems (type);
+CREATE INDEX testitems_item ON testitems (item);
+CREATE INDEX testitems_seq ON testitems (seq);
+
+
+CREATE TABLE quicklits (
+string        varchar(64) NOT NULL,
+word          varchar(1) default 'N',
+level         integer default 0,
+used          varchar(1) default 'N',
+UNIQUE        (string)
+);
+CREATE INDEX quicklits_string ON quicklits (string);
+
+-- Names
+CREATE TABLE names (
+name        varchar(64) NOT NULL,
+gender      varchar(1) default 'F',
+nameset     integer unsigned NOT NULL
+);
+CREATE INDEX names_name ON names (name);
+CREATE INDEX names_gender ON names (gender);
+CREATE INDEX names_nameset ON names (nameset);
+
+-- photos
+CREATE TABLE photos (
+subjectid   integer NOT NULL PRIMARY KEY AUTOINCREMENT,
+filename    varchar(1024) NOT NULL,
+gender      varchar(1) default 'F',
+photoset    integer unsigned NOT NULL
+);
+CREATE INDEX photos_filename ON photos (filename);
+CREATE INDEX photos_gender ON photos (gender);
+CREATE INDEX photos_photoset ON photos (photoset);
+
+-- photoes
+CREATE TABLE photoes (
+subjectid          integer NOT NULL,
+filename          varchar(1024) NOT NULL,
+feeling      varchar(1024) NOT NULL,
+FOREIGN KEY(subjectid) REFERENCES photos (subjectid) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE INDEX photoes_filename ON photoes (filename);
+CREATE INDEX photoes_feeling ON photoes (feeling);
+
+

@@ -61,20 +61,57 @@
 
     </style>
 </head>
-<body background="assets/images/background.png">
-<div id="viz">
-    <canvas id="analyser" width="1024" height="500"></canvas>
-    <canvas id="wavedisplay" width="1024" height="500"></canvas>
-</div>
-<div id="controls">
-    <img id="record" src="images/mic128.png" onclick="toggleRecording(this);">
-    <a id="save" href="#"><img src="images/save.svg"></a>
-    <div id="button">
-        <button id="next" type="button" class="text-center" font-size="16px">Next</button>
+<body>
+<div id="hiddenVoice">
+    <div id="viz">
+        <canvas id="analyser" width="1024" height="500"></canvas>
+
+
+        <img id="record" src="images/mic128.png" onclick="toggleRecording(this);">
+        <a id="save" href="#"><img src="images/save.svg"></a>
+        <div id="button">
+            <button id="next" type="button" class="btn btn-primary text-center" onclick="window.location.href='/interview'">Next</button>
+        </div>
     </div>
 </div>
 
 <script>
+    function initAndTestAudio() {
+        if (!navigator.getUserMedia)
+            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+        if (!navigator.cancelAnimationFrame)
+            navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
+        if (!navigator.requestAnimationFrame)
+            navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
+
+        navigator.getUserMedia(
+            {
+                "audio": {
+                    "mandatory": {
+                        "googEchoCancellation": "false",
+                        "googAutoGainControl": "false",
+                        "googNoiseSuppression": "false",
+                        "googHighpassFilter": "false"
+                    },
+                    "optional": []
+                },
+            }, function(stream) {
+                var audio = new Audio('/assets/Audio/items/2000.2.mp3');
+                audio.onended = function() {
+                    alert("you have mic!!");
+                    //toggleRecording(this);
+                };
+                audio.play();
+
+            }, function(e) {
+                var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
+                audio.play();
+                alert("no mic!!");
+            });
+    }
+
+    initAndTestAudio();
+
     $('#next').click(function () {
         window.location.href = "/interview";
     })
