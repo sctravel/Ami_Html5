@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" >
+    <head>
+        <meta charset="utf-8" />
+        <meta name="author" content="Script Tutorials" />
+        <title>AMI_Paces</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <!-- attach CSS styles -->
+        <link href="/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+        <%activeMenu = "Home"%>
+    </head>
+
+
+
+    <body>
+    <!--  BODY PAGE CONTENT -->
+        <!-- attach JavaScripts -->
+
+        <!-- first section - Home -->
+        <div id="home" class="home">
+            <div class="text-center">
+                <h1 style="font-family: Brush Script MT; font-size:80px;font-style: normal ">AMI Paces</h1>
+
+
+            </div>
+        </div>
+
+    <div id="content">
+        <video id="video" width="400" height="400" autoplay></video>
+        <canvas id="canvas" width="400" height="400" disabled="true"></canvas>
+        <button id="snap">Snap Photo</button>
+
+        <hr/>
+        <audio id="audio" controls>
+            <source src="http://www.tmbg.com/_media/_pod/TMBGPodcast21A.mp3" type="audio/mp3">
+        </audio>
+        <hr/>
+
+    </div>
+    <!-- /footer -->
+    <script>
+        var video = document.getElementById('video');
+
+        // Get access to the camera!
+        if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+            // Not adding `{ audio: true }` since we only want video now
+            navigator.mediaDevices.getUserMedia({ video: true }).then(function(stream) {
+                video.src = window.URL.createObjectURL(stream);
+                video.play();
+            });
+        }
+
+        // Elements for taking the snapshot
+        var canvas = document.getElementById('canvas');
+        var context = canvas.getContext('2d');
+        var video = document.getElementById('video');
+
+        // Trigger photo take
+        document.getElementById("snap").addEventListener("click", function() {
+            document.getElementById("snap").setAttribute("disabled", "false");
+            context.drawImage(video, 0, 0, 300, 300);
+        });
+    </script>
+    <script src="/jquery/dist/jquery.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+
+
+    </body>
+
+</html>

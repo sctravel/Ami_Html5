@@ -1,0 +1,10 @@
+{
+  "emailCredentials" : {
+    "service" : "Gmail",
+    "auth" : {
+      "user" : "willgiveplatform@gmail.com",
+      "pass" : "WillGive2015"
+    }
+  },
+  "siteUrl" : "localhost:3000"
+}
