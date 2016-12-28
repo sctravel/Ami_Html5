@@ -7,7 +7,7 @@ var http = require('http');
 var https = require('https');
 var path = require('path');
 var passport = require('passport');
-
+//var constants = require('src/common/constants.js');
 var flash = require('connect-flash');
 
 global.fs = require('fs');
@@ -74,6 +74,8 @@ if ('development' == app.get('env')) {
 }
 
 
+var configUserLoginRoute = require('./routes/userLoginRoute');
+configUserLoginRoute(app);
 ///////////////////////////////////////////////////////////////////////////
 // SSL Certification
 ///////////////////////////////////////////////////////////////////////////
@@ -84,36 +86,18 @@ if ('development' == app.get('env')) {
  ca:  fs.readFileSync('./intermediate.pem'),
  cert: fs.readFileSync('./my_cert.pem')
  };
-
+*/
 
  //User login, need to separate from recipient login
  function isLoggedIn(req, res, next) {
- if (req.isAuthenticated() && ( constants.login.LOGIN_PROVIDER.FACEBOOK==req.user.provider || constants.login.LOGIN_PROVIDER.WILLGIVE==req.user.provider)) {
- logger.debug(req.user);
- return next();
- } else if( req.isAuthenticated() && constants.login.LOGIN_PROVIDER.RECIPIENT==req.user.provider){
- req.flash('error','You are logged in as a Charity. Please use your user account to login.');
- req.logout();
+     if (req.isAuthenticated()) {
+         logger.debug(req.user);
+         return next();
+     } else {
+         res.redirect("/");
+     }
  }
- res.redirect("/login/signin");
- }
- //User login, need to separate from recipient login
- function isLoggedInAsRecipient(req, res, next) {
- if (req.isAuthenticated() && constants.login.LOGIN_PROVIDER.RECIPIENT==req.user.provider) {
- logger.debug(req.user);
- return next();
- } else if( req.isAuthenticated() && constants.login.LOGIN_PROVIDER.RECIPIENT!=req.user.provider){
- req.flash('error','You are logged in as a user. Please use your Charity account to login.');
- req.logout();
- }
- res.redirect("/recipient/login");
- }
-
  exports.isLoggedIn = isLoggedIn;
- exports.isLoggedInAsRecipient = isLoggedInAsRecipient;
-
- */
-
 
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
@@ -122,7 +106,7 @@ app.get('/', function (req,res){
     console.log(req.user);
     req.session.lastPage = '/';
 
-    res.render('index',{user: req.user});
+    res.render('index',{error: req.flash('error'), success: req.flash('success'), message:req.flash('message') });
 });
 
 app.get('/audio', function (req,res){
@@ -132,6 +116,12 @@ app.get('/audio', function (req,res){
     res.render('recorder',{user: req.user});
 });
 
+app.get('/interview', function (req,res){
+    console.log(req.user);
+    req.session.lastPage = '/';
+
+    res.render('game',{user: req.user});
+});
 
 app.get('/contactus', function (req,res){
     req.session.lastPage = '/contactus';
