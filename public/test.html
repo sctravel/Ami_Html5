@@ -1,12 +1,77 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
-    <meta charset="UTF-8">
-    <title>Title</title>
+    <script src="https://sdk.amazonaws.com/js/aws-sdk-2.6.10.min.js"></script>
+    <script src="./app.js"></script>
+    <script>
+        function getHtml(template) {
+            return template.join('\n');
+        }
+        listAlbums();
+
+
+
+
+        function listAlbums() {
+
+            var albumBucketName = 'amipaces';
+            var IdentityPoolId = 'us-west-2:3ddb9fdb-10b7-4f0a-b34b-f53afaab6464';
+            var bucketRegion = 'us-west-2';
+
+            AWS.config.update({
+                region: bucketRegion,
+                credentials: new AWS.CognitoIdentityCredentials({
+                    IdentityPoolId: IdentityPoolId
+                })
+            });
+
+
+            var s3 = new AWS.S3({
+                apiVersion: '2006-03-01',
+                params: {Bucket: 'amipaces'}
+            });
+
+            s3.listObjects({Delimiter: '/'}, function(err, data) {
+                if (err) {
+                    return alert('There was an error listing your albums: ' + err.message);
+                } else {
+                    var albums = data.CommonPrefixes.map(function(commonPrefix) {
+                        var prefix = commonPrefix.Prefix;
+                        var albumName = decodeURIComponent(prefix.replace('/', ''));
+                        return getHtml([
+                            '<li>',
+                            '<span onclick="deleteAlbum(\'' + albumName + '\')">X</span>',
+                            '<span onclick="viewAlbum(\'' + albumName + '\')">',
+                            albumName,
+                            '</span>',
+                            '</li>'
+                        ]);
+                    });
+                    var message = albums.length ?
+                        getHtml([
+                            '<p>Click on an album name to view it.</p>',
+                            '<p>Click on the X to delete the album.</p>'
+                        ]) :
+                        '<p>You do not have any albums. Please Create album.';
+                    var htmlTemplate = [
+                        '<h2>Albums</h2>',
+                        message,
+                        '<ul>',
+                        getHtml(albums),
+                        '</ul>',
+                        '<button onclick="createAlbum(prompt(\'Enter Album Name:\'))">',
+                        'Create New Album',
+                        '</button>'
+                    ]
+                    document.getElementById('app').innerHTML = getHtml(htmlTemplate);
+                }
+            });
+        }
+    </script>
 </head>
 <body>
-
-Hello baby
-
+<h1>My S3 test App</h1>
+<div id="app"></div>
 </body>
 </html>
+

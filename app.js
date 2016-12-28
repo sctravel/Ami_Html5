@@ -116,6 +116,11 @@ app.get('/testMic', function (req,res){
     res.render('testMicVolumeAndNoise',{user: req.user});
 });
 
+
+app.get('/s3test', function (req,res){
+    res.redirect('/test.html');
+});
+
 app.get('/audio', function (req,res){
     console.log(req.user);
     req.session.lastPage = '/';
