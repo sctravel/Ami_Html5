@@ -109,6 +109,12 @@ app.get('/', function (req,res){
     res.render('index',{error: req.flash('error'), success: req.flash('success'), message:req.flash('message') });
 });
 
+
+app.get('/s3test', function (req,res){
+    res.redirect('/test.html');
+});
+
+
 app.get('/audio', function (req,res){
     console.log(req.user);
     req.session.lastPage = '/';
