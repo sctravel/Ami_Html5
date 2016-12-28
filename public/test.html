@@ -14,16 +14,15 @@
 
         function listAlbums() {
 
-            var albumBucketName = 'amipaces';
-            var IdentityPoolId = 'us-west-2:3ddb9fdb-10b7-4f0a-b34b-f53afaab6464';
-            var bucketRegion = 'us-west-2';
-
-            AWS.config.update({
+            //todo: need to do in safer way
+           /* AWS.config.update({
                 region: bucketRegion,
                 credentials: new AWS.CognitoIdentityCredentials({
                     IdentityPoolId: IdentityPoolId
                 })
-            });
+            });*/
+
+            AWS.config.update({accessKeyId: '', secretAccessKey: '', region: bucketRegion});
 
 
             var s3 = new AWS.S3({
@@ -49,18 +48,18 @@
                     });
                     var message = albums.length ?
                         getHtml([
-                            '<p>Click on an album name to view it.</p>',
-                            '<p>Click on the X to delete the album.</p>'
+                            '<p>Click on an video to view it.</p>',
+                            '<p>Click on the X to delete the video.</p>'
                         ]) :
-                        '<p>You do not have any albums. Please Create album.';
+                        '<p>You do not have any videos. Please Create video.';
                     var htmlTemplate = [
-                        '<h2>Albums</h2>',
+                        '<h2>videos</h2>',
                         message,
                         '<ul>',
                         getHtml(albums),
                         '</ul>',
-                        '<button onclick="createAlbum(prompt(\'Enter Album Name:\'))">',
-                        'Create New Album',
+                        '<button onclick="createAlbum(prompt(\'Enter video Name:\'))">',
+                        'Create New video',
                         '</button>'
                     ]
                     document.getElementById('app').innerHTML = getHtml(htmlTemplate);
