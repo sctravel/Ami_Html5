@@ -109,6 +109,13 @@ app.get('/', function (req,res){
     res.render('index',{error: req.flash('error'), success: req.flash('success'), message:req.flash('message') });
 });
 
+app.get('/adjustVolume', function (req,res){
+    res.render('adjustVolume',{user: req.user});
+});
+app.get('/testMic', function (req,res){
+    res.render('testMicVolumeAndNoise',{user: req.user});
+});
+
 app.get('/audio', function (req,res){
     console.log(req.user);
     req.session.lastPage = '/';

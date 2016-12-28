@@ -43,12 +43,12 @@ module.exports = function(app) {
 
     app.post('/services/login/signin',
         passport.authenticate('user',
-            { failureRedirect: '/audio', failureFlash: true }
+            { failureRedirect: '/', failureFlash: true }
         ),
         function(req,res){
             logger.info(req.body);
             logger.info("sign-in request");
-            res.redirect("/interview");
+            res.redirect("/adjustVolume");
         }
     );
 
