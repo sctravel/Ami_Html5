@@ -118,11 +118,7 @@
 
 
 <script>
-    startTimer(10);
-    function test() {
-        alert("test video on end!");
-    }
-    addVideoOnEndFunction(test);
+    startTimer(10,50, function(){alert("timeout")});
     startVideo("/assets/Video/HotDogSquare.mp4");
 
 </script>
