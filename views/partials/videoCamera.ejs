@@ -1,0 +1,33 @@
+    <div id="cameraContent" class="text-center">
+        <video id="camera" width="400" height="400" autoplay></video>
+    </div>
+    <script>
+        function startCamera() {
+            var camera = document.getElementById('camera');
+
+            // Get access to the camera!
+            if(navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+                // Not adding `{ audio: true }` since we only want video now
+                navigator.mediaDevices.getUserMedia({ audio: true, video: true }).then(function(stream) {
+                    camera.src = window.URL.createObjectURL(stream);
+                    camera.play();
+                }, function(error){
+                    alert("Please make sure your camera and micphone are correctly set up.");
+                });
+            } else {
+                alert("Please make sure your browser support camera and micphone.");
+            }
+
+            // Elements for taking the snapshot
+            var canvas = document.getElementById('canvas');
+            var context = canvas.getContext('2d');
+            var camera = document.getElementById('camera');
+
+            /*// Trigger photo take
+            document.getElementById("snap").addEventListener("click", function() {
+                document.getElementById("snap").setAttribute("disabled", "false");
+                context.drawImage(video, 0, 0, 300, 300);
+            });*/
+        }
+
+    </script>

@@ -63,9 +63,10 @@
 </head>
 <body>
 <div id="hiddenVoice">
+    <div id="errorReporter" style="padding-bottom: 2%"></div>
+
     <div id="viz">
         <canvas id="analyser" width="1024" height="500"></canvas>
-
 
         <img id="record" src="images/mic128.png" onclick="toggleRecording(this);">
         <a id="save" href="#"><img src="images/save.svg"></a>
@@ -75,6 +76,7 @@
     </div>
 </div>
 
+<script src="/js/messageReporter.js"></script>
 <script>
     function initAndTestAudio() {
         if (!navigator.getUserMedia)
@@ -83,7 +85,13 @@
             navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
         if (!navigator.requestAnimationFrame)
             navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-
+        if(!navigator.getUserMedia) {
+            var reporter = new MessageReporter("errorReporter");
+            reporter.clear();
+            reporter.errorStatus("Your brower doesn't support micphone. Please make sure you are using latest Chrome!");
+            reporter.render();
+            return;
+        }
         navigator.getUserMedia(
             {
                 "audio": {
@@ -98,23 +106,28 @@
             }, function(stream) {
                 var audio = new Audio('/assets/Audio/items/2000.2.mp3');
                 audio.onended = function() {
-                    alert("you have mic!!");
                     //toggleRecording(this);
+                    $('#next').click(function () {
+                        window.location.href = "/interview";
+                    })
                 };
                 audio.play();
+                var reporter = new MessageReporter("errorReporter");
+                reporter.clear();
 
             }, function(e) {
                 var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
                 audio.play();
-                alert("no mic!!");
+                var reporter = new MessageReporter("errorReporter");
+                reporter.clear();
+                reporter.errorStatus("Your micphone is disable. Please make sure you have micphone and it is working fine.");
+                reporter.render();
             });
     }
 
     initAndTestAudio();
 
-    $('#next').click(function () {
-        window.location.href = "/interview";
-    })
+
 </script>
 
 </body>
