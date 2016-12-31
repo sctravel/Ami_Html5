@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Bootstrap Example</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+
+</head>
+<body>
+
+<div class="container">
+
+    <div id="top" class="row panel-body ">
+        <div id="camera" class="col-lg-1">
+            <span><video autoplay></video></span>
+        </div>
+
+        <div id="spinner" class="col-lg-1 " >
+          <span class="vcenter">  <% include partials/timer.ejs %></span>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-sm-4">
+            ...........
+    </div>
+        <div class="col-sm-4">
+            ...
+        </div>
+        <div class="col-sm-4">
+            ...
+        </div>
+    </div>
+</div>
+<script>
+    var video = document.querySelector('video');
+    //var canvas = document.querySelector('canvas');
+    //var ctx = canvas.getContext('2d');
+    //var image = document.querySelector('img');
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+
+    window.URL = window.URL || window.webkitURL;
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia({ video: true,audio:false},
+            function(stream) {
+                video.src = window.URL.createObjectURL(stream);
+                video.onloadedmetadata = function(e) {
+                    video.play();
+                };
+            },
+            function(err) {
+                console.log("The following error occured: " + err.name);
+            }
+        );
+    } else {
+        console.log("getUserMedia not supported");
+    }
+</script>
+
+<script>
+    startTimer(10);
+</script>
+
+</body>
+</html>
