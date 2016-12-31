@@ -5,8 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AMI Paces</title>
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
+    <style>
+        .my-error-class{
+            color:#FF0000 /*red*/
+        }
+    </style>
 </head>
-<body style="">
+<body style="" background="assets/">
 
 <div style="padding-top: 5%; height:auto; min-height: 90%;  margin: 0 auto -50px">
     <div class="container" >
@@ -15,7 +20,6 @@
 
         <div class="form-signin text-center" style="padding-top: 10px">
             <form id="userSignInForm"  action="/services/login/signin" method="post">
-                <div id="signInReporter" style="padding-bottom: 2%"></div>
                 <% if (error) { %>
                 <div class="text-center alert" style="color: red; font-size: small; font-style: italic; padding-bottom: 1% "> <%= error %> </div>
                 <% } %>
@@ -85,39 +89,16 @@
             usage: "Please check my terms."
         }
     };
+
     $("#userSignInForm").validate(
         formValidateParams
     );
-    /*
-     $( "#userSignInForm" ).submit(function( event ) {
-     event.preventDefault();
-     reporter.clear();
-     if (!$("#userSignInForm").valid()) {
-     console.log("Sign Up form is not valid!");
-     return;
-     }
-     var userAccountInfo={};
-     userAccountInfo.email = $('#signupEmail').val();
-     userAccountInfo.password = $('#signupPassword').val();
-     userAccountInfo.provider="willgive";
-     console.log("User Signing In!");
-     $.post("/services/login/signin", {userAccountInfo : userAccountInfo}, function(data){
-     if(data.isAuthenticated) {
-     console.log("user-"+userAccountInfo.email+" successfully logged in");
-     window.location.href="/";
-     } else {
-     reporter.errorStatus(data);
-     reporter.render();
-     }
-     })
-     });*/
 </script>
 
 
 <script>
 
 </script>
-<% include partials/footer.ejs%>
 </body>
 
 </html>

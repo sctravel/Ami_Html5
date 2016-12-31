@@ -23,7 +23,6 @@ module.exports = function(app) {
                     return done(null, false, { message: 'Login Error. Please try again' });
                 }
                 if(results.isAuthenticated == true ) {
-                    logger.debug(results);
                     return done(null, {email:results.email, userId : results.userId, sessionId: results.sessionId} );
                 } else {
                     return done(null, false, { message: results.errorMessage });
