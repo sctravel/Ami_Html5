@@ -12,10 +12,7 @@
     <div class="container" >
         <h2 class="form-signin-heading text-center " style="font-family : Nevis">AMI Paces Login</h2>
         <hr class="greenLine" >
-        <% include partials/videoPlayer.ejs %>
-        <hr class="greenLine" >
 
-        <% include partials/timer.ejs %>
         <div class="form-signin text-center" style="padding-top: 10px">
             <form id="userSignInForm"  action="/services/login/signin" method="post">
                 <div id="signInReporter" style="padding-bottom: 2%"></div>
@@ -118,12 +115,6 @@
 
 
 <script>
-    startTimer(10);
-    function test() {
-        alert("test video on end!");
-    }
-    addVideoOnEndFunction(test);
-    startVideo("/assets/Video/HotDogSquare.mp4");
 
 </script>
 <% include partials/footer.ejs%>

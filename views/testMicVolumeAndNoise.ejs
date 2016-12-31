@@ -64,67 +64,70 @@
 <body>
 <div id="hiddenVoice">
     <div id="errorReporter" style="padding-bottom: 2%"></div>
-
+    <% include partials/timer.ejs%>
     <div id="viz">
-        <canvas id="analyser" width="1024" height="500"></canvas>
+        <canvas id="analyser" width="1024" height="500" style="display: none"></canvas>
 
         <img id="record" src="images/mic128.png" onclick="toggleRecording(this);">
         <a id="save" href="#"><img src="images/save.svg"></a>
         <div id="button">
             <button id="next" type="button" class="btn btn-primary text-center" onclick="window.location.href='/interview'">Next</button>
         </div>
+
     </div>
 </div>
 
 <script src="/js/messageReporter.js"></script>
 <script>
-    function initAndTestAudio() {
-        if (!navigator.getUserMedia)
-            navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-        if (!navigator.cancelAnimationFrame)
-            navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
-        if (!navigator.requestAnimationFrame)
-            navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-        if(!navigator.getUserMedia) {
-            var reporter = new MessageReporter("errorReporter");
-            reporter.clear();
-            reporter.errorStatus("Your brower doesn't support micphone. Please make sure you are using latest Chrome!");
-            reporter.render();
-            return;
-        }
-        navigator.getUserMedia(
-            {
-                "audio": {
-                    "mandatory": {
-                        "googEchoCancellation": "false",
-                        "googAutoGainControl": "false",
-                        "googNoiseSuppression": "false",
-                        "googHighpassFilter": "false"
-                    },
-                    "optional": []
-                },
-            }, function(stream) {
-                var audio = new Audio('/assets/Audio/items/2000.2.mp3');
-                audio.onended = function() {
-                    //toggleRecording(this);
-                    $('#next').click(function () {
-                        window.location.href = "/interview";
-                    })
-                };
-                audio.play();
-                var reporter = new MessageReporter("errorReporter");
-                reporter.clear();
 
-            }, function(e) {
-                var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
-                audio.play();
-                var reporter = new MessageReporter("errorReporter");
-                reporter.clear();
-                reporter.errorStatus("Your micphone is disable. Please make sure you have micphone and it is working fine.");
-                reporter.render();
-            });
+    function audioOrVideoNotEnabled() {
+        var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
+        audio.play();
+        audio.onended = function() {
+            window.location.href='/'
+        };
     }
 
+    function testMicPhone(stream) {
+        var audio = new Audio('/assets/Audio/items/2000.2.mp3');
+        audio.onended = function() {
+            var recordButton = document.getElementById("record");
+            document.getElementById("analyser").style.display="inline";
+            gotStream(stream);
+            toggleRecording(recordButton);
+            startTimer(25, 50, function() {
+                toggleRecording(recordButton);
+                document.getElementById("analyser").style.display="none";
+
+                //Need to calculate SNR of the voice and evaluate it
+                var audioOK = new Audio('/assets/Audio/items/2000.2.OK.mp3');
+                audioOK.onended = function(){
+                   // window.location.href = "/interview";
+                }
+                audioOK.play();
+
+            })
+            //toggleRecording(this);
+        };
+        audio.play();
+    }
+
+    function initAndTestAudio() {
+        navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia || navigator.msGetUserMedia;
+        if(!navigator.getUserMedia) {
+            audioOrVideoNotEnabled();
+            return
+        }
+
+
+        if (navigator.getUserMedia) {
+            navigator.getUserMedia({audio: true, video: true}, function (stream) {
+                testMicPhone(stream);
+            }, function (error) {
+                audioOrVideoNotEnabled();
+            });
+        }
+    }
     initAndTestAudio();
 
 

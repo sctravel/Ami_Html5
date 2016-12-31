@@ -9,8 +9,9 @@ var path = require('path');
 var passport = require('passport');
 //var constants = require('src/common/constants.js');
 var flash = require('connect-flash');
-
+var bodyParser = require('body-parser');
 global.fs = require('fs');
+//var busboyBodyParser = require('busboy-body-parser');
 
 ///////////////////////////////////////////////////////////////////////////
 // Environments Settings
@@ -29,6 +30,9 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(express.methodOverride());
+//app.use(busboyBodyParser({ limit: '15mb' }));
+app.use(bodyParser.json({limit: "50mb"}));
+app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
 ///////////////////////////////////////////////////////////////////////////
 // Log4js configuration
@@ -159,6 +163,29 @@ app.get('/Privacy', function (req,res){
     res.render('Privacy', {user: req.user});
 });
 
+var buf = new Buffer("a", encoding='utf8'); // decode
+
+var uploadFolder = "C:\\uploadedFiles\\";
+fs.mkdir(uploadFolder,function(e){
+    if(!e || (e && e.code === 'EEXIST')){
+        //do something with contents
+    } else {
+        //debug
+        console.log(e);
+    }
+});
+
+app.post('/upload/audio/', function (req, res) {
+    var id = req.body.id;
+    var buf =  new Buffer(req.body.blob, 'Base64'); // decode
+    var filename = uploadFolder+"question_"+id+".wav"; //"+req.user+"_"+req.sessionId+"\\
+    fs.writeFile(filename, buf, function(err) {
+        res.sendStatus(err ? 500 : 200);
+        return;
+    });
+    console.log("########upload wav file succeeded!");
+    res.send("ok");
+});
 
 //https://stripe.com/docs/tutorials/forms
 
