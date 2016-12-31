@@ -20,7 +20,7 @@ var app = express();
 // all environments
 app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
-app.use(express.favicon(__dirname + '/public/images/icon_big.png'));
+app.use(express.favicon(__dirname + '/public/images/icon_large.png'));
 app.use(express.logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded());
@@ -134,32 +134,26 @@ app.get('/s3test', function (req,res){
 
 app.get('/audio', function (req,res){
     console.log(req.user);
-    req.session.lastPage = '/';
 
     res.render('recorder',{user: req.user});
 });
 
 app.get('/interview', function (req,res){
     console.log(req.user);
-    req.session.lastPage = '/';
 
-    res.render('game',{user: req.user});
+    res.render('interview',{user: req.user});
 });
 
 app.get('/contactus', function (req,res){
-    req.session.lastPage = '/contactus';
     res.render('contactUs', {user: req.user});
 });
 app.get('/aboutus', function (req,res){
-    req.session.lastPage = '/aboutus';
     res.render('aboutUs', {user: req.user});
 });
 app.get('/terms', function (req,res){
-    req.session.lastPage = '/terms';
     res.render('Terms', {user: req.user});
 });
 app.get('/Privacy', function (req,res){
-    req.session.lastPage = '/Privacy';
     res.render('Privacy', {user: req.user});
 });
 

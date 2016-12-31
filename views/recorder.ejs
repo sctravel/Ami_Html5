@@ -81,7 +81,7 @@ function playQuestion(stream) {
     }
 }
 
-navigator.getUserMedia({audio: true, video: true}, function (stream) {
+navigator.getUserMedia({audio: true, video: false}, function (stream) {
     playQuestion(stream);
 }, function (error) {
     //audioOrVideoNotEnabled();
