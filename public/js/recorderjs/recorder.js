@@ -94,10 +94,35 @@
         var url = (window.URL || window.webkitURL).createObjectURL(blob);
         var link = document.getElementById("save");
         alert(url);
+        console.log(url);
         link.href = url;
         link.download = filename || 'output.wav';
     }
 
+    var blobToBase64 = function(blob, cb) {
+        var reader = new FileReader();
+        reader.onload = function() {
+            var dataUrl = reader.result;
+            var base64 = dataUrl.split(',')[1];
+            cb(base64);
+        };
+        reader.readAsDataURL(blob);
+    };
+
+    Recorder.startUpload = function(blob, postUrl) {
+        var url = (window.URL || window.webkitURL).createObjectURL(blob);
+        //var data = new FormData();
+        //data.append('file', blob);
+        blobToBase64(blob, function(base64){ // encode
+            var update = {'blob': base64, "id": id};
+            $.post(postUrl, update, function(err) {
+                    if(err=="ok")
+                        console.log("success");
+                }
+            );
+        });
+
+    }
     window.Recorder = Recorder;
 
 })(window);

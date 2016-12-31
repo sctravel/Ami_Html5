@@ -12,9 +12,12 @@
     <link rel="stylesheet" href="/css/audioCss.css">
 </head>
 <body background="assets/images/background.png">
+<% include partials/timer.ejs %>
+<div id="videoContent" class="text-center">
+    <video id="video" width="400" height="400" autoplay></video>
+</div>
 <div id="viz" >
-    <canvas id="analyser" width="1024" height="500"></canvas>
-    <canvas id="wavedisplay" width="1024" height="500"></canvas>
+    <canvas id="analyser" width="1024" height="500" style="display: none"></canvas>
 </div>
 <div id="controls">
     <img id="record" src="images/mic128.png" onclick="toggleRecording(this);">
@@ -25,9 +28,60 @@
 </div>
 
 <script>
-    $('#next').click(function () {
-        window.location.href = "/interview";
-    })
+var questionList = [{"type": "video","source": "assets/Video/HotdogSquare.mp4","timeout": 0,"id": "3"},{"type": "audio","source": "assets/Audio/items/2070.1.mp3","timeout": 10,"id": "1"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "2"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "4_1"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "4_2"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3", "timeout": 10,"id": "5"}];
+var index = 0;
+var canvas = document.getElementById("analyser");
+var video = document.getElementById("video");
+var question = questionList[index];
+var recordButton = document.getElementById("record");
+var id="0";
+
+function playQuestion(stream) {
+    question = questionList[index];
+    id=question.id;
+    console.log(question);
+    console.log("playing question --- " +index );
+    if(index>questionList.length) return;
+    if(question.type=="audio") {
+        var audio = new Audio(question.source);
+        console.log("playing audio with souce --- " +question.source );
+
+        audio.onended = function() {
+            console.log("playing audio ended--- " +question.source );
+
+            canvas.style.display = "inline";
+            gotStream(stream);
+            toggleRecording(recordButton);
+            startTimer(question.timeout, 50, function() {
+                toggleRecording(recordButton);
+                canvas.style.display="none";
+                playQuestion(stream);
+                ++index;
+            })
+        }
+        audio.play();
+
+    } else if(question.type=="video") {
+        //video.source = question.source;
+        video.style.display = "inline";
+        console.log("playing video with souce --- " +question.source );
+        video.src = question.source;
+        video.onended = function() {
+            video.style.display = "none";
+            ++index;
+            console.log("playing video ended--- " +question.source );
+            playQuestion(stream);
+        }
+        video.play();
+
+    }
+}
+
+navigator.getUserMedia({audio: true, video: true}, function (stream) {
+    playQuestion(stream);
+}, function (error) {
+    //audioOrVideoNotEnabled();
+});
 </script>
 
 </body>
