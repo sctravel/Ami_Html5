@@ -74,10 +74,14 @@ function playQuestion(stream) {
         }
         video.play();
 
+    } else if(question.type=="image") {
+
+    } else if(question.type=="words") {
+
     }
 }
 
-navigator.getUserMedia({audio: true, video: true}, function (stream) {
+navigator.getUserMedia({audio: true, video: false}, function (stream) {
     playQuestion(stream);
 }, function (error) {
     //audioOrVideoNotEnabled();
