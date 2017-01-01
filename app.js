@@ -81,6 +81,9 @@ fs.mkdir(constants.path.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
 configUserLoginRoute(app);
+
+var getTestsRoute = require('./routes/getTestsRoute');
+getTestsRoute(app);
 ///////////////////////////////////////////////////////////////////////////
 // SSL Certification
 ///////////////////////////////////////////////////////////////////////////
