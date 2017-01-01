@@ -376,3 +376,23 @@ GET /css/main.css
 GET /index2
 GET /css/main.css
 GET /images/background.png
+#########app env: development. ##############
+Express server listening on port 3000
+#########app env: development. ##############
+Express server listening on port 3000
+GET /
+GET /bootstrap/dist/css/bootstrap.css
+GET /assets/css/social-buttons.css
+GET /jquery/dist/jquery.min.js
+GET /jquery-validation/dist/jquery.validate.js
+GET /assets/images/icon_large.png
+GET /bootstrap/dist/fonts/glyphicons-halflings-regular.woff2
+GET /test/
+#########app env: development. ##############
+Express server listening on port 3000
+GET /tests
+GET /tests
+#########app env: development. ##############
+Express server listening on port 3000
+#########app env: development. ##############
+Express server listening on port 3000
