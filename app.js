@@ -77,6 +77,7 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
+fs.mkdir(constants.path.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
 configUserLoginRoute(app);
@@ -159,20 +160,15 @@ app.get('/Privacy', function (req,res){
 
 var buf = new Buffer("a", encoding='utf8'); // decode
 
-var uploadFolder = "C:\\uploadedFiles\\";
-fs.mkdir(uploadFolder,function(e){
-    if(!e || (e && e.code === 'EEXIST')){
-        //do something with contents
-    } else {
-        //debug
-        console.log(e);
-    }
-});
 
 app.post('/upload/audio/', function (req, res) {
+    console.log("########start uploading wav file");
     var id = req.body.id;
     var buf =  new Buffer(req.body.blob, 'Base64'); // decode
-    var filename = uploadFolder+"question_"+id+".wav"; //"+req.user+"_"+req.sessionId+"\\
+    var filename = constants.path.UPLOAD_FOLDER + "/test/question_" + id + ".wav";
+    if(req.user) {
+        constants.path.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/question_" + id + ".wav"; //"+req.user+"_"+req.sessionId+"\\
+    }
     fs.writeFile(filename, buf, function(err) {
         res.sendStatus(err ? 500 : 200);
         return;
@@ -181,7 +177,6 @@ app.post('/upload/audio/', function (req, res) {
     res.send("ok");
 });
 
-//https://stripe.com/docs/tutorials/forms
 
 
 
