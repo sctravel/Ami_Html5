@@ -4,9 +4,11 @@ module.exports = function(app) {
 app.get('/tests', function(req, res, next) {
      console.log("########start retrieving tests");
 
-     results = "Hello world"
+     jsonObject = { b: 1 }
 
-     res.send(results);
+     res.setHeader('Content-Type', 'application/json');
+     res.send(JSON.stringify(jsonObject));
+
 });
 
 }
