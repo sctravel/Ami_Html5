@@ -80,6 +80,9 @@ if ('development' == app.get('env')) {
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
 configUserLoginRoute(app);
+
+var getTestsRoute = require('./routes/getTestsRoute');
+getTestsRoute(app);
 ///////////////////////////////////////////////////////////////////////////
 // SSL Certification
 ///////////////////////////////////////////////////////////////////////////
