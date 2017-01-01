@@ -1,6 +1,11 @@
 /* For mobile phones: */
+html {
+    height: 100%;
+}
+
 body{
     background-image: url("/images/background.png");
+
 
 }
 #camera {
@@ -28,6 +33,17 @@ video {
 
 #spinner {
     float:right;
+}
+
+#footer{
+    background-color: #ffffff;
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    display:none;
+}
+#next_button_block{
+    background-color: #00B7FF;;
 }
 @media only screen and (min-width: 768px) {
     /* For desktop: */
