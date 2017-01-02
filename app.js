@@ -77,7 +77,7 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-fs.mkdir(constants.path.UPLOAD_FOLDER,function(e){});
+//fs.mkdir(constants.path.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
 configUserLoginRoute(app);
