@@ -6,21 +6,23 @@
     "start": "node app.js"
   },
   "dependencies": {
-    "express": "*",
+    "async": "*",
+    "body-parser": "^1.15.2",
     "config": "*",
-    "ejs":"*",
-    "stylus":"*",
-    "async":"*",
-    "mysql":"*",
-    "memory-cache":"*",
+    "connect-flash": "*",
+    "dateformat": "*",
+    "ejs": "*",
+    "express": "3.4.8",
+    "log4js": "*",
+    "memory-cache": "*",
+    "mysql": "*",
     "nodemailer": "0.3.x",
-    "dateformat":"*",
-    "passport":"*",
-    "passport-local":"*",
-    "passport-facebook":"*",
-    "passport-facebook-token":"*",
-    "connect-flash":"*",
-    "log4js":"*",
-    "request":"*"
+    "passport": "*",
+    "passport-facebook": "*",
+    "passport-facebook-token": "*",
+    "passport-local": "*",
+    "request": "*",
+    "stylus": "*",
+    "underscore": "^1.8.3"
   }
 }

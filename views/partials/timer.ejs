@@ -23,22 +23,29 @@
 
 <script>
 
-    function startTimer(timeout, radius, onEndFunction) {
+    function startTimer(initTimeout, maxTimeout, initTimeoutFunction, maxTimeoutFunction) {
+        var radius = 50;
         var timerId = null;
         var timer = document.getElementById('timer')
         var loader = document.getElementById('loader')
         var border = document.getElementById('border')
         var π = Math.PI
-         var α = 0
-            , t = timeout/ 2 / 360 * 1000; //draw 1 degree every t milli-seconds
+        var α = 0
+            , t = maxTimeout/ 2 / 360 * 1000; //draw 1 degree every t milli-seconds
+        var initA = initTimeout/maxTimeout*360;
+        var initExecuted = false;
 
         (function draw() {
             α++;
+            if(initTimeout>0 && α > initA && !initExecuted) {
+                initTimeoutFunction();
+                initExecuted = true;
+            }
             if (α > 360) {
                 if(timerId!=null) {
                     clearTimeout(timerId);
                 }
-                onEndFunction();
+                maxTimeoutFunction();
                 return;
             }
             //α %= 360;

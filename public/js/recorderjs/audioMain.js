@@ -1,20 +1,7 @@
 /**
  * Created by tuxi1 on 12/26/2016.
  */
-/* Copyright 2013 Chris Wilson
 
- Licensed under the Apache License, Version 2.0 (the "License");
- you may not use this file except in compliance with the License.
- You may obtain a copy of the License at
-
- http://www.apache.org/licenses/LICENSE-2.0
-
- Unless required by applicable law or agreed to in writing, software
- distributed under the License is distributed on an "AS IS" BASIS,
- WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
- See the License for the specific language governing permissions and
- limitations under the License.
- */
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 
@@ -27,12 +14,41 @@ var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
+var uploadURL = "/upload/audio/";
+var isRecording = false;
+
+var latestSNR = 0;
+var audioData = [];
+var audioLevel;
+var audioLevelOptions = {
+    OK : 1,
+    LowVolume : 2,
+    LowSNR : 3,
+    NoMicrophone : 4,
+    UnKnown : 5
+}
 
 /* TODO:
 
  - offer mono option
  - "Monitor input" switch
  */
+
+function evaluateAudio(audioData, lowSignal, minSNR) {
+    if(audioData.length<10) {
+        audioLevel = audioLevelOptions.UnKnown;
+        return;
+    }
+    var noiseLevel = percentile(audioData, 0.25);
+    var signalLevel = percentile(audioData, 0.95);
+    var snr = signalLevel - noiseLevel;
+    console.log("noiseLevel: "+ noiseLevel+"; signalLevel: "+ signalLevel + "; snr: " + snr);
+    if(signalLevel < lowSignal) audioLevel=audioLevelOptions.LowVolume;
+    else if(snr < minSNR) audioLevel=audioLevelOptions.LowSNR;
+    else audioLevel=audioLevelOptions.OK;
+
+    console.log("audioLevel after evaluation is "+audioLevel);
+}
 
 function saveAudio() {
     audioRecorder.exportWAV( doneEncoding );
@@ -52,24 +68,35 @@ function gotBuffers( buffers ) {
 
 function doneEncoding( blob ) {
     //Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
-    Recorder.startUpload( blob, "/upload/audio/" );
-
+    Recorder.startUpload( blob, uploadURL );
     recIndex++;
+}
+
+function startRecording() {
+    if (!audioRecorder)
+        return;
+    audioRecorder.clear();
+    audioRecorder.record();
+    audioData=[];
+    isRecording = true;
+}
+function stopRecording() {
+    audioRecorder.stop();
+    isRecording = false;
+    audioRecorder.getBuffers( gotBuffers );
+    evaluateAudio(audioData, 30, 15);
+    audioData = [];
 }
 
 function toggleRecording( e ) {
     if (e.classList.contains("recording")) {
         // stop recording
-        audioRecorder.stop();
         e.classList.remove("recording");
-        audioRecorder.getBuffers( gotBuffers );
+        stopRecording();
     } else {
         // start recording
-        if (!audioRecorder)
-            return;
+        startRecording();
         e.classList.add("recording");
-        audioRecorder.clear();
-        audioRecorder.record();
     }
 }
 
@@ -118,6 +145,7 @@ function updateAnalysers(time) {
             for (var j = 0; j< multiplier; j++)
                 magnitude += freqByteData[offset + j];
             magnitude = magnitude / multiplier;
+            if(isRecording) audioData.push(magnitude);
             var magnitude2 = freqByteData[i * multiplier];
             analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
             analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
@@ -186,6 +214,22 @@ function initAudio() {
             alert('Error getting audio');
             console.log(e);
         });
+}
+
+function percentile(arr, p) {
+    if (arr.length === 0) return 0;
+    if (typeof p !== 'number') throw new TypeError('p must be a number');
+    if (p <= 0) return arr[0];
+    if (p >= 1) return arr[arr.length - 1];
+
+    arr.sort(function (a, b) { return a - b; });
+    var index = (arr.length - 1) * p
+    lower = Math.floor(index),
+        upper = lower + 1,
+        weight = index % 1;
+
+    if (upper >= arr.length) return arr[lower];
+    return arr[lower] * (1 - weight) + arr[upper] * weight;
 }
 
 window.addEventListener('load', initAudio );

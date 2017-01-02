@@ -10,7 +10,8 @@ module.exports = function(app) {
     var LocalStrategy = require('passport-local').Strategy;
     var logger = require('../app').logger;
     var config = require('config');
-    var userLogin = require('../src/user/userLogin');
+    var userLogin = require('../src/login/userLogin');
+    var Session = require('../src/model/session');
     logger.info("#########app env: "+app.get('env')+". ##############");
     ///////////////////////////////////////////////////////////////////////
     // Passport - Login methods setup
@@ -23,7 +24,9 @@ module.exports = function(app) {
                     return done(null, false, { message: 'Login Error. Please try again' });
                 }
                 if(results.isAuthenticated == true ) {
-                    return done(null, {email:results.email, userId : results.userId, sessionId: results.sessionId} );
+                    //create a session dir for uploading files
+                    fs.mkdir(constants.paths.UPLOAD_FOLDER+results.session.data.userId+"_"+results.session.data.sessionId+"/", function(e){});
+                    return done(null, {email:results.session.data.email, userId : results.session.data.userId, sessionId: results.session.data.sessionId} );
                 } else {
                     return done(null, false, { message: results.errorMessage });
                 }

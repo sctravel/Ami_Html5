@@ -7,10 +7,12 @@ var http = require('http');
 var https = require('https');
 var path = require('path');
 var passport = require('passport');
-//var constants = require('src/common/constants.js');
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 global.fs = require('fs');
+var _ = require("underscore");
+var constants = require('./src/common/constants');
+
 //var busboyBodyParser = require('busboy-body-parser');
 
 ///////////////////////////////////////////////////////////////////////////
@@ -33,6 +35,8 @@ app.use(express.methodOverride());
 //app.use(busboyBodyParser({ limit: '15mb' }));
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Log4js configuration
@@ -77,7 +81,7 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
-fs.mkdir(constants.path.UPLOAD_FOLDER,function(e){});
+fs.mkdir(constants.paths.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
 configUserLoginRoute(app);
@@ -99,7 +103,6 @@ getTestsRoute(app);
  //User login, need to separate from recipient login
  function isLoggedIn(req, res, next) {
      if (req.isAuthenticated()) {
-         logger.debug(req.user);
          return next();
      } else {
          res.redirect("/");
@@ -144,39 +147,39 @@ app.get('/audio', function (req,res){
 
 app.get('/interview', function (req,res){
     console.log(req.user);
-
-    res.render('interview',{user: req.user});
+    res.render('recorder',{user: req.user});
 });
 
-app.get('/contactus', function (req,res){
-    res.render('contactUs', {user: req.user});
-});
-app.get('/aboutus', function (req,res){
-    res.render('aboutUs', {user: req.user});
-});
-app.get('/terms', function (req,res){
-    res.render('Terms', {user: req.user});
-});
-app.get('/Privacy', function (req,res){
-    res.render('Privacy', {user: req.user});
+app.get('/questionSet', function(req, res){
+    console.info("####################")
+    var questionSet = JSON.parse(fs.readFileSync('./document/questionSet.json', 'utf8'));
+    // run
+
+    questionSet = _.where(questionSet, {test: 1});
+    console.dir(questionSet);
+    res.send(questionSet);
 });
 
-var buf = new Buffer("a", encoding='utf8'); // decode
+app.get('/game', function (req,res){
+    res.render('game', {user: req.user});
+});
+
+
 
 
 app.post('/upload/audio/', function (req, res) {
-    console.log("########start uploading wav file");
+    logger.info("########start uploading wav file");
     var id = req.body.id;
     var buf =  new Buffer(req.body.blob, 'Base64'); // decode
-    var filename = constants.path.UPLOAD_FOLDER + "/test/question_" + id + ".wav";
+    var filename = constants.paths.UPLOAD_FOLDER + "/test/question_" + id + ".wav";
     if(req.user) {
-        constants.path.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/question_" + id + ".wav"; //"+req.user+"_"+req.sessionId+"\\
+        constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/question_" + id + ".wav"; //"+req.user+"_"+req.sessionId+"\\
     }
     fs.writeFile(filename, buf, function(err) {
         res.sendStatus(err ? 500 : 200);
         return;
     });
-    console.log("########upload wav file succeeded!");
+    logger.info("########upload wav file succeeded!");
     res.send("ok");
 });
 

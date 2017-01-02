@@ -28,6 +28,7 @@
 </div>
 
 <script>
+var questionSet;
 var questionList = [{"type": "video","source": "assets/Video/HotdogSquare.mp4","timeout": 0,"id": "3"},{"type": "audio","source": "assets/Audio/items/2070.1.mp3","timeout": 10,"id": "1"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "2"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "4_1"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "4_2"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3", "timeout": 10,"id": "5"}];
 var index = 0;
 var canvas = document.getElementById("analyser");
@@ -81,11 +82,16 @@ function playQuestion(stream) {
     }
 }
 
-navigator.getUserMedia({audio: true, video: false}, function (stream) {
-    playQuestion(stream);
-}, function (error) {
-    //audioOrVideoNotEnabled();
-});
+$.get("/questionSet", function(data) {
+    questionSet = data;
+    navigator.getUserMedia({audio: true, video: false}, function (stream) {
+        playQuestion(stream);
+    }, function (error) {
+        //audioOrVideoNotEnabled();
+    });
+})
+
+
 </script>
 
 </body>

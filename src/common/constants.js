@@ -12,7 +12,7 @@ exports.SITE_URL = 'https://www.amipaces.org';
 
 exports.paths = {
     RECIPIENT_FOLDER : '/public/resources/recipients/qrCode/',
-
+    UPLOAD_FOLDER: "C:\\uploadedFiles",//"~/AMIPaces/uploadedFiles/",
     BLANK_ICON_PATH :'/images/blank_icon.jpg'
 }
 
