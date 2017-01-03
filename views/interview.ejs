@@ -8,8 +8,28 @@
     <link rel="stylesheet" href="/css/main.css">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
-
+    <script src="js/recorderjs/audiodisplay.js"></script>
+    <script src="js/recorderjs/recorder.js"></script>
+    <script src="js/recorderjs/audioMain.js"></script>
+    <link rel="stylesheet" href="/css/audioCss.css">
+    <style type="text/css">
+        #trackTap {
+            width: 1280px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        table {
+            margin: 0 auto;
+        }
+        table:hover {
+        //cursor: url('images/chuizi.jpg'),auto;//此处图片路径要依据自己的路径来修改
+        }
+        td {
+            width: 160px;
+            height: 160px;
+            background-color: #000000;
+        }
+    </style>
 </head>
 <body>
 
@@ -36,11 +56,29 @@
         </div>
     </div>
     <div id="videoContent" class="row text-center">
-        <video id="video" width="50%" height="50%" autoplay></video>
+        <video id="video" width="50%" height="50%"></video>
+    </div>
+    <div id="trackTap" style="display: none">
+        <table>
+            <tr>
+                <td id="td[0]" onclick="hit(0)"></td>
+                <td id="td[1]" onclick="hit(1)"></td>
+            </tr>
+            <tr>
+                <td id="td[2]" onclick="hit(2)"></td>
+                <td id="td[3]" onclick="hit(3)"></td>
+            </tr>
+            <tr>
+                <td id="td[4]" onclick="hit(4)"></td>
+                <td id="td[5]" onclick="hit(5)"></td>
+            </tr>
+        </table>
     </div>
     <div id="viz" >
-        <canvas id="analyser" width="1024" height="500" style="display: none"></canvas>
+        <canvas id="analyser" width="1024" height="400" style="display: none"></canvas>
     </div>
+
+    <div id="instructionText" style="display: none"></div>
 
     <div id="controls" style="display: none">
         <img id="record" src="images/mic128.png" onclick="toggleRecording(this);" style="display: none">
@@ -50,6 +88,89 @@
         <button id="nextButton" type="button" class="text-center btn-lg " font-size="16px">Next</button>
     </div>
 </div>
+
+<script>
+    var td = new Array(),      //保存每个格子的地鼠
+        playing = false,       //游戏是否开始
+        score = 0,             //分数
+        total = 0,
+        beat = 0,              //鼠标点击次数
+        success = 0,           //命中率
+        knock = 0,             //鼠标点中老鼠图片次数
+        gameInterId = null,        //指定setInterval()的变量
+        gameTimerId = null;         //指定setTimeout()的变量
+
+    //游戏结束
+    function GameOver(){
+        timeStop();
+        playing = false;
+        clearMouse();
+    }
+
+    //主动停止所有计时
+    function timeStop(){
+        clearInterval(gameInterId);//clearInterval()方法返回setInterval()方法的id
+        clearTimeout(gameTimerId);//clearTime()方法返回setTimeout()的id
+    }
+
+    //随机循环显示老鼠图片
+    function show(){
+        if(playing)
+        {
+            if(total == 10) {
+                GameOver();
+                return;
+            }
+            var current = Math.floor(Math.random()*6);
+            //这里的路径也需要根据自己的实际文件路径来修改
+            document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="160px" width="160px">';
+            ++total;
+            //使用setTimeout()实现2秒后隐藏老鼠图片
+            setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1500);
+        }
+    }
+
+    //清除所有老鼠图片
+    function clearMouse(){
+        for(var i=0;i<=5;i++)
+        {
+            document.getElementById("td["+i+"]").innerHTML="";
+        }
+    }
+
+    //点击事件函数，判断是否点中老鼠
+    function hit(id){
+        if(playing==false)
+        {
+            return;
+        }
+        else
+        {
+            beat +=1;
+            if(document.getElementById("td["+id+"]").innerHTML!="")
+            {
+                score += 1;
+                knock +=1;
+                success = knock/beat;
+                document.getElementById("td["+id+"]").innerHTML="";
+            }
+            else
+            {
+                score += -1;
+                success = knock/beat;
+
+            }
+        }
+    }
+
+    //游戏开始
+    function GameStart(){
+        playing = true;
+        show();
+        interId = setInterval("show()",1500);
+    }
+</script>
+
 <script>
     function audioOrVideoNotEnabled(text) {
         audioLevel = audioLevelOptions.NoMicrophone;
@@ -60,7 +181,7 @@
         };
     }
 
-    var video = document.getElementById('camera');
+    var camera = document.getElementById('camera');
     //var canvas = document.querySelector('canvas');
     //var ctx = canvas.getContext('2d');
     //var image = document.querySelector('img');
@@ -70,9 +191,9 @@
     if (navigator.getUserMedia) {
         navigator.getUserMedia({ video: true,audio:false},
             function(stream) {
-                video.src = window.URL.createObjectURL(stream);
-                video.onloadedmetadata = function(e) {
-                    video.play();
+                camera.src = window.URL.createObjectURL(stream);
+                camera.onloadedmetadata = function(e) {
+                    camera.play();
                 };
             },
             function(err) {
@@ -101,6 +222,8 @@
         ++index;
         if(index>=questionList.length) return;
         item = questionList[index];
+        console.log("#############now processing --- " + item.type + " : " + item.item);
+        console.dir(item);
         switch (item.type) {
             case 2000:
                 if(item.item == 1) {
@@ -115,7 +238,6 @@
                 processDescribeSilentVideo(stream, item)
                 break;
             case 2001:
-            case 2040:
             case 2041:
             case 2044:
             case 2065:
@@ -129,10 +251,15 @@
             case 2073:
             case 2074:
             case 2100:
-                processAudioQuestion(stream, item);
+                if(item.item==0) processInstruction(stream, item); //item 0 has no recording
+                else processAudioQuestion(stream, item);
                 break;
             case 2032:
                 processTrackTap(stream, item);
+                //processItem(stream);
+                break;
+            case 2040:
+                processRetellStory(stream, item);
                 break;
             case 2050:
                 //This type doesn't exist yet
@@ -159,7 +286,7 @@
                 processItem(stream);
                 break;
             default:
-                processTransition(stream, item);
+                processItem(stream);
                 break;
         }
         /*
@@ -202,18 +329,23 @@
         }*/
     }
 
-    navigator.getUserMedia({audio: true, video: false}, function (stream) {
-        processItem(stream);
-    }, function (error) {
-        audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
-    });
+    $.get("/questionSet", function(data) {
+        questionList = data;
+        navigator.getUserMedia({audio: true, video: false}, function (stream) {
+            processItem(stream);
+        }, function (error) {
+            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+        });
+    })
+
 
 
     function processInstruction(stream, item) {
-        var audioFileName = item.type+"."+item.item+".mp3";
+        console.log("processInstruction starts with souce --- " + item.type+"."+item.item );
+
+        var audioFileName = item.type+"."+(item.item==0 ? "mp3" : item.item+".mp3");
         var source = audioFolder + audioFileName;
         var audio = new Audio(source);
-        console.log("processInstruction starts with souce --- " + source );
         audio.onended = function() {
             console.log("processInstruction ends --- " +source );
             instr.style.display="none";
@@ -233,6 +365,8 @@
     }
 
     function processAudioQuestion(stream, item) {
+        console.log("processAudioQuestion starts with souce --- " + item.type+"."+item.item );
+
         var audioFileName = item.type+"."+item.item+".mp3";
         var source = audioFolder + audioFileName;
         var audio = new Audio(source);
@@ -270,15 +404,75 @@
     }
 
     function processTrackTap(stream, item) {
+        var audio = new Audio(audioFolder+item.audio);
+        trackTap.style.display = "inline";
+        audio.onended = function() {
+            GameStart();
+            startTimer(0, item.mtimeout, null, function() {
+                GameOver();
+                trackTap.style.display = "none";
+                processItem(stream);
+            });
 
+        }
+        audio.play();
+    }
+
+    function processRetellStory(stream, item){
+        var audioList = item.audio.split(':');
+        var rsindex = 0;
+        var audio = new Audio(audioFolder+audioList[rsindex]);
+        audio.onended = function() {
+
+            playAudioInRetellStory(audioList, rsindex+1, stream, item);
+
+        };
+        audio.play();
+    }
+    function playAudioInRetellStory(audioList, rsindex, stream, item){
+        if(rsindex>=audioList.length) {
+            processItem(stream);
+            return;
+        }
+        var audio = new Audio(audioFolder+audioList[rsindex]);
+
+        audio.onended = function() {
+            if(rsindex==2) { //The third audio in retell story is "Now you tell the story")
+                analyser.style.display = "inline";
+                gotStream(stream);
+                startRecording();
+                startTimer(item.itimeout, item.mtimeout,
+                    function () {
+                        nextButton.style.display = "inline";
+                        nextButton.onclick = function () {
+                            stopTimer();
+                            stopRecording();
+                            nextButton.style.display = "none";
+                            analyser.style.display = "none";
+                            playAudioInRetellStory(audioList, rsindex + 1, stream, item);
+                        };
+                    },
+                    function () {
+                        stopTimer();
+                        stopRecording();
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        playAudioInRetellStory(audioList, rsindex + 1, stream, item);
+                    }
+                );
+            } else {
+                playAudioInRetellStory(audioList, rsindex+1, stream, item);
+            }
+        }
+        audio.play();
     }
 
     function processDescribeSilentVideo(stream, item) {
-        var audioList = item.audio.split(',');
+        var audioList = item.audio.split(':');
         var vindex = 0;
         video.src = videoFolder + item.video;
         video.load();
-        var audio = new Audio(audioList[vindex]);
+        var audio = new Audio(audioFolder+audioList[vindex]);
         audio.onended = function() {
             var analyser = document.getElementById("analyser");
             analyser.style.display="inline";
@@ -299,7 +493,7 @@
             processItem(stream);
             return;
         }
-        var audio = new Audio(audioList[vindex]);
+        var audio = new Audio(audioFolder+audioList[vindex]);
 
         audio.onended = function() {
 
@@ -368,14 +562,14 @@
                     case audioLevelOptions.OK:
                         var audioOK = new Audio('/assets/Audio/items/2000.2.OK.mp3');
                         audioOK.onended = function () {
-                            procesItem(stream);
+                            processItem(stream);
                         }
                         audioOK.play();
                         break;
                     case audioLevelOptions.LowVolume:
                         var audioLowVolume = new Audio('/assets/Audio/items/2000.2.Low.mp3');
                         audioLowVolume.onended = function () {
-                            procesItem(stream);
+                            processItem(stream);
                         }
                         audioLowVolume.play();
                         break;

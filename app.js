@@ -147,7 +147,7 @@ app.get('/audio', function (req,res){
 
 app.get('/interview', function (req,res){
     console.log(req.user);
-    res.render('recorder',{user: req.user});
+    res.render('interview',{user: req.user});
 });
 
 app.get('/questionSet', function(req, res){
@@ -155,7 +155,7 @@ app.get('/questionSet', function(req, res){
     var questionSet = JSON.parse(fs.readFileSync('./document/questionSet.json', 'utf8'));
     // run
 
-    questionSet = _.where(questionSet, {test: 1});
+    //questionSet = _.where(questionSet, {test: 1});
     console.dir(questionSet);
     res.send(questionSet);
 });
