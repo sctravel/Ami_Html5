@@ -10,8 +10,7 @@
    "dbOptions" : {
         "host" : "mysql.cohi5vfxnofi.us-west-2.rds.amazonaws.com",//process.env.MYSQL_HOST,
         "user" : "admin",//process.env.MYSQL_USER,
-
-        "password" : "root_mysql",//process.env.MYSQL_PASS,
+        "password" : "",//process.env.MYSQL_PASS,
         "database" : "AMIPACES",//process.env.MYSQL_DB,
         "connectionLimit" : 500,
         "supportBigNumbers" : true
