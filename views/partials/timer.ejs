@@ -22,10 +22,17 @@
 </svg>
 
 <script>
+    var timerId = null;
+
+    function stopTimer() {
+        if(timerId !=null) {
+            clearTimeout(timerId);
+            timerId = null;
+        }
+    }
 
     function startTimer(initTimeout, maxTimeout, initTimeoutFunction, maxTimeoutFunction) {
         var radius = 50;
-        var timerId = null;
         var timer = document.getElementById('timer')
         var loader = document.getElementById('loader')
         var border = document.getElementById('border')
@@ -44,6 +51,7 @@
             if (α > 360) {
                 if(timerId!=null) {
                     clearTimeout(timerId);
+                    timerId = null;
                 }
                 maxTimeoutFunction();
                 return;
