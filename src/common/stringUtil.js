@@ -73,12 +73,10 @@ exports.generateRandomNumbers=function(length) {
 
     function f(len) {
         var confirmationNumber="";
-
         for(var i=0;i<len;++i) {
             var randomNumber = Math.floor( Math.random() * 10 ); //random number between 0 and 9
             confirmationNumber = confirmationNumber + numbers[randomNumber];
         }
-        console.log(confirmationNumber);
         return confirmationNumber;
     };
 
@@ -101,8 +99,6 @@ exports.generateRandomString=function(length) {
             var randomNumber = Math.floor( Math.random() * 36 ); //random number between 0 and 35
             confirmationCode = confirmationCode + letters[randomNumber];
         }
-        console.log(confirmationCode);
-        //callback(confirmationCode);
         return confirmationCode;
     };
 

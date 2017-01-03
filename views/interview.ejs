@@ -4,32 +4,15 @@
     <title>Bootstrap Example</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/css/main.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    <script src="/jquery/dist/jquery.min.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="js/recorderjs/audiodisplay.js"></script>
     <script src="js/recorderjs/recorder.js"></script>
     <script src="js/recorderjs/audioMain.js"></script>
     <link rel="stylesheet" href="/css/audioCss.css">
-    <style type="text/css">
-        #trackTap {
-            width: 1280px;
-            margin: 0 auto;
-            text-align: center;
-        }
-        table {
-            margin: 0 auto;
-        }
-        table:hover {
-        //cursor: url('images/chuizi.jpg'),auto;//此处图片路径要依据自己的路径来修改
-        }
-        td {
-            width: 160px;
-            height: 160px;
-            background-color: #000000;
-        }
-    </style>
+    <link rel="stylesheet" href="/css/trackTap.css">
 </head>
 <body>
 
@@ -209,10 +192,11 @@
     var audioFolder = "assets/Audio/items/"
     var videoFolder = "assets/Video/"
     var imageFolder = "assets/Images/"
+    var questionList;
     var index = -1;
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
-    var item = questionList[index];
+    var item;
     var nextButton = document.getElementById("nextButton");
     var instr = document.getElementById("instructionText");
     var trackTap = document.getElementById("trackTap");
@@ -277,8 +261,12 @@
                 processCalcuationResponse(stream, item);
                 break;
             case 2062: //bypass the following two for now
-                //processNameTheFace(stream, item);
-                processItem(stream);
+                if(item.item==0) {
+                    processInstruction(stream, item);
+                } //item 0 has no recording
+                else {//processNameTheFace(stream, item);
+                    processItem(stream);
+                }
                 break;
             case 2064:
                 //processQuickLit(stream, item);

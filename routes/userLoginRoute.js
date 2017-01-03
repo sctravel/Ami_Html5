@@ -8,10 +8,10 @@ module.exports = function(app) {
     var isLoggedIn = require('../app').isLoggedIn;
     var passport = require('passport');
     var LocalStrategy = require('passport-local').Strategy;
-    var logger = require('../app').logger;
     var config = require('config');
     var userLogin = require('../src/login/userLogin');
     var Session = require('../src/model/session');
+
     logger.info("#########app env: "+app.get('env')+". ##############");
     ///////////////////////////////////////////////////////////////////////
     // Passport - Login methods setup
