@@ -15,6 +15,7 @@
 <body style="" background="assets/images/icon_large.png">
 
 <div style="padding-top: 5%; height:auto; min-height: 90%;  margin: 0 auto -50px">
+    <p id="errorMessage" class="text-center" style="color: red"></p>
     <div class="container" >
         <h2 class="form-signin-heading text-center " style="font-family : Nevis">AMI Paces Login</h2>
         <hr class="greenLine" >
@@ -55,6 +56,24 @@
 <script src="/jquery/dist/jquery.min.js"></script>
 <script src="/jquery-validation/dist/jquery.validate.js"></script>
 <script>
+    (function($) {
+        $.QueryString = (function(a) {
+            if (a == "") return {};
+            var b = {};
+            for (var i = 0; i < a.length; ++i)
+            {
+                var p=a[i].split('=', 2);
+                if (p.length != 2) continue;
+                b[p[0]] = decodeURIComponent(p[1].replace(/\+/g, " "));
+            }
+            return b;
+        })(window.location.search.substr(1).split('&'))
+    })(jQuery);
+</script>
+<script>
+    if($.QueryString["error"]) {
+        document.getElementById("errorMessage").innerHTML=$.QueryString['error'];
+    }
     //@notice: name attribute in form, not id attributes
     var formValidateParams = {
         errorClass: "my-error-class",
