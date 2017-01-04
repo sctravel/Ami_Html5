@@ -1,7 +1,7 @@
 /**
  * Created by xitu on 12/27/2016.
  */
-
+var logger = require('./logger');
 var nodemailer = require("nodemailer");
 var config = require('config');
 
@@ -22,11 +22,9 @@ var mailOptions = {
 exports.sendEmail=function(mailOptions,callback) {
     smtpTransport.sendMail(mailOptions,function(error, responseStatus){
         if(!error){
-            console.log(responseStatus.message); // response from the server
-            console.log(responseStatus.messageId); // Message-ID value used
             callback(null,responseStatus);
         } else {
-            console.error(error);
+            logger.error(error);
         }
     });
 }

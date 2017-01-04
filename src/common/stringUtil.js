@@ -62,11 +62,26 @@ exports.toDateTimeString = function(date) {
     var day  = date.getDate();
     day = (day < 10 ? "0" : "") + day;
 
-    return date.getFullYear()+month+day+hour+min+sec;
+    return date.getFullYear()+month+day+"-"+hour+min+sec;
 }
 
 var letters = ['1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L','M','N',
     'O','P','Q','R','S','T','U','V','W','X','Y','Z'];
+
+exports.generateRandomNumbers=function(length) {
+    var numbers = ['0','1','2','3','4','5','6','7','8','9'];
+
+    function f(len) {
+        var confirmationNumber="";
+        for(var i=0;i<len;++i) {
+            var randomNumber = Math.floor( Math.random() * 10 ); //random number between 0 and 9
+            confirmationNumber = confirmationNumber + numbers[randomNumber];
+        }
+        return confirmationNumber;
+    };
+
+    return f(length);
+}
 
 //need to check duplicate confirmation_code
 /**
@@ -84,8 +99,6 @@ exports.generateRandomString=function(length) {
             var randomNumber = Math.floor( Math.random() * 36 ); //random number between 0 and 35
             confirmationCode = confirmationCode + letters[randomNumber];
         }
-        console.log(confirmationCode);
-        //callback(confirmationCode);
         return confirmationCode;
     };
 

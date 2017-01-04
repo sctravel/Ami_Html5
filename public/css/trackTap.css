@@ -1,0 +1,16 @@
+#trackTap {
+    width: 1280px;
+    margin: 0 auto;
+    text-align: center;
+}
+table {
+    margin: 0 auto;
+}
+table:hover {
+//cursor: url('images/chuizi.jpg'),auto;//此处图片路径要依据自己的路径来修改
+}
+td {
+    width: 160px;
+    height: 160px;
+    background-color: #000000;
+}

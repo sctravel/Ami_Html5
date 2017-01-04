@@ -10,8 +10,8 @@ var passport = require('passport');
 var constants = require('./src/common/constants.js');
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
-global.fs = require('fs');
 var _ = require("underscore");
+global.fs = require('fs');
 
 //var busboyBodyParser = require('busboy-body-parser');
 
@@ -36,38 +36,8 @@ app.use(express.methodOverride());
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-
-
-///////////////////////////////////////////////////////////////////////////
-// Log4js configuration
-///////////////////////////////////////////////////////////////////////////
-var log4js = require('log4js');
-log4js.configure({
-    appenders: [
-        { type: 'console' }, //控制台输出
-        {
-            type: 'file', //文件输出
-            filename: 'logs/access.log',
-            maxLogSize: 1024*1024*100, //100MB
-            backups:3,
-            "layout": {
-                "type": "pattern",
-                "pattern": "%m"
-            },
-            "category": "AMI_HTML5"
-        }
-    ],
-    replaceConsole: true
-});
-var logger = log4js.getLogger('AMI_HTML5');
-if ('development' == app.get('env')) {
-    logger.setLevel('DEBUG');
-    app.use(log4js.connectLogger(logger, {level:log4js.levels.DEBUG, format:':method :url'}));
-} else {
-    logger.setLevel('INFO');
-    app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO, format:':method :url'}));
-}
-exports.logger=logger;
+var configLogger = require('./src/common/logger');
+global.logger = configLogger(app);
 
 ///////////////////////////////////////////////////////////////////////////
 // Router / Middleware configuration
@@ -103,15 +73,15 @@ s3Route(app);
  };
 */
 
- //User login, need to separate from recipient login
- function isLoggedIn(req, res, next) {
-     if (req.isAuthenticated()) {
-         return next();
-     } else {
-         res.redirect("/");
-     }
- }
- exports.isLoggedIn = isLoggedIn;
+//User login, need to separate from recipient login
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect("/");
+    }
+}
+exports.isLoggedIn = isLoggedIn;
 
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
@@ -146,16 +116,13 @@ app.get('/audio', function (req,res){
 
 app.get('/interview', function (req,res){
     console.log(req.user);
-    res.render('recorder',{user: req.user});
+    res.render('interview',{user: req.user});
 });
 
 app.get('/questionSet', function(req, res){
     console.info("####################")
     var questionSet = JSON.parse(fs.readFileSync('./document/questionSet.json', 'utf8'));
-    // run
-
-    questionSet = _.where(questionSet, {test: 1});
-    console.dir(questionSet);
+    //questionSet = _.where(questionSet, {test: 1});
     res.send(questionSet);
 });
 
@@ -164,7 +131,11 @@ app.get('/game', function (req,res){
 });
 
 
-
+app.post('/api/finish', function(req, res) {
+    //zip directory
+    //upload zip to s3;
+    req.logout();
+});
 
 app.post('/upload/audio/', function (req, res) {
     logger.info("########start uploading wav file");
