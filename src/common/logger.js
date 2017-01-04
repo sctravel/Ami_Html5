@@ -5,6 +5,7 @@
 ///////////////////////////////////////////////////////////////////////////
 // Log4js configuration
 ///////////////////////////////////////////////////////////////////////////
+
 module.exports = function(app) {
     var log4js = require('log4js');
     log4js.configure({
@@ -27,10 +28,10 @@ module.exports = function(app) {
     var logger = log4js.getLogger('AMI_HTML5');
     if ('development' == app.get('env')) {
         logger.setLevel('DEBUG');
-        app.use(log4js.connectLogger(logger, {level: log4js.levels.DEBUG, format: ':method :url'}));
+        app.use(log4js.connectLogger(logger, {level: log4js.levels.DEBUG, format: ':datetime :category :method :url'}));
     } else {
         logger.setLevel('INFO');
-        app.use(log4js.connectLogger(logger, {level: log4js.levels.INFO, format: ':method :url'}));
+        app.use(log4js.connectLogger(logger, {level: log4js.levels.INFO, format: ':datetime :category :method :url'}));
     }
     return logger;
 }

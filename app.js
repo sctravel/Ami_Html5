@@ -12,8 +12,46 @@ var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 var _ = require("underscore");
 global.fs = require('fs');
+var JL = require('jsnlog').JL;
+var winston = require('winston');
+var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
+var logger = JL("server");
 
-//var busboyBodyParser = require('busboy-body-parser');
+var logFormatter = function(options) {
+    console.dir(options);
+    //return options;
+    // Return string will be passed to logger.
+    return (new Date()).toISOString() +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
+};
+
+exports.logFormatter = logFormatter;
+
+winston.loggers.add('server', {
+    file: {
+        filename: 'logs/server.log',
+        maxsize: 15000000,
+        json: false
+    }
+});
+winston.loggers.add('client', {
+    file: {
+        filename: 'logs/abc.log',
+        json: false,
+        timestamp: new Date(),
+        formatter: logFormatter
+    },
+});
+
+var fileAppender = new (winston.transports.File)({
+    filename: 'logs/server.log' ,
+    timestamp: new Date(),
+    formatter: logFormatter,
+    json: false
+});
+logger.setOptions({ "appenders": [fileAppender, new (winston.transports.Console)()] });
+var clientLogger = JL("client");
+clientLogger.setOptions({ "appenders": [new (winston.transports.File)({ filename: 'logs/client.log' })]});
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Environments Settings
@@ -36,8 +74,6 @@ app.use(express.methodOverride());
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-var configLogger = require('./src/common/logger');
-global.logger = configLogger(app);
 
 ///////////////////////////////////////////////////////////////////////////
 // Router / Middleware configuration
@@ -51,6 +87,15 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
+//User login, need to separate from recipient login
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect("/");
+    }
+}
+exports.isLoggedIn = isLoggedIn;
 fs.mkdir(constants.paths.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
@@ -73,15 +118,6 @@ s3Route(app);
  };
 */
 
-//User login, need to separate from recipient login
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        res.redirect("/");
-    }
-}
-exports.isLoggedIn = isLoggedIn;
 
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
@@ -118,7 +154,7 @@ app.get('/audio', function (req,res){
     res.render('recorder',{user: req.user});
 });
 
-app.get('/interview', function (req,res){
+app.get('/interview', isLoggedIn, function (req,res){
     console.log(req.user);
     res.render('interview',{user: req.user});
 });
@@ -159,6 +195,20 @@ app.post('/upload/audio/', function (req, res) {
 
 
 
+// jsnlog.js on the client by default sends log messages to /jsnlog.logger, using POST.
+app.post('*.logger', isLoggedIn, function (req, res) {
+    //var logger = JL('client');
+    //clientLogger.info(req.body);
+    console.dir(req.body);
+    console.dir(req.body.lg);
+    var clientLog = req.body.lg;
+    for(var i in clientLog) {
+        var line = clientLog[i];
+        winston.loggers.get(req.user.sessionId).info(line.t+": " + line.m);
+    }
+    // Send empty response. This is ok, because client side jsnlog does not use response from server.
+    res.send('');
+});
 
 
 

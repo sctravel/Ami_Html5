@@ -5,14 +5,14 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>AMI Paces</title>
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/assets/css/social-buttons.css">
+    <link rel="stylesheet" href="/css/social-buttons.css">
     <style>
         .my-error-class{
             color:#FF0000 /*red*/
         }
     </style>
 </head>
-<body style="" background="assets/images/icon_large.png">
+<body style="">
 
 <div style="padding-top: 5%; height:auto; min-height: 90%;  margin: 0 auto -50px">
     <p id="errorMessage" class="text-center" style="color: red"></p>
@@ -21,7 +21,7 @@
         <hr class="greenLine" >
 
         <div class="form-signin text-center" style="padding-top: 10px">
-            <form id="userSignInForm"  action="/services/login/signin" method="post">
+            <form id="userSignInForm"  action="/api/login/signin" method="post">
                 <% if (error) { %>
                 <div class="text-center alert" style="color: red; font-size: small; font-style: italic; padding-bottom: 1% "> <%= error %> </div>
                 <% } %>
