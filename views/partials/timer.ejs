@@ -15,14 +15,29 @@
 </style>
 
 
-<svg id="timer" timeout="10" r="50" width="50" height="50" viewbox="0 0 100 100">
+<svg id="timer" style="display: none" r="50" width="50" height="50" viewbox="0 0 100 100">
 
     <path id="border" transform="translate(50, 50)"/>
     <path id="loader" transform="translate(50, 50) scale(.84)"/>
 </svg>
 
 <script>
+    var timerId = null;
+    var timer = document.getElementById('timer')
 
+    function stopTimer() {
+        timer.style.display = "none";
+        if(timerId !=null) {
+            clearTimeout(timerId);
+            timerId = null;
+        }
+    }
+
+    function startTimer(initTimeout, maxTimeout, initTimeoutFunction, maxTimeoutFunction) {
+        var radius = 50;
+        timer.style.display = "inline";
+
+<<<<<<< HEAD
     function startTimer(timeout, radius, onEndFunction) {
         var timerId = null;
         var timer = document.getElementById('timer');
@@ -31,14 +46,28 @@
         var π = Math.PI;
          var α = 0
             , t = timeout/ 2 / 360 * 1000; //draw 1 degree every t milli-seconds
+=======
+        var loader = document.getElementById('loader')
+        var border = document.getElementById('border')
+        var π = Math.PI
+        var α = 0
+            , t = maxTimeout/ 2 / 360 * 1000; //draw 1 degree every t milli-seconds
+        var initA = initTimeout/maxTimeout*360;
+        var initExecuted = false;
+>>>>>>> c917b35a4c0981b30aab1be9890c0ea53db36e36
 
         (function draw() {
             α++;
+            if(initTimeout>0 && α > initA && !initExecuted) {
+                initTimeoutFunction();
+                initExecuted = true;
+            }
             if (α > 360) {
                 if(timerId!=null) {
                     clearTimeout(timerId);
+                    timerId = null;
                 }
-                onEndFunction();
+                maxTimeoutFunction();
                 return;
             }
             //α %= 360;

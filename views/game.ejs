@@ -22,8 +22,8 @@
                 //cursor: url('images/chuizi.jpg'),auto;//此处图片路径要依据自己的路径来修改
             }
             td {
-                width: 120px;
-                height: 120px;
+                width: 160px;
+                height: 160px;
                 background-color: #000000;
             }
         </style>
@@ -35,7 +35,7 @@
                 beat = 0,              //鼠标点击次数
                 success = 0,           //命中率
                 knock = 0,             //鼠标点中老鼠图片次数
-                countDown = 20,        //倒计时
+                countDown = 40,        //倒计时
                 interId = null,        //指定setInterval()的变量
                 timeId = null;         //指定setTimeout()的变量
 
@@ -50,7 +50,7 @@
                 score = 0;
                 knock = 0;
                 beat = 0;
-                countDown = 20;
+                countDown = 40;
             }
 
             //显示当前倒计时所剩时间
@@ -72,22 +72,22 @@
             function show(){
                 if(playing)
                 {
-                    if(total == 20) {
+                    if(total == 10) {
                         GameOver();
                         return;
                     }
-                    var current = Math.floor(Math.random()*25);
+                    var current = Math.floor(Math.random()*6);
                     //这里的路径也需要根据自己的实际文件路径来修改
-                    document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="120px" width="120px">';
+                    document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="160px" width="160px">';
                     ++total;
                     //使用setTimeout()实现2秒后隐藏老鼠图片
-                    setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1000);
+                    setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1500);
                 }
             }
 
             //清除所有老鼠图片
             function clearMouse(){
-                for(var i=0;i<=24;i++)
+                for(var i=0;i<=5;i++)
                 {
                     document.getElementById("td["+i+"]").innerHTML="";
                 }
@@ -124,7 +124,8 @@
             //游戏开始
             function GameStart(){
                 playing = true;
-                interId = setInterval("show()",1000);
+                show();
+                interId = setInterval("show()",1500);
                 document.form1.score.value = score;
                 document.form1.success.value = success;
                 timeShow();
@@ -165,37 +166,14 @@
             <tr>
                 <td id="td[0]" onclick="hit(0)"></td>
                 <td id="td[1]" onclick="hit(1)"></td>
+            </tr>
+            <tr>
                 <td id="td[2]" onclick="hit(2)"></td>
                 <td id="td[3]" onclick="hit(3)"></td>
+            </tr>
+            <tr>
                 <td id="td[4]" onclick="hit(4)"></td>
-            </tr>
-            <tr>
                 <td id="td[5]" onclick="hit(5)"></td>
-                <td id="td[6]" onclick="hit(6)"></td>
-                <td id="td[7]" onclick="hit(7)"></td>
-                <td id="td[8]" onclick="hit(8)"></td>
-                <td id="td[9]" onclick="hit(9)"></td>
-            </tr>
-            <tr>
-                <td id="td[10]" onclick="hit(10)"></td>
-                <td id="td[11]" onclick="hit(11)"></td>
-                <td id="td[12]" onclick="hit(12)"></td>
-                <td id="td[13]" onclick="hit(13)"></td>
-                <td id="td[14]" onclick="hit(14)"></td>
-            </tr>
-            <tr>
-                <td id="td[15]" onclick="hit(15)"></td>
-                <td id="td[16]" onclick="hit(16)"></td>
-                <td id="td[17]" onclick="hit(17)"></td>
-                <td id="td[18]" onclick="hit(18)"></td>
-                <td id="td[19]" onclick="hit(19)"></td>
-            </tr>
-            <tr>
-                <td id="td[20]" onclick="hit(20)"></td>
-                <td id="td[21]" onclick="hit(21)"></td>
-                <td id="td[22]" onclick="hit(22)"></td>
-                <td id="td[23]" onclick="hit(23)"></td>
-                <td id="td[24]" onclick="hit(24)"></td>
             </tr>
         </table>
     </div>

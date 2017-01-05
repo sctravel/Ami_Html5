@@ -7,11 +7,51 @@ var http = require('http');
 var https = require('https');
 var path = require('path');
 var passport = require('passport');
-//var constants = require('src/common/constants.js');
+var constants = require('./src/common/constants.js');
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
+var _ = require("underscore");
 global.fs = require('fs');
-//var busboyBodyParser = require('busboy-body-parser');
+var JL = require('jsnlog').JL;
+var winston = require('winston');
+var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
+var logger = JL("server");
+
+var logFormatter = function(options) {
+    console.dir(options);
+    //return options;
+    // Return string will be passed to logger.
+    return (new Date()).toISOString() +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
+};
+
+exports.logFormatter = logFormatter;
+
+winston.loggers.add('server', {
+    file: {
+        filename: 'logs/server.log',
+        maxsize: 15000000,
+        json: false
+    }
+});
+winston.loggers.add('client', {
+    file: {
+        filename: 'logs/abc.log',
+        json: false,
+        timestamp: new Date(),
+        formatter: logFormatter
+    },
+});
+
+var fileAppender = new (winston.transports.File)({
+    filename: 'logs/server.log' ,
+    timestamp: new Date(),
+    formatter: logFormatter,
+    json: false
+});
+logger.setOptions({ "appenders": [fileAppender, new (winston.transports.Console)()] });
+var clientLogger = JL("client");
+clientLogger.setOptions({ "appenders": [new (winston.transports.File)({ filename: 'logs/client.log' })]});
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Environments Settings
@@ -34,36 +74,6 @@ app.use(express.methodOverride());
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-///////////////////////////////////////////////////////////////////////////
-// Log4js configuration
-///////////////////////////////////////////////////////////////////////////
-var log4js = require('log4js');
-log4js.configure({
-    appenders: [
-        { type: 'console' }, //控制台输出
-        {
-            type: 'file', //文件输出
-            filename: 'logs/access.log',
-            maxLogSize: 1024*1024*100, //100MB
-            backups:3,
-            "layout": {
-                "type": "pattern",
-                "pattern": "%m"
-            },
-            "category": "AMI_HTML5"
-        }
-    ],
-    replaceConsole: true
-});
-var logger = log4js.getLogger('AMI_HTML5');
-if ('development' == app.get('env')) {
-    logger.setLevel('DEBUG');
-    app.use(log4js.connectLogger(logger, {level:log4js.levels.DEBUG, format:':method :url'}));
-} else {
-    logger.setLevel('INFO');
-    app.use(log4js.connectLogger(logger, {level:log4js.levels.INFO, format:':method :url'}));
-}
-exports.logger=logger;
 
 ///////////////////////////////////////////////////////////////////////////
 // Router / Middleware configuration
@@ -77,9 +87,25 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
+//User login, need to separate from recipient login
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect("/");
+    }
+}
+exports.isLoggedIn = isLoggedIn;
+fs.mkdir(constants.paths.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
 configUserLoginRoute(app);
+
+var getTestsRoute = require('./routes/getTestsRoute');
+getTestsRoute(app);
+
+var s3Route = require('./routes/s3Route');
+s3Route(app);
 ///////////////////////////////////////////////////////////////////////////
 // SSL Certification
 ///////////////////////////////////////////////////////////////////////////
@@ -92,16 +118,6 @@ configUserLoginRoute(app);
  };
 */
 
- //User login, need to separate from recipient login
- function isLoggedIn(req, res, next) {
-     if (req.isAuthenticated()) {
-         logger.debug(req.user);
-         return next();
-     } else {
-         res.redirect("/");
-     }
- }
- exports.isLoggedIn = isLoggedIn;
 
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
@@ -138,52 +154,61 @@ app.get('/audio', function (req,res){
     res.render('recorder',{user: req.user});
 });
 
-app.get('/interview', function (req,res){
+app.get('/interview', isLoggedIn, function (req,res){
     console.log(req.user);
-
     res.render('interview',{user: req.user});
 });
 
-app.get('/contactus', function (req,res){
-    res.render('contactUs', {user: req.user});
-});
-app.get('/aboutus', function (req,res){
-    res.render('aboutUs', {user: req.user});
-});
-app.get('/terms', function (req,res){
-    res.render('Terms', {user: req.user});
-});
-app.get('/Privacy', function (req,res){
-    res.render('Privacy', {user: req.user});
+app.get('/questionSet', function(req, res){
+    console.info("####################")
+    var questionSet = JSON.parse(fs.readFileSync('./document/questionSet.json', 'utf8'));
+    //questionSet = _.where(questionSet, {test: 1});
+    res.send(questionSet);
 });
 
-var buf = new Buffer("a", encoding='utf8'); // decode
+app.get('/game', function (req,res){
+    res.render('game', {user: req.user});
+});
 
-var uploadFolder = "C:\\uploadedFiles\\";
-fs.mkdir(uploadFolder,function(e){
-    if(!e || (e && e.code === 'EEXIST')){
-        //do something with contents
-    } else {
-        //debug
-        console.log(e);
-    }
+
+app.post('/api/finish', function(req, res) {
+    //zip directory
+    //upload zip to s3;
+    req.logout();
 });
 
 app.post('/upload/audio/', function (req, res) {
+    logger.info("########start uploading wav file");
     var id = req.body.id;
     var buf =  new Buffer(req.body.blob, 'Base64'); // decode
-    var filename = uploadFolder+"question_"+id+".wav"; //"+req.user+"_"+req.sessionId+"\\
+    var filename = constants.paths.UPLOAD_FOLDER + "/test/question_" + id + ".wav";
+    if(req.user) {
+        constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/question_" + id + ".wav"; //"+req.user+"_"+req.sessionId+"\\
+    }
     fs.writeFile(filename, buf, function(err) {
         res.sendStatus(err ? 500 : 200);
         return;
     });
-    console.log("########upload wav file succeeded!");
+    logger.info("########upload wav file succeeded!");
     res.send("ok");
 });
 
-//https://stripe.com/docs/tutorials/forms
 
 
+// jsnlog.js on the client by default sends log messages to /jsnlog.logger, using POST.
+app.post('*.logger', isLoggedIn, function (req, res) {
+    //var logger = JL('client');
+    //clientLogger.info(req.body);
+    console.dir(req.body);
+    console.dir(req.body.lg);
+    var clientLog = req.body.lg;
+    for(var i in clientLog) {
+        var line = clientLog[i];
+        winston.loggers.get(req.user.sessionId).info(line.t+": " + line.m);
+    }
+    // Send empty response. This is ok, because client side jsnlog does not use response from server.
+    res.send('');
+});
 
 
 

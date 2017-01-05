@@ -79,6 +79,7 @@
 <script>
 
     function audioOrVideoNotEnabled() {
+        audioLevel = audioLevelOptions.NoMicrophone;
         var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
         audio.play();
         audio.onended = function() {
@@ -93,16 +94,39 @@
             document.getElementById("analyser").style.display="inline";
             gotStream(stream);
             toggleRecording(recordButton);
-            startTimer(25, 50, function() {
+            startTimer(0, 10, null, function() {
                 toggleRecording(recordButton);
-                document.getElementById("analyser").style.display="none";
-
-                //Need to calculate SNR of the voice and evaluate it
-                var audioOK = new Audio('/assets/Audio/items/2000.2.OK.mp3');
-                audioOK.onended = function(){
-                   // window.location.href = "/interview";
+                document.getElementById("analyser").style.display = "none";
+                switch(audioLevel) {
+                    case audioLevelOptions.OK:
+                        var audioOK = new Audio('/assets/Audio/items/2000.2.OK.mp3');
+                        audioOK.onended = function () {
+                            // window.location.href = "/interview";
+                        }
+                        audioOK.play();
+                        break;
+                    case audioLevelOptions.LowVolume:
+                        var audioOK = new Audio('/assets/Audio/items/2000.2.Low.mp3');
+                        audioOK.onended = function () {
+                            // window.location.href = "/interview";
+                        }
+                        audioOK.play();
+                        break;
+                    case audioLevelOptions.LowSNR:
+                        var audioOK = new Audio('/assets/Audio/items/2000.2.Noise.mp3');
+                        audioOK.onended = function () {
+                            // window.location.href = "/interview";
+                        }
+                        audioOK.play();
+                        break;
+                    default:
+                        var audioOK = new Audio('/assets/Audio/items/2000.2.MoreSpeech.mp3');
+                        audioOK.onended = function () {
+                            // window.location.href = "/interview";
+                        }
+                        audioOK.play();
+                        break;
                 }
-                audioOK.play();
 
             })
             //toggleRecording(this);

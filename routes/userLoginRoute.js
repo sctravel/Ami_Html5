@@ -6,12 +6,14 @@ module.exports = function(app) {
     var constants = require('../src/common/constants');
     var stringUtil = require('../src/common/stringUtil');
     var isLoggedIn = require('../app').isLoggedIn;
+    var logFormatter = require('../app').logFormatter;
     var passport = require('passport');
     var LocalStrategy = require('passport-local').Strategy;
-    var logger = require('../app').logger;
     var config = require('config');
-    var userLogin = require('../src/user/userLogin');
-    logger.info("#########app env: "+app.get('env')+". ##############");
+    var userLogin = require('../src/login/userLogin');
+    var Session = require('../src/model/session');
+    var winston = require('winston');
+
     ///////////////////////////////////////////////////////////////////////
     // Passport - Login methods setup
     ///////////////////////////////////////////////////////////////////////
@@ -23,7 +25,9 @@ module.exports = function(app) {
                     return done(null, false, { message: 'Login Error. Please try again' });
                 }
                 if(results.isAuthenticated == true ) {
-                    return done(null, {email:results.email, userId : results.userId, sessionId: results.sessionId} );
+                    //create a session dir for uploading files
+                    fs.mkdir(constants.paths.UPLOAD_FOLDER+results.session.data.userId+"_"+results.session.data.sessionId+"/", function(e){});
+                    return done(null, {email:results.session.data.email, userId : results.session.data.userId, sessionId: results.session.data.sessionId} );
                 } else {
                     return done(null, false, { message: results.errorMessage });
                 }
@@ -40,15 +44,29 @@ module.exports = function(app) {
     });
 
 
-    app.post('/services/login/signin',
+    app.post('/api/login/signin',
         passport.authenticate('user',
             { failureRedirect: '/', failureFlash: true }
         ),
         function(req,res){
-            logger.info(req.body);
-            logger.info("sign-in request");
-            res.redirect("/adjustVolume");
+            //logger.info(req.body);
+            //logger.info("sign-in request");
+            winston.loggers.add(req.user.sessionId, {
+                file: {
+                    filename: 'logs/client/'+req.user.sessionId+'.log',
+                    json: false,
+                    timestamp: new Date(),
+                    formatter: logFormatter
+                },
+            });
+            res.redirect("/interview");
         }
     );
+
+    app.post('/api/login/signout', isLoggedIn, function (req, res) {
+        winston.loggers.get(req.user.sessionId).close();
+        req.logout();
+        res.redirect("/");
+    });
 
 };
