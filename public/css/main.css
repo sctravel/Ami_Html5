@@ -21,7 +21,7 @@ body{
     height:auto;
 }
 
-video {
+#camera_spot {
 
     min-width: 50px;
     max-width: 150px;
@@ -42,10 +42,63 @@ video {
     width: 100%;
     display:none;
 }
+#content{
+    width: 100%;
+    min-height:200px ;
+    max-height: 60%;
+}
+#microphone{
+    width:100%;
+
+    position:absolute;
+    bottom:42px;
+}
+
+#video{
+    width: 100%;
+    min-height:200px ;
+    max-height: 500px;
+}
 #next_button_block{
     background-color: #00B7FF;;
 }
 @media only screen and (min-width: 768px) {
     /* For desktop: */
 
+}
+
+div.img {
+    border: 1px solid #ccc;
+}
+
+div.img:hover {
+    border: 1px solid #777;
+}
+
+div.img img {
+    width: 100%;
+    height: auto;
+}
+
+div.desc {
+    padding: 15px;
+    text-align: center;
+}
+
+* {
+    box-sizing: border-box;
+}
+
+.responsive {
+    padding: 0 6px;
+    float:left;
+    width: 49.99999%;
+}
+
+
+
+.clearfix:after {
+    content: "";
+    display: table;
+    clear: both;
 }
