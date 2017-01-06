@@ -14,13 +14,8 @@ var _ = require("underscore");
 global.fs = require('fs');
 var JL = require('jsnlog').JL;
 var winston = require('winston');
-var jsnlog_nodejs = require('jsnlog-nodejs').jsnlog_nodejs;
-var logger = JL("server");
 
 var logFormatter = function(options) {
-    console.dir(options);
-    //return options;
-    // Return string will be passed to logger.
     return (new Date()).toISOString() +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
 };
 
@@ -30,28 +25,13 @@ winston.loggers.add('server', {
     file: {
         filename: 'logs/server.log',
         maxsize: 15000000,
-        json: false
-    }
-});
-winston.loggers.add('client', {
-    file: {
-        filename: 'logs/abc.log',
         json: false,
         timestamp: new Date(),
         formatter: logFormatter
-    },
+    }
 });
 
-var fileAppender = new (winston.transports.File)({
-    filename: 'logs/server.log' ,
-    timestamp: new Date(),
-    formatter: logFormatter,
-    json: false
-});
-logger.setOptions({ "appenders": [fileAppender, new (winston.transports.Console)()] });
-var clientLogger = JL("client");
-clientLogger.setOptions({ "appenders": [new (winston.transports.File)({ filename: 'logs/client.log' })]});
-
+global.logger = winston.loggers.get('server');
 
 ///////////////////////////////////////////////////////////////////////////
 // Environments Settings
@@ -171,11 +151,7 @@ app.get('/game', function (req,res){
 });
 
 
-app.post('/api/finish', function(req, res) {
-    //zip directory
-    //upload zip to s3;
-    req.logout();
-});
+
 
 app.post('/upload/audio/', function (req, res) {
     logger.info("########start uploading wav file");
