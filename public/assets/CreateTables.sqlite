@@ -107,4 +107,30 @@ FOREIGN KEY(subjectid) REFERENCES photos (subjectid) ON DELETE CASCADE ON UPDATE
 CREATE INDEX photoes_filename ON photoes (filename);
 CREATE INDEX photoes_feeling ON photoes (feeling);
 
+-- sessions
+CREATE TABLE sessions (
+sessionId     varchar(31) NOT NULL PRIMARY KEY,
+userId        varchar(63) NOT NULL,
+email         varchar(127) NOT NULL,
+starttime     datetime NOT NULL,
+endtime       datetime default NULL,
+testId        integer NOT NULL
+FOREIGN KEY(testId) REFERENCES tests (test) ON UPDATE CASCADE
+);
+CREATE INDEX sessions_userId ON sessions (userId);
+
+-- sessions
+CREATE TABLE sessionstates (
+sessionId     varchar(31) NOT NULL,
+testId        integer NOT NULL,
+type          integer unsigned NOT NULL,
+item          integer unsigned NOT NULL,
+seq           integer unsigned NOT NULL,
+status        integer NOT NULL,
+UNIQUE        (sessionId, testId, type, item),
+FOREIGN KEY(sessionId) REFERENCES sessions (sessionId) ON DELETE CASCADE ON UPDATE CASCADE
+);
+CREATE INDEX sessionstates_sessionId ON sessionstates (sessionId);
+
+
 

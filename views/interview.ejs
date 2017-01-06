@@ -8,6 +8,8 @@
     <link rel="stylesheet" href="/css/main.css">
     <script src="/jquery/dist/jquery.min.js"></script>
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/jsnlog.js/jsnlog.js"></script>
+
     <script src="js/recorderjs/audiodisplay.js"></script>
     <script src="js/recorderjs/recorder.js"></script>
     <script src="js/recorderjs/audioMain.js"></script>
@@ -200,6 +202,8 @@
     var nextButton = document.getElementById("nextButton");
     var instr = document.getElementById("instructionText");
     var trackTap = document.getElementById("trackTap");
+
+    JL("client").info("Interview started");
 
     function processItem(stream) {
         ++index;

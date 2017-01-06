@@ -6,13 +6,14 @@ module.exports = function(app) {
     var constants = require('../src/common/constants');
     var stringUtil = require('../src/common/stringUtil');
     var isLoggedIn = require('../app').isLoggedIn;
+    var logFormatter = require('../app').logFormatter;
     var passport = require('passport');
     var LocalStrategy = require('passport-local').Strategy;
     var config = require('config');
     var userLogin = require('../src/login/userLogin');
     var Session = require('../src/model/session');
+    var winston = require('winston');
 
-    logger.info("#########app env: "+app.get('env')+". ##############");
     ///////////////////////////////////////////////////////////////////////
     // Passport - Login methods setup
     ///////////////////////////////////////////////////////////////////////
@@ -43,15 +44,32 @@ module.exports = function(app) {
     });
 
 
-    app.post('/services/login/signin',
+    app.post('/api/login/signin',
         passport.authenticate('user',
             { failureRedirect: '/', failureFlash: true }
         ),
         function(req,res){
-            logger.info(req.body);
-            logger.info("sign-in request");
-            res.redirect("/adjustVolume");
+            //logger.info(req.body);
+            //logger.info("sign-in request");
+            winston.loggers.add(req.user.sessionId, {
+                file: {
+                    filename: 'logs/client/'+req.user.sessionId+'.log',
+                    json: false,
+                    timestamp: new Date(),
+                    formatter: logFormatter
+                },
+            });
+            res.redirect("/interview");
         }
     );
+
+    app.post('/api/login/finish', isLoggedIn, function(req, res) {
+        winston.loggers.get(req.user.sessionId).close();
+        userLogin.finishSession();
+        //upload zip to s3;
+        req.logout();
+        res.redirect("/");
+    });
+
 
 };

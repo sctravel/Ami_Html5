@@ -12,8 +12,26 @@ var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 var _ = require("underscore");
 global.fs = require('fs');
+var JL = require('jsnlog').JL;
+var winston = require('winston');
 
-//var busboyBodyParser = require('busboy-body-parser');
+var logFormatter = function(options) {
+    return (new Date()).toISOString() +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
+};
+
+exports.logFormatter = logFormatter;
+
+winston.loggers.add('server', {
+    file: {
+        filename: 'logs/server.log',
+        maxsize: 15000000,
+        json: false,
+        timestamp: new Date(),
+        formatter: logFormatter
+    }
+});
+
+global.logger = winston.loggers.get('server');
 
 ///////////////////////////////////////////////////////////////////////////
 // Environments Settings
@@ -36,8 +54,6 @@ app.use(express.methodOverride());
 app.use(bodyParser.json({limit: "50mb"}));
 app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
 
-var configLogger = require('./src/common/logger');
-global.logger = configLogger(app);
 
 ///////////////////////////////////////////////////////////////////////////
 // Router / Middleware configuration
@@ -51,6 +67,15 @@ if ('development' == app.get('env')) {
     app.use(express.errorHandler());
 }
 
+//User login, need to separate from recipient login
+function isLoggedIn(req, res, next) {
+    if (req.isAuthenticated()) {
+        return next();
+    } else {
+        res.redirect("/");
+    }
+}
+exports.isLoggedIn = isLoggedIn;
 fs.mkdir(constants.paths.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
@@ -73,15 +98,6 @@ s3Route(app);
  };
 */
 
-//User login, need to separate from recipient login
-function isLoggedIn(req, res, next) {
-    if (req.isAuthenticated()) {
-        return next();
-    } else {
-        res.redirect("/");
-    }
-}
-exports.isLoggedIn = isLoggedIn;
 
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
@@ -114,7 +130,7 @@ app.get('/audio', function (req,res){
     res.render('recorder',{user: req.user});
 });
 
-app.get('/interview', function (req,res){
+app.get('/interview', isLoggedIn, function (req,res){
     console.log(req.user);
     res.render('interview',{user: req.user});
 });
@@ -131,11 +147,7 @@ app.get('/game', function (req,res){
 });
 
 
-app.post('/api/finish', function(req, res) {
-    //zip directory
-    //upload zip to s3;
-    req.logout();
-});
+
 
 app.post('/upload/audio/', function (req, res) {
     logger.info("########start uploading wav file");
@@ -155,6 +167,20 @@ app.post('/upload/audio/', function (req, res) {
 
 
 
+// jsnlog.js on the client by default sends log messages to /jsnlog.logger, using POST.
+app.post('*.logger', isLoggedIn, function (req, res) {
+    //var logger = JL('client');
+    //clientLogger.info(req.body);
+    console.dir(req.body);
+    console.dir(req.body.lg);
+    var clientLog = req.body.lg;
+    for(var i in clientLog) {
+        var line = clientLog[i];
+        winston.loggers.get(req.user.sessionId).info(line.t+": " + line.m);
+    }
+    // Send empty response. This is ok, because client side jsnlog does not use response from server.
+    res.send('');
+});
 
 
 
