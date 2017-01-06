@@ -12,6 +12,11 @@ var Session = function (userId, email, testId) {
     this.data.testId = testId;
 }
 
+Session.prototype.createSessionFromExisting = function(userId, email, sessionId, testId) {
+    var session = new Session(userId, email, testId);
+    session.data.sessionId = sessionId;
+    return session;
+}
 Session.prototype.data = {}
 
 

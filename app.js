@@ -104,7 +104,6 @@ s3Route(app);
 ///////////////////////////////////////////////////////////////////////////
 app.get('/', function (req,res){
     console.log(req.user);
-    req.session.lastPage = '/';
 
     res.render('index',{error: req.flash('error'), success: req.flash('success'), message:req.flash('message') });
 });

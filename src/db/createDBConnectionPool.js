@@ -14,7 +14,7 @@ console.log(util.inspect(dbOptions, {showHidden: false, depth: null}))
 var pool = mysql.createPool({
     host     : dbOptions.host,
     user     : dbOptions.user,
-    password :  process.env.MYSQL_PASS,
+    password :  "sctravel",
     database : dbOptions.database
 });
 
@@ -55,6 +55,7 @@ exports.runQueryWithParams = function(sql, params, callback) {
  * @param callback: callback function to deal with the result
  */
 exports.runQuery = function(sql, callback) {
+    var logger = require('../../app').logger;
 
     pool.getConnection(function(err,conn){
         if(err){
@@ -72,5 +73,5 @@ exports.runQuery = function(sql, callback) {
             callback(null,results);
             conn.release();
         })
-     })
- }
+    })
+}
