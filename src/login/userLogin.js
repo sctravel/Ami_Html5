@@ -1,7 +1,6 @@
 var stringUtil = require('./../common/stringUtil');
 var constants = require('./../common/constants');
 var emailUtil = require('./../common/emailUtil');
-var logger = require('../../app').logger;
 var Session = require("../model/session.js")
 var dbPool = require("../db/createDBConnectionPool");
 
@@ -34,24 +33,60 @@ var markSessionEnd = function(sessionId, callback) {
     });
 }
 
+var getUnfinishedSession = function(email,callback) {
+    var sqlUnfinishedSession = "select sessionId, testId from sessions where email = ? and endtime is null order by starttime desc";
+    dbPool.runQueryWithParams(sqlUnfinishedSession, [email], function (err, results) {
+        if (err) {
+            logger.error("getUnfinishedSession() failed for email: " + email);
+            callback(err, null);
+            return;
+        }
+        logger.info("getUnfinishedSession() - with results - " + results);
+        console.dir(results);
+        if(results==null || results.length==0) {
+            callback(null, null);
+        } else {
+            callback(null, results[0]);
+        }
+    });
+
+}
+
 //user login with email and password
 exports.manualLogin = function(email, pass, callback) {
     var returnObj = {};
     returnObj.isAuthenticated = false;
-    if(pass == "ami_qa") {
-        returnObj.isAuthenticated = true;
-        var testIndex = Math.floor(testList.length * Math.random());
-        var testId = testList[testIndex];
-        returnObj.session = new Session(email, email, testId);
-        createUserSession(returnObj.session.data, function(err, results){
-            if (err) {
+    if(pass == "ami_qa") { //TODO: here we hard code password
+        getUnfinishedSession(email, function(err, unfinishedSession){
+            if(err) {
+                logger.error(err);
                 callback(err, null);
                 return;
             }
-            logger.info("Session for " + email + " was created at " + returnObj.session.data.startTime + " with test :"+testId);
-            callback(null, returnObj);
-        });
-        //create session entry in session table
+            returnObj.isAuthenticated = true;
+
+            if(unfinishedSession!=null) {
+                logger.info("Session for " + email + " already exists, with sessionId = " + unfinishedSession.testId + " and testId = " + unfinishedSession.sessionId);
+                returnObj.session = new Session(email, email, unfinishedSession.testId);
+                returnObj.session.data.sessionId = unfinishedSession.sessionId;
+                callback(null, returnObj);
+            } else {
+                var testIndex = Math.floor(testList.length * Math.random());
+                var testId = testList[testIndex]; //TODO: use actual test list from DB or cached
+                returnObj.session = new Session(email, email, testId);
+                createUserSession(returnObj.session.data, function (err, results) {
+                    if (err) {
+                        logger.error("createUserSession() failed for email: " + email);
+                        callback(err, null);
+                        return;
+                    }
+                    logger.info("Session for " + email + " is created at " + returnObj.session.data.startTime + " with test :" + testId);
+                    callback(null, returnObj);
+                });
+            }
+            //create session entry in session table
+        })
+
 
     } else {
         logger.error("email-"+email+" logged in failed. The password is incorrect. Please try it again. ");
@@ -61,23 +96,7 @@ exports.manualLogin = function(email, pass, callback) {
 };
 
 
-exports.getUnfinishedSession = function(email,callback) {
-    var unfinishedSessionId = null;
-    var sqlUnfinishedSession = "select sessionId from sessions where email = ? and endtime = null order by starttime desc";
-    dbPool.runQueryWithParams(sqlUnfinishedSession, [email], function (err, results) {
-        if (err) {
-            logger.error("getUnfinishedSession() failed for email: " + email);
-            callback(err, null);
-            return;
-        }
-        console.dir(results);
-        if(results.length>0) {
-            unfinishedSessionId = results[0];
-        }
-        callback(null, unfinishedSessionId);
-    });
 
-}
 
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
     var sqlGetFinishedItemsInSession = "select sessionId, testId, type, item, seq, status from sessionstates where sessionId = ?";
@@ -97,17 +116,17 @@ function getFinishedItemsInSession(unfinishedSessionId, callback) {
 exports.getUnFinishedTestItemsInSession = function(email, callback) { // or change to sessionID
     //get status from sessionstates table to see whether there's any unfinished session
     // If so
-    getUnfinishedSession(email, function(err, unfinishedSessionId){
+    getUnfinishedSession(email, function(err, unfinishedSession){
         if(err) {
             logger.error("getFinishedTestItemsInSession() failed for email: " + email);
             callback(err, null);
             return;
         }
-        if(unfinishedSessionId==null) {
+        if(unfinishedSession==null) {
             callback(null, null);
             return;
         }
-        getFinishedItemsInSession(unfinishedSessionId, function(err, results) {
+        getFinishedItemsInSession(unfinishedSession.sessionId, function(err, results) {
             if(err) {
                 callback(err, null);
                 return;
@@ -116,7 +135,7 @@ exports.getUnFinishedTestItemsInSession = function(email, callback) { // or chan
                 callback(null, results);
                 return;
             }
-            var testId = result[0].testId;
+            var testId = unfinishedSession[0].testId;
             //TODO: filter all tests in testId by the results exception type==2000 (volumn/speaker check);
             callback(null, results);
         });
