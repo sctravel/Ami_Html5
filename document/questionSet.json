@@ -1,6 +1,6 @@
 [
   {
-    "test": 4,
+    "test": 2,
     "type": 2000,
     "item": 1,
     "seq": 2,
@@ -28,7 +28,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2000,
     "item": 2,
     "seq": 3,
@@ -56,7 +56,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2000,
     "item": 3,
     "seq": 4,
@@ -84,22 +84,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2023,
-    "item": 5,
+    "item": 2,
     "seq": 24,
     "itimeout": 0,
     "etimeout": 0,
     "mtimeout": 8,
     "itext": "Describe Video",
     "screen": "",
-    "audio": "2023.mp3:2023.5.mp3:2023.2.mp3",
-    "video": "WalletFallSquareShort.mp4",
+    "audio": "2023.mp3:2023.2.mp3:2023.1.mp3",
+    "video": "TrainTicket_Cropped_v01aiP5.mov",
     "initargs": "3.5:1.5:21.5",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Wallet Fall VIDEO",
+    "audiotext": "Train Ticket VIDEO",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Speaking in Sync",
@@ -112,7 +112,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2032,
     "item": 1,
     "seq": 22,
@@ -140,22 +140,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2040,
-    "item": 10,
+    "item": 7,
     "seq": 11,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 45,
     "itext": "Passage Retell",
     "screen": "",
-    "audio": "2040.10.mp3:2040.10V.mp3:2040.POST.mp3:2040.10.a.mp3",
+    "audio": "2040.7.mp3:2040.7V.mp3:2040.POST.mp3:2040.7.a.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Listen to this story about SISTERS and remember it.:Remember the SISTERS story, so you can re-tell it again later.:SISTERS. One cold morning, two sisters were walking to school when the little sister realized that sheâ€™d forgotten to bring along her lunch from home. The big sister said that sheâ€™d be willing to go back and get it for her â€“ she could run faster and take a shortcut, so she probably wouldnâ€™t be late. The younger girl agreed and soon found her big sister there at school waiting for her, lunch in hand.",
+    "audiotext": "Listen to this story about a CROSSWALK and remember it.:Remember the CROSSWALK story, so you can re-tell it again later.:CROSSWALK. When the elderly woman finished shopping, she had to go across the street to wait for her daughter. The woman tried to get across the street, but no cars where stopping to let her cross. A tall, thin young man was passing by and noticed the woman. He walked over and offered to help her. Once she got to the other side, her daughter arrived to pick her up.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -168,22 +168,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2041,
-    "item": 10,
+    "item": 7,
     "seq": 36,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 45,
     "itext": "Passage Re-retell",
     "screen": "",
-    "audio": "2041.10.mp3",
+    "audio": "2041.7.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Re-tell the SISTERS story again now. Put in all the details you can remember.",
+    "audiotext": "Re-tell the CROSSWALK story again now. Put in all the details you can remember.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -196,7 +196,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2044,
     "item": 0,
     "seq": 27,
@@ -224,22 +224,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2044,
-    "item": 4,
+    "item": 2,
     "seq": 28,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.4.mp3",
+    "audio": "2044.2.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "It's all unaccountably strange the way they do it.",
+    "audiotext": "How's the technical team holding up these days?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -252,22 +252,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2044,
-    "item": 8,
+    "item": 6,
     "seq": 29,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.8.mp3",
+    "audio": "2044.6.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "He cleared everybody out of the building except the supervisors.",
+    "audiotext": "Well the facts were right, but he didn't explain it.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -280,22 +280,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2044,
-    "item": 12,
+    "item": 10,
     "seq": 30,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.12.mp3",
+    "audio": "2044.10.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Her voice would deliver sales just by the welcome in it.",
+    "audiotext": "From my spot in the corner I could see every agent.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -308,22 +308,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2044,
-    "item": 16,
+    "item": 14,
     "seq": 31,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.16.mp3",
+    "audio": "2044.14.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Then Wilson tilted up that beautiful display and looked underneath it.",
+    "audiotext": "The darkness came and I went on working the front counter.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -336,22 +336,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2044,
-    "item": 20,
+    "item": 18,
     "seq": 32,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.20.mp3",
+    "audio": "2044.18.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Said to myself something's up; she never gets so many commissions.",
+    "audiotext": "You really want him to take a closer look at your accounts?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -364,7 +364,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2062,
     "item": 0,
     "seq": 14,
@@ -392,7 +392,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2062,
     "item": 1,
     "seq": 15,
@@ -420,7 +420,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2062,
     "item": 2,
     "seq": 17,
@@ -448,7 +448,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2064,
     "item": 1,
     "seq": 18,
@@ -473,10 +473,10 @@
     "timeout": 0,
     "replay": 0,
     "addition": "",
-    "wordsBlob": "[{\"string\":\"ACCESSORIES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"ACCORDED\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"ADDICTION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ALMOST\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"ALPHA\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ALTERNATE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AMERA\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"AMOUNT\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"ANSWER\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"APPROACHES\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"APPULIST\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"ARMOR\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AROUND\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"ASTONISHING\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AWAKENED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"AWESOME\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"BATTENING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"BECLUDE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"BEFORE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"BELOW\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"BIZARRE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"BOARDS\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"BRENDOUSLY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"BROCHURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"BUFFETED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"BUILD\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"CALCULATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"CALISTRATED\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"CAPITULATION\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CARGO\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CAUSED\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"CELLMARM\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"CENTENER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CERTENARY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"CHAKES\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CHAMERBILITY\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"CHARRUL\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"CHLORINATED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"CLEVERAGE\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"COINSURANCE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"COMES\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"COMMISSIONS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPOSER\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPREHEND\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPULSION\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"CONFISCATE\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CONFRONTED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CONSCEND\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"CONSISTENT\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"CONSISTFULLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CONSTITUTED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"CONTINSHIP\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CRITERION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CRUDELISTIC\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"CRUSTACEANS\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CULTURE\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"CYLINDER\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DARM\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"DEAFENING\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DEBRIEFING\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DECIDE\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DECISE\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"DEDUCES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"DELAY\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"DELINEATED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DEMUTE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"DEVELOPS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"DIDDLING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"DIGHT\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"DISCOVERY\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DISCURSIVE\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DISSECTING\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DISTROBINGLY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"DORS\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"DOUBLING\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DOUBTED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"DREAM\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DRUPS\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"DUTILIZATION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"DYED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"EDITORIALS\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"ELIMINATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"EMPTY\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"ENCOURAGED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ENTRACE\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"ERGONOMIC\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"ESSENTIAL\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"EVEN\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"EVERYTHING\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"EXPECTED\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"EXPLOSIVE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"EXPLUNE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"FAHRENHEIT\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"FANTER\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"FEACH\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"FEATURES\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"FECELLATIONS\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"FLITHER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"FORBIDDEN\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"FORGET\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"FRANCTUAL\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"FULFILLMENT\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"FUNDRAISING\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"GESPIRT\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"GLASTRILOGY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"GLORCE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"GUITARIST\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"HAPPENED\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"HAWKISH\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"HEAVY\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"HOMLICATION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"HYDRIMIC\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"ILLFRESSED\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"ILLUSTRATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"IMMORTALITY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"IMPOSED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"INDESCRIBABLY\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INFLAMED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INSENSUAL\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"INSULTED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INSURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"INTERCLEVERIST\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"INTERMINGLED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"INTERSWINES\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"IRONCLAD\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"IRRESCENDING\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"JILER\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"KNIBBENS\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"KNOWLEDGE\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"LADRIMACITY\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"LAVISH\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"LEAST\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"LEPOCATION\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"LITIGATION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"LORVENTION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"LOSING\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"MARTIAN\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"MEASURES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"MERCIFYING\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"MICROPHONES\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"MICROSTRUCTURES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"MINIMALLY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"MOTORCYCLE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"NESSURE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"NONGO\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"NONRESSIMILATED\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"NOTORIETY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"NUTTIER\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"OBSERVATORY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"OBSTRUCTED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"OCCUPIED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"OFFDALE\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"OFFICIALS\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"OMEGA\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"OVERQUATED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"PACKLE\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PAMPHLETS\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"PERFISCATE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"PINEAPPLE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"PLAGUED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"POLICE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"PONICY\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"POSTDURABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"PRACTIMONIA\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"PRECEDENT\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"PREEXISTENT\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"PREMIUMS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"PRESTRACTED\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PRETOLOGY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"PREVERSIFY\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"PRISHED\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PROGRAM\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"PROMISING\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"PRONCHABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"PROUSTLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"PROVEN\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"PURSPETTE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"QUITE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"REFENDMENT\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"REFESTEN\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"REFORALIZATION \",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"REGULATION\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"RELECTING\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"RELIES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"REMOCITY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"REPOWERMENT\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"RESPECTABLE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"RESPITE\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"RESTORTICAL\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"RIGHTS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"ROMANCED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"ROOSTED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"ROUSED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"SANDBLAST\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"SANDBLEDER\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"SCAFT\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"SCORPLESS\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"SEDDED\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"SHORTAGE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"SMETHER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"SOLDIERS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"SOOCKED\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STAMINA\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"STECTURE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"STENETICS\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"STINGLESS\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"STODGY\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"STOM\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STONTER\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STOPPILY\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"STRESTURE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"STRICTEST\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"STYLISHNESS\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"SUBMINIFY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"SULFATE\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"SUPERSEUM\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"TABLEMATES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"TECHNICAL\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"TELGENCE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"TERREMISS\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"TERRIBLY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"THANKS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"TOMENTIAL\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"TOWELS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"TRANKLING\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"ULTRAVIOLET\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNDECIDABLE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNDERCOUNTING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNDERWIRE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNGANNED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"UNLESTANCY\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"UNMISTAKABLE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNRELOANABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNREMANCHIBLE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"UNSTAMIBLE\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"URACEPTORS\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"UTTERLY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"VIBRIMARILY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"VISUALIZED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"WELCOME\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"WELCOMING\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"WERCOMB\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"WITHERED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"WORMED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"WORRIED\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"WRESTIVAILED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"WRISTEN\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"YOUR\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"}]"
+    "wordsBlob": "[{\"string\":\"INSURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"BROCHURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"}]"
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2064,
     "item": 2,
     "seq": 19,
@@ -501,10 +501,10 @@
     "timeout": 0,
     "replay": 0,
     "addition": "",
-    "wordsBlob": "[{\"string\":\"ACCESSORIES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"ACCORDED\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"ADDICTION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ALMOST\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"ALPHA\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ALTERNATE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AMERA\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"AMOUNT\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"ANSWER\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"APPROACHES\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"APPULIST\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"ARMOR\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AROUND\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"ASTONISHING\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AWAKENED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"AWESOME\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"BATTENING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"BECLUDE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"BEFORE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"BELOW\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"BIZARRE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"BOARDS\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"BRENDOUSLY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"BROCHURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"BUFFETED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"BUILD\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"CALCULATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"CALISTRATED\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"CAPITULATION\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CARGO\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CAUSED\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"CELLMARM\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"CENTENER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CERTENARY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"CHAKES\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CHAMERBILITY\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"CHARRUL\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"CHLORINATED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"CLEVERAGE\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"COINSURANCE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"COMES\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"COMMISSIONS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPOSER\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPREHEND\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPULSION\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"CONFISCATE\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CONFRONTED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CONSCEND\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"CONSISTENT\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"CONSISTFULLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CONSTITUTED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"CONTINSHIP\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CRITERION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CRUDELISTIC\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"CRUSTACEANS\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CULTURE\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"CYLINDER\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DARM\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"DEAFENING\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DEBRIEFING\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DECIDE\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DECISE\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"DEDUCES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"DELAY\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"DELINEATED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DEMUTE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"DEVELOPS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"DIDDLING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"DIGHT\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"DISCOVERY\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DISCURSIVE\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DISSECTING\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DISTROBINGLY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"DORS\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"DOUBLING\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DOUBTED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"DREAM\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DRUPS\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"DUTILIZATION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"DYED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"EDITORIALS\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"ELIMINATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"EMPTY\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"ENCOURAGED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ENTRACE\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"ERGONOMIC\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"ESSENTIAL\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"EVEN\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"EVERYTHING\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"EXPECTED\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"EXPLOSIVE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"EXPLUNE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"FAHRENHEIT\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"FANTER\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"FEACH\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"FEATURES\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"FECELLATIONS\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"FLITHER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"FORBIDDEN\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"FORGET\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"FRANCTUAL\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"FULFILLMENT\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"FUNDRAISING\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"GESPIRT\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"GLASTRILOGY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"GLORCE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"GUITARIST\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"HAPPENED\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"HAWKISH\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"HEAVY\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"HOMLICATION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"HYDRIMIC\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"ILLFRESSED\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"ILLUSTRATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"IMMORTALITY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"IMPOSED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"INDESCRIBABLY\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INFLAMED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INSENSUAL\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"INSULTED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INSURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"INTERCLEVERIST\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"INTERMINGLED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"INTERSWINES\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"IRONCLAD\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"IRRESCENDING\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"JILER\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"KNIBBENS\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"KNOWLEDGE\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"LADRIMACITY\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"LAVISH\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"LEAST\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"LEPOCATION\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"LITIGATION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"LORVENTION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"LOSING\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"MARTIAN\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"MEASURES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"MERCIFYING\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"MICROPHONES\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"MICROSTRUCTURES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"MINIMALLY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"MOTORCYCLE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"NESSURE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"NONGO\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"NONRESSIMILATED\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"NOTORIETY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"NUTTIER\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"OBSERVATORY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"OBSTRUCTED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"OCCUPIED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"OFFDALE\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"OFFICIALS\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"OMEGA\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"OVERQUATED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"PACKLE\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PAMPHLETS\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"PERFISCATE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"PINEAPPLE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"PLAGUED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"POLICE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"PONICY\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"POSTDURABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"PRACTIMONIA\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"PRECEDENT\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"PREEXISTENT\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"PREMIUMS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"PRESTRACTED\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PRETOLOGY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"PREVERSIFY\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"PRISHED\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PROGRAM\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"PROMISING\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"PRONCHABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"PROUSTLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"PROVEN\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"PURSPETTE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"QUITE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"REFENDMENT\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"REFESTEN\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"REFORALIZATION \",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"REGULATION\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"RELECTING\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"RELIES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"REMOCITY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"REPOWERMENT\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"RESPECTABLE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"RESPITE\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"RESTORTICAL\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"RIGHTS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"ROMANCED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"ROOSTED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"ROUSED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"SANDBLAST\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"SANDBLEDER\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"SCAFT\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"SCORPLESS\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"SEDDED\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"SHORTAGE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"SMETHER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"SOLDIERS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"SOOCKED\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STAMINA\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"STECTURE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"STENETICS\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"STINGLESS\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"STODGY\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"STOM\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STONTER\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STOPPILY\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"STRESTURE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"STRICTEST\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"STYLISHNESS\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"SUBMINIFY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"SULFATE\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"SUPERSEUM\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"TABLEMATES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"TECHNICAL\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"TELGENCE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"TERREMISS\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"TERRIBLY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"THANKS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"TOMENTIAL\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"TOWELS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"TRANKLING\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"ULTRAVIOLET\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNDECIDABLE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNDERCOUNTING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNDERWIRE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNGANNED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"UNLESTANCY\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"UNMISTAKABLE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNRELOANABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNREMANCHIBLE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"UNSTAMIBLE\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"URACEPTORS\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"UTTERLY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"VIBRIMARILY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"VISUALIZED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"WELCOME\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"WELCOMING\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"WERCOMB\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"WITHERED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"WORMED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"WORRIED\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"WRESTIVAILED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"WRISTEN\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"YOUR\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"}]"
+    "wordsBlob": "[{\"string\":\"INSURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"BROCHURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"}]"
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2064,
     "item": 3,
     "seq": 20,
@@ -529,10 +529,10 @@
     "timeout": 0,
     "replay": 0,
     "addition": "",
-    "wordsBlob": "[{\"string\":\"ACCESSORIES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"ACCORDED\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"ADDICTION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ALMOST\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"ALPHA\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ALTERNATE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AMERA\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"AMOUNT\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"ANSWER\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"APPROACHES\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"APPULIST\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"ARMOR\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AROUND\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"ASTONISHING\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"AWAKENED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"AWESOME\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"BATTENING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"BECLUDE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"BEFORE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"BELOW\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"BIZARRE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"BOARDS\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"BRENDOUSLY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"BROCHURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"BUFFETED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"BUILD\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"CALCULATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"CALISTRATED\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"CAPITULATION\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CARGO\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CAUSED\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"CELLMARM\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"CENTENER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CERTENARY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"CHAKES\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CHAMERBILITY\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"CHARRUL\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"CHLORINATED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"CLEVERAGE\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"COINSURANCE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"COMES\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"COMMISSIONS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPOSER\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPREHEND\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"COMPULSION\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"CONFISCATE\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CONFRONTED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CONSCEND\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"CONSISTENT\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"CONSISTFULLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CONSTITUTED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"CONTINSHIP\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"CRITERION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"CRUDELISTIC\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"CRUSTACEANS\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"CULTURE\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"CYLINDER\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DARM\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"DEAFENING\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DEBRIEFING\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DECIDE\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DECISE\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"DEDUCES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"DELAY\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"DELINEATED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DEMUTE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"DEVELOPS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"DIDDLING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"DIGHT\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"DISCOVERY\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DISCURSIVE\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DISSECTING\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"DISTROBINGLY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"DORS\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"DOUBLING\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"DOUBTED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"DREAM\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"DRUPS\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"DUTILIZATION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"DYED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"EDITORIALS\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"ELIMINATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"EMPTY\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"ENCOURAGED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"ENTRACE\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"ERGONOMIC\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"ESSENTIAL\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"EVEN\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"EVERYTHING\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"EXPECTED\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"EXPLOSIVE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"EXPLUNE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"FAHRENHEIT\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"FANTER\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"FEACH\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"FEATURES\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"FECELLATIONS\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"FLITHER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"FORBIDDEN\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"FORGET\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"FRANCTUAL\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"FULFILLMENT\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"FUNDRAISING\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"GESPIRT\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"GLASTRILOGY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"GLORCE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"GUITARIST\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"HAPPENED\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"HAWKISH\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"HEAVY\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"HOMLICATION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"HYDRIMIC\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"ILLFRESSED\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"ILLUSTRATED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"IMMORTALITY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"IMPOSED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"INDESCRIBABLY\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INFLAMED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INSENSUAL\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"INSULTED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"INSURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"INTERCLEVERIST\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"INTERMINGLED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"INTERSWINES\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"IRONCLAD\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"IRRESCENDING\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"JILER\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"KNIBBENS\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"KNOWLEDGE\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"LADRIMACITY\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"LAVISH\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"LEAST\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"LEPOCATION\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"LITIGATION\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"LORVENTION\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"LOSING\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"MARTIAN\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"MEASURES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"MERCIFYING\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"MICROPHONES\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"MICROSTRUCTURES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"MINIMALLY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"MOTORCYCLE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"NESSURE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"NONGO\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"NONRESSIMILATED\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"NOTORIETY\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"NUTTIER\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"OBSERVATORY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"OBSTRUCTED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"OCCUPIED\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"OFFDALE\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"OFFICIALS\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"OMEGA\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"OVERQUATED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"PACKLE\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PAMPHLETS\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"PERFISCATE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"PINEAPPLE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"PLAGUED\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"POLICE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"PONICY\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"POSTDURABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"PRACTIMONIA\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"PRECEDENT\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"PREEXISTENT\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"PREMIUMS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"PRESTRACTED\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PRETOLOGY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"PREVERSIFY\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"PRISHED\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"PROGRAM\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"PROMISING\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"PRONCHABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"PROUSTLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"PROVEN\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"PURSPETTE\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"QUITE\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"},{\"string\":\"REFENDMENT\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"REFESTEN\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"REFORALIZATION \",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"REGULATION\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"RELECTING\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"RELIES\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"REMOCITY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"REPOWERMENT\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"RESPECTABLE\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"RESPITE\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"RESTORTICAL\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"RIGHTS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"ROMANCED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"ROOSTED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"ROUSED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"SANDBLAST\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"SANDBLEDER\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"SCAFT\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"SCORPLESS\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"SEDDED\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"SHORTAGE\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"SMETHER\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"SOLDIERS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"SOOCKED\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STAMINA\",\"word\":\"Y\",\"level\":7,\"used\":\"N\"},{\"string\":\"STECTURE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"STENETICS\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"STINGLESS\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"STODGY\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"STOM\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STONTER\",\"word\":\"N\",\"level\":1,\"used\":\"N\"},{\"string\":\"STOPPILY\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"STRESTURE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"STRICTEST\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"STYLISHNESS\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"SUBMINIFY\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"SULFATE\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"SUPERSEUM\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"TABLEMATES\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"TECHNICAL\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"TELGENCE\",\"word\":\"N\",\"level\":2,\"used\":\"N\"},{\"string\":\"TERREMISS\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"TERRIBLY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"THANKS\",\"word\":\"Y\",\"level\":2,\"used\":\"N\"},{\"string\":\"TOMENTIAL\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"TOWELS\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"TRANKLING\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"ULTRAVIOLET\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNDECIDABLE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNDERCOUNTING\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNDERWIRE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNGANNED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"UNLESTANCY\",\"word\":\"N\",\"level\":5,\"used\":\"N\"},{\"string\":\"UNMISTAKABLE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNRELOANABLE\",\"word\":\"N\",\"level\":9,\"used\":\"N\"},{\"string\":\"UNREMANCHIBLE\",\"word\":\"N\",\"level\":8,\"used\":\"N\"},{\"string\":\"UNSTAMIBLE\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"URACEPTORS\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"UTTERLY\",\"word\":\"Y\",\"level\":4,\"used\":\"N\"},{\"string\":\"VIBRIMARILY\",\"word\":\"N\",\"level\":6,\"used\":\"N\"},{\"string\":\"VISUALIZED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"WELCOME\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"WELCOMING\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"WERCOMB\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"WITHERED\",\"word\":\"Y\",\"level\":8,\"used\":\"N\"},{\"string\":\"WORMED\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"},{\"string\":\"WORRIED\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"WRESTIVAILED\",\"word\":\"N\",\"level\":7,\"used\":\"N\"},{\"string\":\"WRISTEN\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"YOUR\",\"word\":\"Y\",\"level\":1,\"used\":\"N\"}]"
+    "wordsBlob": "[{\"string\":\"INSURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"BROCHURE\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"}]"
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2067,
     "item": 0,
     "seq": 25,
@@ -560,25 +560,25 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2067,
-    "item": 4,
+    "item": 2,
     "seq": 26,
     "itimeout": 10,
     "etimeout": 1.5,
     "mtimeout": 75,
     "itext": "Explanation",
     "screen": "",
-    "audio": "2067.4.mp3",
+    "audio": "2067.2.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "How does a driver know what other cars are likely to do? Why is it important to anticipate what other cars will do?",
+    "audiotext": "Access to the Internet has changed how people live and work. Explain how the Internet has changed family life, for the better or for the worse.",
     "enabled": "",
     "flag": 0,
-    "xrinfo": "How does a driver know what other cars are likely to do? Why is it important to anticipate what other cars will do?",
+    "xrinfo": "Access to the Internet has changed how people live and work. Explain how the Internet has changed family life, for the better or for the worse.",
     "name": "Explanation",
     "note": "",
     "format": "audio",
@@ -588,7 +588,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2070,
     "item": 0,
     "seq": 12,
@@ -616,22 +616,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2070,
-    "item": 4,
+    "item": 2,
     "seq": 13,
     "itimeout": 10,
     "etimeout": 1.5,
     "mtimeout": 75,
     "itext": "Opinion",
     "screen": "",
-    "audio": "2070.4.mp3",
+    "audio": "2070.2.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Has education changed in the past 10 years? If so, how has it changed? If not, how should education change in the future?",
+    "audiotext": "In what ways has the country changed over the last four or five years? How important are these changes? Have they been good or bad?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -644,7 +644,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2071,
     "item": 1,
     "seq": 5,
@@ -672,7 +672,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2071,
     "item": 3,
     "seq": 6,
@@ -700,7 +700,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2072,
     "item": 1,
     "seq": 7,
@@ -728,7 +728,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2073,
     "item": 1,
     "seq": 8,
@@ -756,7 +756,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2073,
     "item": 4,
     "seq": 9,
@@ -784,7 +784,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2074,
     "item": 0,
     "seq": 33,
@@ -812,22 +812,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2074,
-    "item": 4,
+    "item": 2,
     "seq": 34,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 40,
     "itext": "Polite Request",
     "screen": "",
-    "audio": "2074.4.mp3",
+    "audio": "2074.2.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "You having trouble with a computer-based survey questionaire thatyour company sent out to everyone. You have a co-worker who is a computer wizard and you want to ask her for help. What do you say to her?",
+    "audiotext": "You are working on a complicated and difficult task. A group of people have gathered around behind you talking and joking loudly, unaware that they might interfere with your work. What would you say to them?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -840,22 +840,22 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2074,
-    "item": 8,
+    "item": 6,
     "seq": 35,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 40,
     "itext": "Polite Request",
     "screen": "",
-    "audio": "2074.8.mp3",
+    "audio": "2074.6.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "You borrowed a video from a friend at work, but you lost it somewhere. You're having coffee with your friend and she says she needs the video back 'cause she's promised to lend it to her cousin. What do you say to her?",
+    "audiotext": "Your boss invites everyone to a baseball game on Saturday. You'll be at a wedding then. When the boss asks you if you're coming to the game, what do you say?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -868,7 +868,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2091,
     "item": 0,
     "seq": 10,
@@ -896,7 +896,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2094,
     "item": 0,
     "seq": 23,
@@ -924,7 +924,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2095,
     "item": 0,
     "seq": 16,
@@ -952,7 +952,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2096,
     "item": 0,
     "seq": 39,
@@ -980,7 +980,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2097,
     "item": 0,
     "seq": 37,
@@ -1008,7 +1008,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2098,
     "item": 0,
     "seq": 21,
@@ -1036,7 +1036,7 @@
     "wordsBlob": ""
   },
   {
-    "test": 4,
+    "test": 2,
     "type": 2100,
     "item": 4,
     "seq": 38,
