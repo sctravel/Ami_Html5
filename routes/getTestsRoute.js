@@ -11,10 +11,26 @@ app.get('/tests', function(req, res, next) {
                 return;
             }
             console.dir("end calling tests: " + results);
+
+
+
             res.send(results);
         });
      //res.setHeader('Content-Type', 'application/json');
      //res.send(JSON.stringify(jsonObject));
 });
-
 }
+
+//update progress
+//app.get('/tests', function(req, res, next) {
+   // response.end(JSON.stringify(rows));
+//});
+
+//get progress
+
+//update session xml results
+
+//generate session xml results
+//app.get('/tests', function(req, res, next) {
+ //   response.end(JSON.stringify(rows));
+//})

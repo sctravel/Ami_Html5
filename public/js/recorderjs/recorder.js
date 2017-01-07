@@ -61,6 +61,11 @@
             worker.postMessage({ command: 'getBuffers' })
         }
 
+        this.getData = function(cb) {
+            currCallback = cb || config.callback;
+            worker.postMessage({ command: 'getData' })
+        }
+
         this.exportWAV = function(cb, type){
             currCallback = cb || config.callback;
             type = type || config.type || 'audio/wav';
@@ -93,8 +98,6 @@
     Recorder.setupDownload = function(blob, filename){
         var url = (window.URL || window.webkitURL).createObjectURL(blob);
         var link = document.getElementById("save");
-        alert(url);
-        console.log(url);
         link.href = url;
         link.download = filename || 'output.wav';
     }
@@ -114,7 +117,7 @@
         //var data = new FormData();
         //data.append('file', blob);
         blobToBase64(blob, function(base64){ // encode
-            var update = {'blob': base64, "id": id};
+            var update = {'blob': base64, "id": item.type+"."+item.item};
             $.post(postUrl, update, function(err) {
                     if(err=="ok")
                         console.log("success");

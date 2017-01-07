@@ -22,7 +22,7 @@ module.exports = function(app) {
 
             userLogin.manualLogin(username, password, function(error,results){
                 if(error) {
-                    return done(null, false, { message: 'Login Error. Please try again' });
+                    return done(null, false, { message: 'Login Error. Please try again.' });
                 }
                 if(results.isAuthenticated == true ) {
                     //create a session dir for uploading files
@@ -63,10 +63,21 @@ module.exports = function(app) {
         }
     );
 
-    app.post('/api/login/signout', isLoggedIn, function (req, res) {
+    app.post('/api/login/finish', isLoggedIn, function(req, res) {
         winston.loggers.get(req.user.sessionId).close();
+        userLogin.finishSession();
+        //upload zip to s3;
         req.logout();
         res.redirect("/");
     });
+
+    app.post('/api/login/finish', isLoggedIn, function(req, res) {
+        winston.loggers.get(req.user.sessionId).close();
+        userLogin.finishSession();
+        //upload zip to s3;
+        req.logout();
+        res.redirect("/");
+    });
+
 
 };
