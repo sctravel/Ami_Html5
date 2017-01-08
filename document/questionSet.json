@@ -1,6 +1,6 @@
 [
   {
-    "test": 3,
+    "test": 4,
     "type": 2000,
     "item": 1,
     "seq": 2,
@@ -26,10 +26,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2000,
     "item": 2,
     "seq": 3,
@@ -55,10 +57,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2000,
     "item": 3,
     "seq": 4,
@@ -84,10 +88,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2071,
     "item": 1,
     "seq": 5,
@@ -113,10 +119,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2071,
     "item": 3,
     "seq": 6,
@@ -142,10 +150,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2072,
     "item": 1,
     "seq": 7,
@@ -171,10 +181,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2073,
     "item": 1,
     "seq": 8,
@@ -200,10 +212,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2073,
     "item": 4,
     "seq": 9,
@@ -229,10 +243,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2091,
     "item": 0,
     "seq": 10,
@@ -258,28 +274,30 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2040,
-    "item": 9,
+    "item": 10,
     "seq": 11,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 45,
     "itext": "Passage Retell",
     "screen": "",
-    "audio": "2040.9.mp3:2040.9V.mp3:2040.POST.mp3:2040.9.a.mp3",
+    "audio": "2040.10.mp3:2040.10V.mp3:2040.POST.mp3:2040.10.a.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Listen to this story about DRIVING and remember it.:Remember the DRIVING story, so you can re-tell it again later.:DRIVING. Learning how to drive a car was nerve wracking. Maria was doing well, but she felt like she was going to crash into everything. Her father was teaching her and one day he started singing a lullaby to her, which seemed to calm her down. Soothing music really relaxed her. On the day of her driverâ€™s test, she hummed all the way through the test and she passed with ease.",
+    "audiotext": "Listen to this story about SISTERS and remember it.:Remember the SISTERS story, so you can re-tell it again later.:SISTERS. One cold morning, two sisters were walking to school when the little sister realized that sheâ€™d forgotten to bring along her lunch from home. The big sister said that sheâ€™d be willing to go back and get it for her â€“ she could run faster and take a shortcut, so she probably wouldnâ€™t be late. The younger girl agreed and soon found her big sister there at school waiting for her, lunch in hand.",
     "enabled": "",
     "flag": 0,
-    "xrinfo": "Immediate Retelling",
+    "xrinfo": "",
     "name": "Retell_Passage",
     "note": "",
     "format": "audio",
@@ -287,10 +305,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2070,
     "item": 0,
     "seq": 12,
@@ -316,25 +336,27 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2070,
-    "item": 3,
+    "item": 4,
     "seq": 13,
     "itimeout": 10,
     "etimeout": 1.5,
     "mtimeout": 75,
     "itext": "Opinion",
     "screen": "",
-    "audio": "2070.3.mp3",
+    "audio": "2070.4.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "How do you see the future of work and how people will use their free time in the next 10 years? What will be diffenent?",
+    "audiotext": "Has education changed in the past 10 years? If so, how has it changed? If not, how should education change in the future?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -345,10 +367,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2062,
     "item": 0,
     "seq": 14,
@@ -374,10 +398,14 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": "[{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"A\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"Alert\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"H\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"I\",\"gender\":\"M\",\"photoset\":2}]"
+    "namefacePicBlob": "[{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"S\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"C\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"H\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"I\",\"gender\":\"F\",\"photoset\":1}]",
+    "namefaceNameBlob": "[{\"name\":\"Amanda\"},{\"name\":\"Rachel\"},{\"name\":\"Laura\"},{\"name\":\"Heather\"}]",
+    "namefacePicked": {
+      "name": "Heather"
+    }
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2062,
     "item": 1,
     "seq": 15,
@@ -403,10 +431,14 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": "[{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"A\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"Alert\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"H\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"I\",\"gender\":\"M\",\"photoset\":2}]"
+    "namefacePicBlob": "[{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"S\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"C\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"H\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"I\",\"gender\":\"F\",\"photoset\":1}]",
+    "namefaceNameBlob": "[{\"name\":\"Amanda\"},{\"name\":\"Rachel\"},{\"name\":\"Laura\"},{\"name\":\"Heather\"}]",
+    "namefacePicked": {
+      "name": "Heather"
+    }
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2095,
     "item": 0,
     "seq": 16,
@@ -432,10 +464,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2062,
     "item": 2,
     "seq": 17,
@@ -461,10 +495,14 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": "[{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"A\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"Alert\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"H\",\"gender\":\"M\",\"photoset\":2},{\"subjectid\":8,\"filename\":\"MA4_Neutral.jpg\",\"feeling\":\"I\",\"gender\":\"M\",\"photoset\":2}]"
+    "namefacePicBlob": "[{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"S\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"C\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"H\",\"gender\":\"F\",\"photoset\":1},{\"subjectid\":2,\"filename\":\"FE2_Neutral.jpg\",\"feeling\":\"I\",\"gender\":\"F\",\"photoset\":1}]",
+    "namefaceNameBlob": "[{\"name\":\"Amanda\"},{\"name\":\"Rachel\"},{\"name\":\"Laura\"},{\"name\":\"Heather\"}]",
+    "namefacePicked": {
+      "name": "Heather"
+    }
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2064,
     "item": 1,
     "seq": 18,
@@ -489,11 +527,13 @@
     "timeout": 0,
     "replay": 0,
     "addition": "",
-    "wordsBlob": "[{\"string\":\"MARTIAN\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNDERWIRE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"}]",
-    "namefaceBlob": ""
+    "wordsBlob": "[{\"string\":\"REFENDMENT\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"PROUSTLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"COMPREHEND\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"CONSISTENT\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"INTERCLEVERIST\",\"word\":\"N\",\"level\":8,\"used\":\"N\"}]",
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2064,
     "item": 2,
     "seq": 19,
@@ -518,11 +558,13 @@
     "timeout": 0,
     "replay": 0,
     "addition": "",
-    "wordsBlob": "[{\"string\":\"MARTIAN\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNDERWIRE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"}]",
-    "namefaceBlob": ""
+    "wordsBlob": "[{\"string\":\"REFENDMENT\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"PROUSTLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"COMPREHEND\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"CONSISTENT\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"INTERCLEVERIST\",\"word\":\"N\",\"level\":8,\"used\":\"N\"}]",
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2064,
     "item": 3,
     "seq": 20,
@@ -547,11 +589,13 @@
     "timeout": 0,
     "replay": 0,
     "addition": "",
-    "wordsBlob": "[{\"string\":\"MARTIAN\",\"word\":\"Y\",\"level\":6,\"used\":\"N\"},{\"string\":\"UNDERWIRE\",\"word\":\"Y\",\"level\":9,\"used\":\"N\"}]",
-    "namefaceBlob": ""
+    "wordsBlob": "[{\"string\":\"REFENDMENT\",\"word\":\"N\",\"level\":3,\"used\":\"N\"},{\"string\":\"PROUSTLY\",\"word\":\"N\",\"level\":4,\"used\":\"N\"},{\"string\":\"COMPREHEND\",\"word\":\"Y\",\"level\":5,\"used\":\"N\"},{\"string\":\"CONSISTENT\",\"word\":\"Y\",\"level\":3,\"used\":\"N\"},{\"string\":\"INTERCLEVERIST\",\"word\":\"N\",\"level\":8,\"used\":\"N\"}]",
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2098,
     "item": 0,
     "seq": 21,
@@ -577,10 +621,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2032,
     "item": 1,
     "seq": 22,
@@ -606,10 +652,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2094,
     "item": 0,
     "seq": 23,
@@ -635,25 +683,27 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2023,
-    "item": 3,
+    "item": 5,
     "seq": 24,
     "itimeout": 0,
     "etimeout": 0,
     "mtimeout": 8,
     "itext": "Describe Video",
     "screen": "",
-    "audio": "2023.mp3:2023.2.mp3:2023.3.mp3",
-    "video": "HotdogSquare.mp4",
+    "audio": "2023.mp3:2023.5.mp3:2023.2.mp3",
+    "video": "WalletFallSquareShort.mp4",
     "initargs": "3.5:1.5:21.5",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Hot Dog VIDEO",
+    "audiotext": "Wallet Fall VIDEO",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Speaking in Sync",
@@ -664,10 +714,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2067,
     "item": 0,
     "seq": 25,
@@ -693,28 +745,30 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2067,
-    "item": 3,
+    "item": 4,
     "seq": 26,
     "itimeout": 10,
     "etimeout": 1.5,
     "mtimeout": 75,
     "itext": "Explanation",
     "screen": "",
-    "audio": "2067.3.mp3",
+    "audio": "2067.4.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Explain how a person should shop for food. How should a person decide what to buy and what not to buy? What are common mistakes people make in food shopping?",
+    "audiotext": "How does a driver know what other cars are likely to do? Why is it important to anticipate what other cars will do?",
     "enabled": "",
     "flag": 0,
-    "xrinfo": "Explain how a person should shop for food. How should a person decide what to buy and what not to buy? What are common mistakes people make in food shopping?",
+    "xrinfo": "How does a driver know what other cars are likely to do? Why is it important to anticipate what other cars will do?",
     "name": "Explanation",
     "note": "",
     "format": "audio",
@@ -722,10 +776,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2044,
     "item": 0,
     "seq": 27,
@@ -751,25 +807,27 @@
     "replay": 0,
     "addition": "EMPTY-50ms.wav",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2044,
-    "item": 3,
+    "item": 4,
     "seq": 28,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.3.mp3",
+    "audio": "2044.4.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "I wish he hadn't made that happen that way.",
+    "audiotext": "It's all unaccountably strange the way they do it.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -780,25 +838,27 @@
     "replay": 0,
     "addition": "EMPTY-50ms.wav",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2044,
-    "item": 7,
+    "item": 8,
     "seq": 29,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.7.mp3",
+    "audio": "2044.8.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Tom was puzzled, but he kept studying the problem anyway.",
+    "audiotext": "He cleared everybody out of the building except the supervisors.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -809,25 +869,27 @@
     "replay": 0,
     "addition": "EMPTY-50ms.wav",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2044,
-    "item": 11,
+    "item": 12,
     "seq": 30,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.11.mp3",
+    "audio": "2044.12.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Did they overhear what was said in the room that day?",
+    "audiotext": "Her voice would deliver sales just by the welcome in it.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -838,25 +900,27 @@
     "replay": 0,
     "addition": "EMPTY-50ms.wav",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2044,
-    "item": 15,
+    "item": 16,
     "seq": 31,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.15.mp3",
+    "audio": "2044.16.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "We advertized a lot, but it's so specialized that nobody bought.",
+    "audiotext": "Then Wilson tilted up that beautiful display and looked underneath it.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -867,25 +931,27 @@
     "replay": 0,
     "addition": "EMPTY-50ms.wav",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2044,
-    "item": 19,
+    "item": 20,
     "seq": 32,
     "itimeout": 5,
     "etimeout": 1.5,
     "mtimeout": 10,
     "itext": "Repeat Sentence",
     "screen": "",
-    "audio": "2044.19.mp3",
+    "audio": "2044.20.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "They would either look at the document or know why they couldn't.",
+    "audiotext": "Said to myself something's up; she never gets so many commissions.",
     "enabled": "",
     "flag": 0,
     "xrinfo": "Verbatim Repetition",
@@ -896,10 +962,12 @@
     "replay": 0,
     "addition": "EMPTY-50ms.wav",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2074,
     "item": 0,
     "seq": 33,
@@ -925,25 +993,27 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2074,
-    "item": 3,
+    "item": 4,
     "seq": 34,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 40,
     "itext": "Polite Request",
     "screen": "",
-    "audio": "2074.3.mp3",
+    "audio": "2074.4.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Your company pays by direct deposit, but now it's Monday and Friday's payment hasn't shown up yet in your account. What do you say your supervisor at work?",
+    "audiotext": "You having trouble with a computer-based survey questionaire thatyour company sent out to everyone. You have a co-worker who is a computer wizard and you want to ask her for help. What do you say to her?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -954,25 +1024,27 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2074,
-    "item": 7,
+    "item": 8,
     "seq": 35,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 40,
     "itext": "Polite Request",
     "screen": "",
-    "audio": "2074.7.mp3",
+    "audio": "2074.8.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "You have an appointment for a job interview, but your car won't start. You call the company's office to reschedule. What do you say?",
+    "audiotext": "You borrowed a video from a friend at work, but you lost it somewhere. You're having coffee with your friend and she says she needs the video back 'cause she's promised to lend it to her cousin. What do you say to her?",
     "enabled": "",
     "flag": 0,
     "xrinfo": "",
@@ -983,28 +1055,30 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2041,
-    "item": 9,
+    "item": 10,
     "seq": 36,
     "itimeout": 8,
     "etimeout": 1.5,
     "mtimeout": 45,
     "itext": "Passage Re-retell",
     "screen": "",
-    "audio": "2041.9.mp3",
+    "audio": "2041.10.mp3",
     "video": "",
     "initargs": "",
     "activenext": "",
     "difficulty": 0,
     "subtype": 0,
-    "audiotext": "Re-tell the DRIVING story again now. Put in all the details you can remember.",
+    "audiotext": "Re-tell the SISTERS story again now. Put in all the details you can remember.",
     "enabled": "",
     "flag": 0,
-    "xrinfo": "Delayed Retelling",
+    "xrinfo": "",
     "name": "Re_Retell_Passage",
     "note": "",
     "format": "audio",
@@ -1012,10 +1086,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2097,
     "item": 0,
     "seq": 37,
@@ -1041,10 +1117,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2100,
     "item": 4,
     "seq": 38,
@@ -1070,10 +1148,12 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   },
   {
-    "test": 3,
+    "test": 4,
     "type": 2096,
     "item": 0,
     "seq": 39,
@@ -1099,6 +1179,8 @@
     "replay": 0,
     "addition": "",
     "wordsBlob": "",
-    "namefaceBlob": ""
+    "namefacePicBlob": "",
+    "namefaceNameBlob": "",
+    "namefacePicked": ""
   }
 ]
