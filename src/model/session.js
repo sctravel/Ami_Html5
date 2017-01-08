@@ -17,6 +17,7 @@ Session.prototype.createSessionFromExisting = function(userId, email, sessionId,
     session.data.sessionId = sessionId;
     return session;
 }
+
 Session.prototype.data = {}
 
 

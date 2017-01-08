@@ -1,8 +1,8 @@
 exports.login = {
     SESSION_HOURS : 3,  // session expires in 30 minutes
+    SESSION_ID_LENGTH : 8,
 
     FIND_PASSWORD_VALID_MINUTES : 30, //find password link only valid for 30 minutes
-    SESSION_ID_LENGTH : 8,
 
     EMAIL_REX : /^([\w-\.]+@([\w-]+\.)+[\w-]{2,6})?$/
 }
@@ -21,6 +21,16 @@ exports.services = {
     CALLBACK_FAILED : 'failed'
 }
 
-exports.strings = {
-    ANONYMOUS : 'Anonymous'
+exports.responseStatus = {
+    NEXT_TOUCHED: "NEXT_TOUCHED",
+    INIT_TIMEOUT: "INIT_TIMEOUT",
+    END_TIMEOUT:  "END_TIMEOUT",
+    MAX_TIMEOUT:  "MAX_TIMEOUT",
+    DONE:         "DONE",
+    UNKNOWN:      "UNKNOWN"
+}
+
+exports.itemTypes = {
+    "2000.2" : "MicrophoneAudioResponse",
+    "2072.1" : ""
 }
