@@ -9,8 +9,18 @@
         }
         listAlbums();
 
-
-
+     /*   $.ajax({
+    url: uploadUrl,
+    headers: headers,
+    type: 'POST',
+    // This prevents JQuery from trying to append the form as a querystring
+    processData: false,
+    contentType: false,
+    data: form
+}).complete(function ( data ) {
+    // Log the JSON response to prove this worked
+    console.log(data.responseText);
+}) */
 
         function listAlbums() {
 

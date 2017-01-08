@@ -1,14 +1,16 @@
 module.exports = function(app) {
 
-    var AWS = require('aws-sdk');
-    var s3 = new AWS.S3();
+  
 
     app.get('/s3test', function (req,res){
         res.redirect('/test.html');
     });
 
 
-    app.post('/getPresignedURL', function (req,res){
+    app.get('/getPresignedURL', function (req,res){
+
+        var AWS = require('aws-sdk');
+        var s3 = new AWS.S3();
         console.log('Start getting presigned URL: '+req.files);
         const util = require('util')
      
@@ -20,7 +22,7 @@ module.exports = function(app) {
 
         const myBucket = 'amipaces'
         //file name from post request
-        const myKey = ''
+        const myKey = 'items.csv'
         const signedUrlExpireSeconds = 60 * 5
 
         const url = s3.getSignedUrl('getObject', {
