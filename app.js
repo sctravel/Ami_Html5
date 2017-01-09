@@ -121,7 +121,9 @@ app.get('/adjustVolume', function (req,res){
 app.get('/testMic', function (req,res){
     res.render('testMicVolumeAndNoise',{user: req.user});
 });
-
+app.get('/testpage', function (req,res){
+    res.sendfile("public/test.html");
+});
 
 app.get('/audio', function (req,res){
     console.log(req.user);
