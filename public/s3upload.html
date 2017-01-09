@@ -1,34 +1,42 @@
 
-<form class="upload-form">
-   <input id="image" type="file" name="image" accept="image/x-png, image/gif, image/jpeg" />
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+<html>
+<form id = "upload-form" class="upload-form">
+   <input id="image" type="file" name="image" />
    <button type="submit">Go!</button>
 </form>
 
-$(function() {
-
-    var upload_image = function(form) {
-        var field = $(form).find('input[name=image]');
-        var file = field[0].files[0];
-        var url = '<%= raw @presigned_url %>';
-        console.log(file);
-        $.ajax({
-            type : 'PUT',
-            url : url,
-            data : file,
-            processData: false,  // tell jQuery not to convert to form data
-            contentType: file.type,
-            success: function(json) { console.log('Upload complete!') },
-            error: function (XMLHttpRequest, textStatus, errorThrown) {
-                console.log('Upload error: ' + XMLHttpRequest.responseText);
-            }
-        });
-    }
-
-    $( '#upload-form' ).submit(function( event ) {
+<script type="text/javascript">
+  $( '#upload-form' ).submit(function( event ) {
         event.preventDefault();
         var form = this;
-        upload_image(form);
-    });
-});
 
-http://stuff-things.net/2016/03/23/direct-to-s3-uploads-with-ajax-presigning/
+        alert(document.getElementById('image').files[0]);
+        var input = document.getElementById('image').value;
+        var file = input.split("\\");
+        var fileName = file[file.length-1];
+        alert(fileName)
+
+        $.get( "/getPresignedURL", { fileName: fileName }, function( dataURL ) {
+           
+            $.ajax({
+                type : 'PUT',
+                url : dataURL,
+                data : document.getElementById('image').files[0],
+                processData: false,  // tell jQuery not to convert to form data
+                contentType: document.getElementById('image').files[0].type,
+                success: function(json) { console.log('Upload complete!') },
+                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                    console.log('Upload error: ' + XMLHttpRequest.responseText);
+                }
+                });
+
+                 alert("upload to s3 finished");
+         });
+    
+    });
+</script>
+
+
