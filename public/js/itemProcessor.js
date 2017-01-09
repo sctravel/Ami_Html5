@@ -1,216 +1,25 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <title>Bootstrap Example</title>
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
-    <link rel="stylesheet" href="/css/main.css">
-    <script src="/jquery/dist/jquery.min.js"></script>
-    <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <script src="/jsnlog.js/jsnlog.js"></script>
+var app = angular.module("itemProcessor", []);
 
-    <script src="js/recorderjs/audiodisplay.js"></script>
-    <script src="js/recorderjs/recorder.js"></script>
-    <script src="js/recorderjs/audioMain.js"></script>
-    <link rel="stylesheet" href="/css/audioCss.css">
-    <link rel="stylesheet" href="/css/trackTap.css">
-</head>
-<body>
+app.service('audioProcessor',  function($rootScope) {
+      this.process = function(item,scopeaudio){
+          var audioFolder = "assets/Audio/items/";
 
-<div class="container">
+          navigator.getUserMedia({audio: true, video: false}, function (stream) {
+                                     //scopeaudio = processItem(stream,item,audioFolder);
+                                     $rootScope.$broadcast('audio',processItem(stream,item,audioFolder));
+                                }, function (error) {
+                                    audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+                                });
 
-    <div id="top" class="row panel-body ">
-        <div id="cameraDiv" class="col-lg-1">
-            <span><video id="camera" autoplay></video></span>
-        </div>
-
-        <div id="spinner" class="col-lg-1 " >
-            <span class="vcenter">  <% include partials/timer.ejs %></span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4">
-            ...........
-        </div>
-        <div class="col-sm-4">
-            ...
-        </div>
-        <div class="col-sm-4">
-            ...
-        </div>
-    </div>
-    <div id="videoContent" class="text-center">
-        <video id="video" width="100%" height="100%"></video>
-    </div>
-    <div id="trackTap" style="display: none">
-        <table>
-            <tr>
-                <td id="td[0]" onclick="hit(0)"></td>
-                <td id="td[1]" onclick="hit(1)"></td>
-            </tr>
-            <tr>
-                <td id="td[2]" onclick="hit(2)"></td>
-                <td id="td[3]" onclick="hit(3)"></td>
-            </tr>
-            <tr>
-                <td id="td[4]" onclick="hit(4)"></td>
-                <td id="td[5]" onclick="hit(5)"></td>
-            </tr>
-        </table>
-    </div>
-    <div id="viz" >
-        <canvas id="analyser" width="1024" height="400" style="display: none"></canvas>
-    </div>
-
-    <div id="instructionText" style="display: none"></div>
-
-    <div id="controls" style="display: none">
-        <img id="record" src="images/mic128.png" onclick="toggleRecording(this);" style="display: none">
-        <a id="save" href="#" style="display: none"><img src="images/save.svg"></a>
-    </div>
-    <div id="button" class="row text-center">
-        <button id="nextButton" type="button" class="text-center btn-lg " font-size="16px">Next</button>
-    </div>
-</div>
-
-<script>
-    var td = new Array(),      //保存每个格子的地鼠
-        playing = false,       //游戏是否开始
-        score = 0,             //分数
-        total = 0,
-        beat = 0,              //鼠标点击次数
-        success = 0,           //命中率
-        knock = 0,             //鼠标点中老鼠图片次数
-        gameInterId = null,        //指定setInterval()的变量
-        gameTimerId = null;         //指定setTimeout()的变量
-
-    //游戏结束
-    function GameOver(){
-        timeStop();
-        playing = false;
-        clearMouse();
     }
 
-    //主动停止所有计时
-    function timeStop(){
-        clearInterval(gameInterId);//clearInterval()方法返回setInterval()方法的id
-        clearTimeout(gameTimerId);//clearTime()方法返回setTimeout()的id
-    }
-
-    //随机循环显示老鼠图片
-    function show(){
-        if(playing)
-        {
-            if(total == 10) {
-                GameOver();
-                return;
-            }
-            var current = Math.floor(Math.random()*6);
-            //这里的路径也需要根据自己的实际文件路径来修改
-            document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="160px" width="160px">';
-            ++total;
-            //使用setTimeout()实现2秒后隐藏老鼠图片
-            setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1500);
-        }
-    }
-
-    //清除所有老鼠图片
-    function clearMouse(){
-        for(var i=0;i<=5;i++)
-        {
-            document.getElementById("td["+i+"]").innerHTML="";
-        }
-    }
-
-    //点击事件函数，判断是否点中老鼠
-    function hit(id){
-        if(playing==false)
-        {
-            return;
-        }
-        else
-        {
-            beat +=1;
-            if(document.getElementById("td["+id+"]").innerHTML!="")
-            {
-                score += 1;
-                knock +=1;
-                success = knock/beat;
-                document.getElementById("td["+id+"]").innerHTML="";
-            }
-            else
-            {
-                score += -1;
-                success = knock/beat;
-
-            }
-        }
-    }
-
-    //游戏开始
-    function GameStart(){
-        playing = true;
-        show();
-        interId = setInterval("show()",1500);
-    }
-</script>
-
-<script>
-    function audioOrVideoNotEnabled(text) {
-        audioLevel = audioLevelOptions.NoMicrophone;
-        var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
-        audio.play();
-        audio.onended = function() {
-            window.location.href= '/?error='+text
-        };
-    }
-
-    var camera = document.getElementById('camera');
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    window.URL = window.URL || window.webkitURL;
-    if (navigator.getUserMedia) {
-        navigator.getUserMedia({ video: true,audio:false},
-            function(stream) {
-                camera.src = window.URL.createObjectURL(stream);
-                camera.onloadedmetadata = function(e) {
-                    camera.play();
-                };
-            },
-            function(err) {
-                audioOrVideoNotEnabled("The following error occured: " + err.name);
-            }
-        );
-    } else {
-        audioOrVideoNotEnabled("Your Browser doesn't support video");
-    }
-</script>
-
-<script>
-    var audioFolder = "assets/Audio/items/"
-    var videoFolder = "assets/Video/"
-    var imageFolder = "assets/Images/"
-    var questionList;
-    var index = -1;
-    var analyser = document.getElementById("analyser");
-    var video = document.getElementById("video");
-    var item;
-    var nextButton = document.getElementById("nextButton");
-    var instr = document.getElementById("instructionText");
-    var trackTap = document.getElementById("trackTap");
-
-    JL("client").info("Interview started");
-
-    function processItem(stream) {
-        ++index;
-        if(index>=questionList.length) return;
-        item = questionList[index];
+    function processItem(stream,item,audioFolder) {
         console.log("#############now processing --- " + item.type + " : " + item.item);
         console.dir(item);
         switch (item.type) {
             case 2000:
                 if(item.item == 1) {
-                    processVolumeChecker(stream, item);
+                   return processVolumeChecker(stream, item,audioFolder);
                 } else if(item.item == 2) {
                     processMicrophoneChecker(stream, item);
                 } else {
@@ -277,57 +86,44 @@
                 break;
         }
         /*
-        if(question.type=="audio") {
-            var audio = new Audio(question.source);
-            console.log("playing audio with souce --- " +question.source );
+         if(question.type=="audio") {
+         var audio = new Audio(question.source);
+         console.log("playing audio with souce --- " +question.source );
 
-            audio.onended = function() {
-                console.log("playing audio ended--- " +question.source );
+         audio.onended = function() {
+         console.log("playing audio ended--- " +question.source );
 
-                canvas.style.display = "inline";
-                gotStream(stream);
-                toggleRecording(recordButton);
-                startTimer(question.timeout, 50, function() {
-                    toggleRecording(recordButton);
-                    canvas.style.display="none";
-                    playQuestion(stream);
-                    ++index;
-                })
-            }
-            audio.play();
+         canvas.style.display = "inline";
+         gotStream(stream);
+         toggleRecording(recordButton);
+         startTimer(question.timeout, 50, function() {
+         toggleRecording(recordButton);
+         canvas.style.display="none";
+         playQuestion(stream);
+         ++index;
+         })
+         }
+         audio.play();
 
-        } else if(question.type=="video") {
-            //video.source = question.source;
-            video.style.display = "inline";
-            console.log("playing video with souce --- " +question.source );
-            video.src = question.source;
-            video.onended = function() {
-                video.style.display = "none";
-                ++index;
-                console.log("playing video ended--- " +question.source );
-                playQuestion(stream);
-            }
-            video.play();
+         } else if(question.type=="video") {
+         //video.source = question.source;
+         video.style.display = "inline";
+         console.log("playing video with souce --- " +question.source );
+         video.src = question.source;
+         video.onended = function() {
+         video.style.display = "none";
+         ++index;
+         console.log("playing video ended--- " +question.source );
+         playQuestion(stream);
+         }
+         video.play();
 
-        } else if(question.type=="image") {
+         } else if(question.type=="image") {
 
-        } else if(question.type=="words") {
+         } else if(question.type=="words") {
 
-        }*/
-    }
-
-    $.get("/questionSet", function(data) {
-        questionList = data;
-        navigator.getUserMedia({audio: true, video: false}, function (stream) {
-            teststream =stream;
-            processItem(stream);
-        }, function (error) {
-            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
-        });
-    })
-
-
-
+         }*/
+    };
     function processInstruction(stream, item) {
         console.log("processInstruction starts with souce --- " + item.type+"."+item.item );
 
@@ -341,8 +137,7 @@
         }
         instr.style.display = "inline";
         audio.play();
-    }
-
+    };
     function processTransition(stream, item) {
         var source = audioFolder + "../"+item.audio;
         var audio = new Audio(source);
@@ -350,7 +145,7 @@
             processItem(stream);
         }
         audio.play();
-    }
+    };
 
     function processAudioQuestion(stream, item) {
         console.log("processAudioQuestion starts with souce --- " + item.type+"."+item.item );
@@ -385,11 +180,11 @@
             );
         }
         audio.play();
-    }
+    };
 
     function processNameTheFace(stream, item) {
 
-    }
+    };
 
     function processTrackTap(stream, item) {
         var audio = new Audio(audioFolder+item.audio);
@@ -404,7 +199,7 @@
 
         }
         audio.play();
-    }
+    };
 
     function processRetellStory(stream, item){
         var audioList = item.audio.split(':');
@@ -416,7 +211,7 @@
 
         };
         audio.play();
-    }
+    };
     function playAudioInRetellStory(audioList, rsindex, stream, item){
         if(rsindex>=audioList.length) {
             processItem(stream);
@@ -453,7 +248,7 @@
             }
         }
         audio.play();
-    }
+    };
 
     function processDescribeSilentVideo(stream, item) {
         var audioList = item.audio.split(':');
@@ -474,7 +269,7 @@
         };
         audio.play();
 
-    }
+    };
 
     function playAudioInDescribeVideo(audioList, vindex, stream, item){
         if(vindex>=audioList.length) {
@@ -509,34 +304,23 @@
             );
         }
         audio.play();
-    }
+    };
 
 
     function processQuickLit(stream, item) {
-        
-    }
-    
-    function processVolumeChecker(stream, item) {
+
+    };
+
+    function processVolumeChecker(stream, item,audioFolder) {
         var audioFileName = item.type+"."+item.item+".mp3";
         var source = audioFolder + audioFileName;
         var audio = new Audio(source);
-        var instr = document.getElementById("instructionText");
-        instr.innerHTML = "Hear This ?";
-        var nextButton = document.getElementById("nextButton");
-        nextButton.style.display="inline";
-        nextButton.onclick = function() {
-            instr.style.display="none";
-            nextButton.style.display="none";
-            audio.pause();audio.src="";
-            processItem(stream);
-        };
-        audio.onended = function() {
-            audio.play();
-        }
-        instr.style.display = "inline";
+        audio.setAttribute("Loop",true);
         audio.play();
-    }
-    
+        return audio;
+
+    };
+
     function processMicrophoneChecker(stream, item) {
         var audio = new Audio('/assets/Audio/items/2000.2.mp3');
         audio.onended = function() {
@@ -581,17 +365,13 @@
             //toggleRecording(this);
         };
         audio.play();
-    }
+    };
 
-    function processStroop(stream, item) {}
+    function processStroop(stream, item) {};
 
-    function processFindErrorResponse(stream, item) {}
+    function processFindErrorResponse(stream, item) {};
 
-    function processCalcuationResponse(stream, item){}
+    function processCalcuationResponse(stream, item){};
 
     function processInterpretResponse() {}
-
-</script>
-
-</body>
-</html>
+});

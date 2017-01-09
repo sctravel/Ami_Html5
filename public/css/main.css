@@ -102,3 +102,12 @@ div.desc {
     display: table;
     clear: both;
 }
+.volumeChecker{
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: initial;
+    font-size:28px;
+
+}
