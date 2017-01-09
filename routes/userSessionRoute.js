@@ -7,11 +7,11 @@ module.exports = function(app) {
     var constants = require('../src/common/constants');
     var stringUtil = require('../src/common/stringUtil');
     var isLoggedIn = require('../app').isLoggedIn;
-    var userLogin = require('../src/login/userLogin');
+    var userSession = require('../src/login/userSession');
 
     app.post('/api/session/updateSessionState', isLoggedIn, function (req, res) {
         var sessionState = req.body.itemResponse;
-        userLogin.addFinishedSessionTestItem(itemResponse, req.user.sessionId, function(err, results) {
+        userSession.addFinishedSessionTestItem(itemResponse, req.user.sessionId, function(err, results) {
            if(err) {
                logger.error(err);
                return;
@@ -19,4 +19,7 @@ module.exports = function(app) {
            res.send(constants.services.CALLBACK_SUCCESS);
         });
     });
+
+
 }
+

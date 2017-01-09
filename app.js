@@ -168,10 +168,6 @@ app.post('/upload/audio/', function (req, res) {
 
 // jsnlog.js on the client by default sends log messages to /jsnlog.logger, using POST.
 app.post('*.logger', isLoggedIn, function (req, res) {
-    //var logger = JL('client');
-    //clientLogger.info(req.body);
-    console.dir(req.body);
-    console.dir(req.body.lg);
     var clientLog = req.body.lg;
     for(var i in clientLog) {
         var line = clientLog[i];

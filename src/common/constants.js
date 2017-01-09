@@ -31,6 +31,12 @@ exports.responseStatus = {
 }
 
 exports.itemTypes = {
-    "2000.2" : "MicrophoneAudioResponse",
-    "2072.1" : ""
+    "MicrophoneAudioResponse": "MicrophoneAudioResponse",
+    "AudioResponse" : "AudioResponse",
+    "SubAudioResponse" : "SubAudioResponse",
+    "QuickLitResponse" : "QuickLitResponse",
+    "TrackTapResponse" : "TrackTapResponse",
+    "Polite_Request": "Polite_Request",
+    "CameraPicture" : "CameraPicture"
+
 }

@@ -7,6 +7,23 @@ var emailUtil = require('./../common/emailUtil');
 var Session = require("../model/session.js")
 var dbPool = require("../db/createDBConnectionPool");
 
+function addFinishedSessionTestItem(itemResponse, callback) {
+    switch (itemResponse.item.type) {
+        case 2000:
+            addMicrophoneCheckResponse(itemResponse, callback);
+            break;
+        case 2062:
+            addNameFacesResponse(itemResponse, callback);
+            break;
+        case 20:
+            break;
+        default:
+            addAudioResponse(itemResponse, callback);
+            break;
+    }
+
+}
+
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
     var sqlGetFinishedItemsInSession = "select sessionId, testId, type, item, startTime, endTime, score, status from sessionstates where sessionId = ? order by startTime";
     dbPool.runQueryWithParams(sqlGetFinishedItemsInSession, [unfinishedSessionId], function (err, results) {
