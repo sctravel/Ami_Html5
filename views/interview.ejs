@@ -190,21 +190,49 @@
     var audioFolder = "assets/Audio/items/"
     var videoFolder = "assets/Video/"
     var imageFolder = "assets/Images/"
-    var questionList;
-    var index = -1;
+    var takePictureIntervalInMilliSeconds = 120000;
+    var takePictureIntervalId = null;
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
-    var item;
+    var camera = document.getElementById("camera");
     var nextButton = document.getElementById("nextButton");
     var instr = document.getElementById("instructionText");
     var trackTap = document.getElementById("trackTap");
+    var questionList;
+    var item;
+    var itemResponse = {};
+    var responseStartTime, responseEndTime;
+    var index = -1;
+    var pictureId = 0;
 
     JL("client").info("Interview started");
 
+    function takePictureAndUpload() {
+        JL("client").info("Taking picture for the interviewer with pictureId: " + (pictureId++));
+    }
+
+    function postItemResponse(stream) {
+        $.post("/api/itemResponse", {itemResponse : itemResponse}, function(data) {
+            if(data!="ok") {
+                var errorMessage = "Upload response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
+                console.error(errorMessage);
+                JL("client").error(errorMessage);
+            } else {
+                JL("client").error("Upload response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
+                processItem(stream);
+            }
+        })
+    }
+
     function processItem(stream) {
         ++index;
-        if(index>=questionList.length) return;
+        if(index>=questionList.length) {
+            clearInterval(takePictureIntervalId);
+            return;
+        }
+        itemResponse = {};
         item = questionList[index];
+        itemResponse.item = item;
         console.log("#############now processing --- " + item.type + " : " + item.item);
         console.dir(item);
         switch (item.type) {
@@ -213,7 +241,9 @@
                     processVolumeChecker(stream, item);
                 } else if(item.item == 2) {
                     processMicrophoneChecker(stream, item);
-                } else {
+                } else if(item.item==3){
+                    takePictureIntervalInMilliSeconds = item.mtimeout*1000;
+                    takePictureIntervalId = setInterval(takePictureAndUpload, takePictureIntervalInMilliSeconds);
                     processInstruction(stream, item);
                 }
                 break;
@@ -316,6 +346,7 @@
         }*/
     }
 
+<<<<<<< HEAD
     $.get("/questionSet", function(data) {
         questionList = data;
         navigator.getUserMedia({audio: true, video: false}, function (stream) {
@@ -325,6 +356,8 @@
             audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
         });
     })
+=======
+>>>>>>> bfd59ac08a5b3a58a301a611ee783ba9ca132e3d
 
 
 
@@ -354,15 +387,18 @@
 
     function processAudioQuestion(stream, item) {
         console.log("processAudioQuestion starts with souce --- " + item.type+"."+item.item );
-
         var audioFileName = item.type+"."+item.item+".mp3";
+        JL('client').info("start playing audio " + audioFileName);
         var source = audioFolder + audioFileName;
         var audio = new Audio(source);
-
+        itemResponse.afilename = item.type+"."+item.item+".flac";
+        itemResponse.itemType = "AudioResponse";
         audio.onended = function() {
+            JL('client').info("end playing audio " + audioFileName);
 
             analyser.style.display = "inline";
             gotStream(stream);
+            responseStartTime = new Date();
             startRecording();
             startTimer(item.itimeout, item.mtimeout,
                 function(){
@@ -372,7 +408,11 @@
                         stopRecording();
                         nextButton.style.display = "none";
                         analyser.style.display = "none";
-                        processItem(stream);
+                        responseEndTime=new Date();
+                        itemResponse.startTime = responseStartTime.toUTCString();
+                        itemResponse.endTime = responseEndTime.toUTCString();
+                        itemResponse.status = "NEXT_TOUCHED";
+                        postItemRepsonse(stream);
                     };
                 },
                 function() {
@@ -380,7 +420,11 @@
                     stopRecording();
                     nextButton.style.display = "none";
                     analyser.style.display = "none";
-                    processItem(stream);
+                    responseEndTime=new Date();
+                    itemResponse.startTime = responseStartTime.toUTCString();
+                    itemResponse.endTime = responseEndTime.toUTCString();
+                    itemResponse.status = "MAX_TIMEOUT";
+                    postItemResponse(stream);
                 }
             );
         }
@@ -392,14 +436,25 @@
     }
 
     function processTrackTap(stream, item) {
+        console.log("processTrackTap starts with souce --- " + item.type+"."+item.item );
         var audio = new Audio(audioFolder+item.audio);
+        JL('client').info("start playing audio " + item.audio);
+
         trackTap.style.display = "inline";
         audio.onended = function() {
+            JL('client').info("start playing tracktap");
+            responseStartTime = new Date();
             GameStart();
             startTimer(0, item.mtimeout, null, function() {
                 GameOver();
                 trackTap.style.display = "none";
-                processItem(stream);
+                responseEndTime = new Date();
+                itemResponse.startTime = responseStartTime.toUTCString();
+                itemResponse.endTime = responseEndTime.toUTCString();
+                itemResponse.status = "MAX_TIMEOUT";
+                //itemResponse.scoreInfo = scoreInfo;
+                postItemResponse(stream);
+                //processItem(stream);
             });
 
         }
@@ -539,8 +594,10 @@
     
     function processMicrophoneChecker(stream, item) {
         var audio = new Audio('/assets/Audio/items/2000.2.mp3');
+        JL('client').info("Start microphone checker. Playing audio 2000.2.mp3.");
         audio.onended = function() {
             document.getElementById("analyser").style.display="inline";
+            JL('client').info("Start recording for microphone checker. Playing audio 2000.2.mp3.");
             gotStream(stream);
             startRecording();
             startTimer(0, item.mTimeout, null, function() {
@@ -590,6 +647,15 @@
     function processCalcuationResponse(stream, item){}
 
     function processInterpretResponse() {}
+
+    $.get("/questionSet", function(data) {
+        questionList = data;
+        navigator.getUserMedia({audio: true, video: false}, function (stream) {
+            processItem(stream);
+        }, function (error) {
+            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+        });
+    })
 
 </script>
 

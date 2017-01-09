@@ -1,98 +1,66 @@
 <!doctype html>
 <html>
 <head>
-    <script src="/jquery/dist/jquery.js"></script>
-    <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Audio Recorder</title>
+    <meta charset="utf-8">
+    <title>DecibelMeter example</title>
 
-    <script src="js/recorderjs/audiodisplay.js"></script>
-    <script src="js/recorderjs/recorder.js"></script>
-    <script src="js/recorderjs/audioMain.js"></script>
-    <link rel="stylesheet" href="/css/audioCss.css">
+    <link rel="stylesheet" href="font/decibel-meter/style.css">
+    <link rel="stylesheet" href="example.css">
 </head>
-<body background="assets/images/background.png">
-<% include partials/timer.ejs %>
-<div id="videoContent" class="text-center">
-    <video id="video" width="400" height="400" autoplay></video>
-</div>
-<div id="viz" >
-    <canvas id="analyser" width="1024" height="500" style="display: none"></canvas>
-</div>
-<div id="controls">
-    <img id="record" src="images/mic128.png" onclick="toggleRecording(this);">
-    <a id="save" href="#"><img src="images/save.svg"></a>
-    <div id="button">
-        <button id="next" type="button" class="text-center" font-size="16px">Next</button>
-    </div>
-</div>
+
+<body>
+
+<div id="message">Click mic to toggle listening</div>
+
+<div id="meter" class="icon-microphone"><span></span></div>
+
+<script src="../build/decibel-meter.js"></script>
 
 <script>
-var questionSet;
-var questionList = [{"type": "video","source": "assets/Video/HotdogSquare.mp4","timeout": 0,"id": "3"},{"type": "audio","source": "assets/Audio/items/2070.1.mp3","timeout": 10,"id": "1"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "2"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "4_1"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3","timeout": 10,"id": "4_2"},{"type": "audio","source": "assets/Audio/items/2070.3.mp3", "timeout": 10,"id": "5"}];
-var index = 0;
-var canvas = document.getElementById("analyser");
-var video = document.getElementById("video");
-var question = questionList[index];
-var recordButton = document.getElementById("record");
-var id="0";
+    // HTML elements
 
-function playQuestion(stream) {
-    question = questionList[index];
-    id=question.id;
-    console.log(question);
-    console.log("playing question --- " +index );
-    if(index>questionList.length) return;
-    if(question.type=="audio") {
-        var audio = new Audio(question.source);
-        console.log("playing audio with souce --- " +question.source );
+    var meterEl = document.getElementById('meter'),
+        levelEl = document.querySelector('#meter > span');
 
-        audio.onended = function() {
-            console.log("playing audio ended--- " +question.source );
 
-            canvas.style.display = "inline";
-            gotStream(stream);
-            toggleRecording(recordButton);
-            startTimer(question.timeout, 50, function() {
-                toggleRecording(recordButton);
-                canvas.style.display="none";
-                playQuestion(stream);
-                ++index;
-            })
-        }
-        audio.play();
+    // Decibel Meter
 
-    } else if(question.type=="video") {
-        //video.source = question.source;
-        video.style.display = "inline";
-        console.log("playing video with souce --- " +question.source );
-        video.src = question.source;
-        video.onended = function() {
-            video.style.display = "none";
-            ++index;
-            console.log("playing video ended--- " +question.source );
-            playQuestion(stream);
-        }
-        video.play();
+    var meter = DecibelMeter.create('meter');
 
-    } else if(question.type=="image") {
+    // listen for audio sources to be ready
 
-    } else if(question.type=="words") {
-
-    }
-}
-
-$.get("/questionSet", function(data) {
-    questionSet = data;
-    navigator.getUserMedia({audio: true, video: false}, function (stream) {
-        playQuestion(stream);
-    }, function (error) {
-        //audioOrVideoNotEnabled();
+    meter.on('ready', function (meter, sources) {
+        var mic = sources[0]; // select first mic
+        meter.connect(mic); // connect to mic
     });
-})
 
+    // adjust displayed level when audio sampled
 
+    meter.on('sample', function (dB, percent, level) {
+        levelEl.style.height = (percent * 100) + '%';
+    });
+
+    // change element class when meter starts listening
+
+    meter.on('listen', function (meter) {
+        meterEl.classList.add('active');
+    });
+
+    // change element class when meter stops listening
+
+    meter.on('stop-listening', function (meter) {
+        meterEl.classList.remove('active');
+        levelEl.style.height = 0;
+    });
+
+    // clicking the meter element will toggle listening
+
+    meterEl.addEventListener('click', function (e) {
+        if (meter.listening)
+            meter.stopListening();
+        else
+            meter.listen();
+    });
 </script>
-
 </body>
 </html>

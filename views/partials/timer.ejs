@@ -27,10 +27,10 @@
 
     function stopTimer() {
         timer.style.display = "none";
-        if(timerId !=null) {
+        //if(timerId !=null) {
             clearTimeout(timerId);
             timerId = null;
-        }
+        //}
     }
 
     function startTimer(initTimeout, maxTimeout, initTimeoutFunction, maxTimeoutFunction) {

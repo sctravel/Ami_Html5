@@ -14,6 +14,7 @@ var _ = require("underscore");
 global.fs = require('fs');
 var JL = require('jsnlog').JL;
 var winston = require('winston');
+var xmlBuilder = require('./src/common/xmlBuilder');
 
 var logFormatter = function(options) {
     return (new Date()).toISOString() +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
@@ -97,7 +98,6 @@ s3Route(app);
  cert: fs.readFileSync('./my_cert.pem')
  };
 */
-
 
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
