@@ -98,17 +98,7 @@ s3Route(app);
  cert: fs.readFileSync('./my_cert.pem')
  };
 */
-var sessionTest={};
-sessionTest.Id = "aaa";
-sessionTest.name="aaa";
-sessionTest.testName="aaaaa";
-sessionTest.startTime=new Date();
-sessionTest.endTime = new Date();
-xmlBuilder.buildSessionXml(sessionTest, function(err, xmlString){
-    fs.writeFile('./logs/session.xml',xmlString, function(err){
 
-    });
-})
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
 ///////////////////////////////////////////////////////////////////////////

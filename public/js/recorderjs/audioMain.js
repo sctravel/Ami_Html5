@@ -15,10 +15,11 @@ var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
 var uploadURL = "/upload/audio/";
-var isRecording = false;
+var isRecording = false, isAnalysing = false;
 
-var snrThreshold=15, signalThreshold=-30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95;
+var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95;
 var latestSNR = 0;
+var currentMaxAudioPoint = 0;
 var audioData = [];
 var currentMaxAudioInDB = 0;
 var audioLevel;
@@ -44,7 +45,7 @@ function evaluateAudio(audioData, lowSignal, minSNR) {
     var noiseLevel = percentile(audioData, noiseLevelPercentile);
     var signalLevel = percentile(audioData, signalLevelPercentile);
     var snr = signalLevel - noiseLevel;
-    console.log("noiseLevel: "+ noiseLevel+"; signalLevel: "+ signalLevel + "; snr: " + snr);
+    console.log("noiseLevel: "+ noiseLevel+"; signalLevel: "+ signalLevel + "; snr: " + snr+ "; currentMaxAudioPoint: " +currentMaxAudioPoint);
     if(signalLevel < lowSignal) audioLevel=audioLevelOptions.LowVolume;
     else if(snr < minSNR) audioLevel=audioLevelOptions.LowSNR;
     else audioLevel=audioLevelOptions.OK;
@@ -74,20 +75,34 @@ function doneEncoding( blob ) {
     recIndex++;
 }
 
+function startAnalysing() {
+    audioData=[];
+    currentMaxAudioPoint = 0;
+    isAnalysing = true;
+}
+
+function stopAnalysing() {
+    evaluateAudio(audioData, signalThreshold, snrThreshold);
+    isAnalysing = false;
+    audioData=[];
+    currentMaxAudioPoint=0;
+}
+
 function startRecording() {
     if (!audioRecorder)
         return;
     audioRecorder.clear();
     audioRecorder.record();
-    audioData=[];
     isRecording = true;
+    startAnalysing();
+
 }
 function stopRecording() {
+    console.log("stop recording")
     audioRecorder.stop();
     isRecording = false;
     audioRecorder.getData( gotBuffers );
-    evaluateAudio(audioData, snrThreshold, signalThreshold);
-    audioData = [];
+    stopAnalysing();
 }
 
 function toggleRecording( e ) {
@@ -125,7 +140,7 @@ function updateAnalysers(time) {
         analyserContext = canvas.getContext('2d');
     }
 
-    // analyzer draw code here
+    if(isAnalysing)
     {
         var SPACING = 3;
         var BAR_WIDTH = 1;
@@ -134,8 +149,6 @@ function updateAnalysers(time) {
         var freqFloatData = new Float32Array(analyserNode.frequencyBinCount); // Float32Array should be the same length as the frequencyBinCount
         analyserNode.getFloatFrequencyData(freqFloatData); // fill the Float32Array with data returned from getFloatFrequencyData()
         analyserNode.getByteFrequencyData(freqByteData);
-
-        if(isRecording) audioData.concat(freqFloatData);
 
         analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
         analyserContext.fillStyle = '#F6D565';
@@ -150,7 +163,8 @@ function updateAnalysers(time) {
             for (var j = 0; j< multiplier; j++)
                 magnitude += freqByteData[offset + j];
             magnitude = magnitude / multiplier;
-
+            audioData.push(magnitude);
+            if(currentMaxAudioPoint<magnitude) currentMaxAudioPoint = magnitude;
             var magnitude2 = freqByteData[i * multiplier];
             analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
             analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);
