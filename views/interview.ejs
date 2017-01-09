@@ -167,11 +167,7 @@
     }
 
     var camera = document.getElementById('camera');
-    //var canvas = document.querySelector('canvas');
-    //var ctx = canvas.getContext('2d');
-    //var image = document.querySelector('img');
     navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-
     window.URL = window.URL || window.webkitURL;
     if (navigator.getUserMedia) {
         navigator.getUserMedia({ video: true,audio:false},
@@ -350,6 +346,18 @@
         }*/
     }
 
+<<<<<<< HEAD
+    $.get("/questionSet", function(data) {
+        questionList = data;
+        navigator.getUserMedia({audio: true, video: false}, function (stream) {
+            teststream =stream;
+            processItem(stream);
+        }, function (error) {
+            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+        });
+    })
+=======
+>>>>>>> bfd59ac08a5b3a58a301a611ee783ba9ca132e3d
 
 
 
