@@ -17,8 +17,10 @@ var recIndex = 0;
 var uploadURL = "/upload/audio/";
 var isRecording = false;
 
+var snrThreshold=15, signalThreshold=-30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95;
 var latestSNR = 0;
 var audioData = [];
+var currentMaxAudioInDB = 0;
 var audioLevel;
 var audioLevelOptions = {
     OK : 1,
@@ -39,8 +41,8 @@ function evaluateAudio(audioData, lowSignal, minSNR) {
         audioLevel = audioLevelOptions.UnKnown;
         return;
     }
-    var noiseLevel = percentile(audioData, 0.25);
-    var signalLevel = percentile(audioData, 0.95);
+    var noiseLevel = percentile(audioData, noiseLevelPercentile);
+    var signalLevel = percentile(audioData, signalLevelPercentile);
     var snr = signalLevel - noiseLevel;
     console.log("noiseLevel: "+ noiseLevel+"; signalLevel: "+ signalLevel + "; snr: " + snr);
     if(signalLevel < lowSignal) audioLevel=audioLevelOptions.LowVolume;
@@ -83,8 +85,8 @@ function startRecording() {
 function stopRecording() {
     audioRecorder.stop();
     isRecording = false;
-    audioRecorder.getBuffers( gotBuffers );
-    evaluateAudio(audioData, 30, 15);
+    audioRecorder.getData( gotBuffers );
+    evaluateAudio(audioData, snrThreshold, signalThreshold);
     audioData = [];
 }
 
@@ -129,8 +131,11 @@ function updateAnalysers(time) {
         var BAR_WIDTH = 1;
         var numBars = Math.round(canvasWidth / SPACING);
         var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
-
+        var freqFloatData = new Float32Array(analyserNode.frequencyBinCount); // Float32Array should be the same length as the frequencyBinCount
+        analyserNode.getFloatFrequencyData(freqFloatData); // fill the Float32Array with data returned from getFloatFrequencyData()
         analyserNode.getByteFrequencyData(freqByteData);
+
+        if(isRecording) audioData.concat(freqFloatData);
 
         analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
         analyserContext.fillStyle = '#F6D565';
@@ -145,7 +150,7 @@ function updateAnalysers(time) {
             for (var j = 0; j< multiplier; j++)
                 magnitude += freqByteData[offset + j];
             magnitude = magnitude / multiplier;
-            if(isRecording) audioData.push(magnitude);
+
             var magnitude2 = freqByteData[i * multiplier];
             analyserContext.fillStyle = "hsl( " + Math.round((i*360)/numBars) + ", 100%, 50%)";
             analyserContext.fillRect(i * SPACING, canvasHeight, BAR_WIDTH, -magnitude);

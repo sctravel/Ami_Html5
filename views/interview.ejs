@@ -194,17 +194,23 @@
     var audioFolder = "assets/Audio/items/"
     var videoFolder = "assets/Video/"
     var imageFolder = "assets/Images/"
-    var questionList;
-    var index = -1;
+
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
-    var item;
+    var camera = document.getElementById("camera");
     var nextButton = document.getElementById("nextButton");
     var instr = document.getElementById("instructionText");
     var trackTap = document.getElementById("trackTap");
+    var questionList;
+    var item;
+    var responseStartTime, responseEndTime;
+    var index = -1;
 
     JL("client").info("Interview started");
 
+    function takePicturePeriodically(intervalInSeconds) {
+
+    }
     function processItem(stream) {
         ++index;
         if(index>=questionList.length) return;
@@ -320,14 +326,6 @@
         }*/
     }
 
-    $.get("/questionSet", function(data) {
-        questionList = data;
-        navigator.getUserMedia({audio: true, video: false}, function (stream) {
-            processItem(stream);
-        }, function (error) {
-            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
-        });
-    })
 
 
 
@@ -366,6 +364,7 @@
 
             analyser.style.display = "inline";
             gotStream(stream);
+            responseStartTime = new Date();
             startRecording();
             startTimer(item.itimeout, item.mtimeout,
                 function(){
@@ -593,6 +592,15 @@
     function processCalcuationResponse(stream, item){}
 
     function processInterpretResponse() {}
+
+    $.get("/questionSet", function(data) {
+        questionList = data;
+        navigator.getUserMedia({audio: true, video: false}, function (stream) {
+            processItem(stream);
+        }, function (error) {
+            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+        });
+    })
 
 </script>
 

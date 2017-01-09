@@ -63,13 +63,6 @@ module.exports = function(app) {
         }
     );
 
-    app.post('/api/login/finish', isLoggedIn, function(req, res) {
-        winston.loggers.get(req.user.sessionId).close();
-        userLogin.finishSession();
-        //upload zip to s3;
-        req.logout();
-        res.redirect("/");
-    });
 
     app.post('/api/login/finish', isLoggedIn, function(req, res) {
         winston.loggers.get(req.user.sessionId).close();
