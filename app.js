@@ -77,6 +77,7 @@ function isLoggedIn(req, res, next) {
     }
 }
 exports.isLoggedIn = isLoggedIn;
+
 fs.mkdir(constants.paths.UPLOAD_FOLDER,function(e){});
 
 var configUserLoginRoute = require('./routes/userLoginRoute');
@@ -90,14 +91,13 @@ s3Route(app);
 ///////////////////////////////////////////////////////////////////////////
 // SSL Certification
 ///////////////////////////////////////////////////////////////////////////
-/*var tls = require('tls');
- var fs = require('fs');
+var tls = require('tls');
  var serverOptions = {
  key: fs.readFileSync('./my_key.pem'),
  ca:  fs.readFileSync('./intermediate.pem'),
  cert: fs.readFileSync('./my_cert.pem')
  };
-*/
+
 
 ///////////////////////////////////////////////////////////////////////////
 // Page Routing
@@ -197,7 +197,10 @@ process.on('uncaughtException', function(err) {
 ///////////////////////////////////////////////////////////////////////////
 if ('development' == app.get('env')) {
     app.set('port', process.env.PORT || 3000);
-    http.createServer(app).listen(app.get('port'), function(){
+    https.createServer(serverOptions,app).listen(app.get('port'), function(){
+        logger.info('Express server listening on port ' + app.get('port'));
+    });
+    http.createServer(app).listen(80, function(){
         logger.info('Express server listening on port ' + app.get('port'));
     });
 }else

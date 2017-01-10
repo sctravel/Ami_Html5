@@ -10,8 +10,10 @@ var dbPool = require("../db/createDBConnectionPool");
 function addItemResponseToSession(itemResponse, sessionId, callback) {
 
     if(itemResponse.item.type==2000 && itemResponse.item.item==3) {
-        addCameraPictureResponseToSession(itemResponse, sessionId, callback);
+        addAudioResponseToSession(itemResponse, "CameraPicture", callback);
     } else if(itemResponse.item.type = 2032) {
+        addTrackTapResponseToSession(itemResponse, sessionId,callback);
+    } else if(itemResponse.item.type = 2064) {
         addQuickLitResponseToSession(itemResponse, sessionId,callback);
     } else if( itemResponse.item == 20) { //TODO: get the item list of SubAudioResponses
         addAudioResponseWithSubResponseToSession(itemResponse, sessionId, callback);
@@ -20,23 +22,48 @@ function addItemResponseToSession(itemResponse, sessionId, callback) {
     }
 }
 
-var addCameraPictureResponseToSession = function(itemResponse, sessionId, callback) {
-    addAudioResponseToSession(itemResponse, sessionId, "CameraPicture", function(err, results) {
-        if (err) {
-            logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
-            callback(err, null);
-            return;
-        }
+var addIndividualPictureResponseToSession = function(picture, sessionId, callback) {
         var sqlAddCameraPicturesToSession = "insert into sessionstates_camerapicture " +
-            " (sessionId, testId, type, item, takenTime, elapseTime, takenType, takeItem, pngFileName) " +
-            " values (?,?,?,?,?,?,?,?,?)";
-        var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item,
-            itemResponse.picture.takenTime, itemResponse.picture.elapsedTime, itemResponse.picture.takenType,
-            itemResponse.picture.takenItem, itemResponse.picture.pngFileName];
+            " (sessionId, takenTime, elapseTime, takenType, takeItem, pngFileName) " +
+            " values (?,?,?,?,?,?)";
+        var params = [sessionId, picture.takenTime, picture.elapsedTime, picture.takenType, picture.takenItem, picture.pngFileName];
 
         dbPool.runQueryWithParams(sqlAddCameraPicturesToSession, params, function (err, results) {
             if (err) {
                 logger.error("sqlAddCameraPicturesToSession failed for sessionId: " + sessionId);
+                callback(err, null);
+                return;
+            }
+            callback(null, constants.services.CALLBACK_SUCCESS);
+        });
+}
+exports.addIndividualPictureResponseToSession = addIndividualPictureResponseToSession;
+
+var addTrackTapResponseToSession = function(itemResponse, sessionId, callback) {
+    addAudioResponseToSession(itemResponse, sessionId, "TrackTapResponse", function(err, results) {
+        if(err) {
+            logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
+            callback(err, null);
+            return;
+        }
+
+        var sqlAddTrackTapWordsToSession = "insert into sessionstates_tracktap " +
+            " (sessionId, latency, distance ) " +
+            " values ";
+        var params = [];
+
+        for(var i in itemResponse.taps) {
+            var tap = itemResponse.taps[i];
+            if(i==itemResponse.taps.length-1) {
+                sqlAddTrackTapWordsToSession = sqlAddTrackTapWordsToSession + " (?,?,?)"
+            } else {
+                sqlAddTrackTapWordsToSession = sqlAddTrackTapWordsToSession + " (?,?,?), "
+            }
+            params = params.concat([sessionId, tap.latency, tap.distance]);
+        }
+        dbPool.runQueryWithParams(sqlAddTrackTapWordsToSession, params, function (err, results) {
+            if (err) {
+                logger.error("sqlAddTrackTapWordsToSession failed for sessionId: " + sessionId);
                 callback(err, null);
                 return;
             }
@@ -82,9 +109,9 @@ var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) 
 
 var addAudioResponseToSession = function(itemResponse, sessionId, responseType, callback) {
     var sqlAddAudioResponseToSession = "insert into sessionstates " +
-        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status)" +
+        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, score)" +
         " values (?,?,?,?,?,?,?,?) ";
-    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, responseType, itemResponse.startTime, itemResponse.endTime, itemResponse.afilename, itemResponse.status];
+    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, responseType, itemResponse.startTime, itemResponse.endTime, itemResponse.afilename, itemResponse.status, itemResponse.score];
     dbPool.runQueryWithParams(sqlAddAudioResponseToSession, params, function (err, results) {
         if (err) {
             logger.error("addAudioResponseToSession() failed for sessionId: " + sessionId);

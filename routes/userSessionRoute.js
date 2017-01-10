@@ -19,6 +19,17 @@ module.exports = function(app) {
         });
     });
 
+    app.post('/api/session/cameraPictureSessionData', isLoggedIn, function (req, res) {
+        var itemResponse = req.body.itemResponse;
+        userSession.addItemResponseToSession(itemResponse, req.user.sessionId, function(err, results) {
+            if(err) {
+                logger.error("update session state failed with error: " + err);
+                return;
+            }
+            res.send(constants.services.CALLBACK_SUCCESS);
+        });
+    });
+
 
 }
 

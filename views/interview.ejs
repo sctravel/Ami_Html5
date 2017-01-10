@@ -21,7 +21,7 @@
 <div class="container">
 
     <div id="top" class="row panel-body ">
-        <div id="cameraDiv" class="col-lg-1">
+        <div id="cameraDiv" class="col-sm-1">
             <span><video id="camera" autoplay></video></span>
         </div>
 
@@ -65,12 +65,12 @@
 
     <div id="instructionText" style="display: none"></div>
 
-    <div id="controls" style="display: none">
+
         <img id="record" src="images/mic128.png" onclick="toggleRecording(this);" style="display: none">
         <a id="save" href="#" style="display: none"><img src="images/save.svg"></a>
-    </div>
-    <div id="button" class="row text-center">
-        <button id="nextButton" type="button" class="text-center btn-lg " font-size="16px">Next</button>
+
+    <div id="button">
+        <button id="nextButton"  width="1024" height="200" type="button" class="text-center btn-lg row " style="color: red">Next</button>
     </div>
 </div>
 
@@ -204,15 +204,31 @@
     var responseStartTime, responseEndTime;
     var index = -1;
     var pictureId = 0;
-
+    var interviewStartTime, interviewEndTime;
     JL("client").info("Interview started");
 
     function takePictureAndUpload() {
         JL("client").info("Taking picture for the interviewer with pictureId: " + (pictureId++));
+        var picture = {};
+        picture.takenItem = item.item;
+        picture.takenType = item.type;
+        picture.takenTime = (new Date()).toUTCString();
+        picture.pngFileName = 'camera'+pictureId+'.png';
+        picture.elapsedTime = (new Date() - interviewStartTime)/1000;
+
+        $.post('/api/session/cameraPictureSessionData', {itemResponse: picture}, function(data) {
+            if (data != "ok") {
+                var errorMessage = "Upload cameraPicture failed with message: " + data;
+                console.error(errorMessage);
+                JL("client").error(errorMessage);
+            } else {
+                JL("client").error("Upload pcameraPicture succeeded.");
+            }
+        });
     }
 
     function postItemResponse(stream) {
-        $.post("/api/itemResponse", {itemResponse : itemResponse}, function(data) {
+        $.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
             if(data!="ok") {
                 var errorMessage = "Upload response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
                 console.error(errorMessage);
@@ -224,13 +240,31 @@
         })
     }
 
+    function postPictureResponse() {
+        picItemResponse.endTime = (new Date()).toUTCString();
+        picItemResponse.status = "MAX_TIMEOUT";
+        $.post("/api/session/updateSessionState", {itemResponse : picItemResponse}, function(data) {
+            if(data!="ok") {
+                var errorMessage = "Upload picture response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
+                console.error(errorMessage);
+                JL("client").error(errorMessage);
+            } else {
+                JL("client").error("Upload picture response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
+                //end the interview
+            }
+        })
+    }
+
     function processItem(stream) {
         ++index;
         if(index>=questionList.length) {
             clearInterval(takePictureIntervalId);
+            interviewEndTime = new Date();
+            postPictureResponse();
             return;
         }
         itemResponse = {};
+
         item = questionList[index];
         itemResponse.item = item;
         console.log("#############now processing --- " + item.type + " : " + item.item);
@@ -242,7 +276,12 @@
                 } else if(item.item == 2) {
                     processMicrophoneChecker(stream, item);
                 } else if(item.item==3){
+                    picItemResponse.item = item;
+                    picItemResponse.pictures=[];
+                    picItemResponse.startTime = (new Date()).toUTCString();
+                    picItemResponse.afilename = "";
                     takePictureIntervalInMilliSeconds = item.mtimeout*1000;
+                    interviewStartTime = new Date();
                     takePictureIntervalId = setInterval(takePictureAndUpload, takePictureIntervalInMilliSeconds);
                     processInstruction(stream, item);
                 }
@@ -306,58 +345,8 @@
                 processItem(stream);
                 break;
         }
-        /*
-        if(question.type=="audio") {
-            var audio = new Audio(question.source);
-            console.log("playing audio with souce --- " +question.source );
-
-            audio.onended = function() {
-                console.log("playing audio ended--- " +question.source );
-
-                canvas.style.display = "inline";
-                gotStream(stream);
-                toggleRecording(recordButton);
-                startTimer(question.timeout, 50, function() {
-                    toggleRecording(recordButton);
-                    canvas.style.display="none";
-                    playQuestion(stream);
-                    ++index;
-                })
-            }
-            audio.play();
-
-        } else if(question.type=="video") {
-            //video.source = question.source;
-            video.style.display = "inline";
-            console.log("playing video with souce --- " +question.source );
-            video.src = question.source;
-            video.onended = function() {
-                video.style.display = "none";
-                ++index;
-                console.log("playing video ended--- " +question.source );
-                playQuestion(stream);
-            }
-            video.play();
-
-        } else if(question.type=="image") {
-
-        } else if(question.type=="words") {
-
-        }*/
     }
 
-<<<<<<< HEAD
-    $.get("/questionSet", function(data) {
-        questionList = data;
-        navigator.getUserMedia({audio: true, video: false}, function (stream) {
-            teststream =stream;
-            processItem(stream);
-        }, function (error) {
-            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
-        });
-    })
-=======
->>>>>>> bfd59ac08a5b3a58a301a611ee783ba9ca132e3d
 
 
 
@@ -393,6 +382,7 @@
         var audio = new Audio(source);
         itemResponse.afilename = item.type+"."+item.item+".flac";
         itemResponse.itemType = "AudioResponse";
+        itemResponse.item = item;
         audio.onended = function() {
             JL('client').info("end playing audio " + audioFileName);
 
@@ -444,6 +434,7 @@
         audio.onended = function() {
             JL('client').info("start playing tracktap");
             responseStartTime = new Date();
+            itemResponse.taps=[];
             GameStart();
             startTimer(0, item.mtimeout, null, function() {
                 GameOver();
@@ -452,6 +443,7 @@
                 itemResponse.startTime = responseStartTime.toUTCString();
                 itemResponse.endTime = responseEndTime.toUTCString();
                 itemResponse.status = "MAX_TIMEOUT";
+                itemResponse.score = score;
                 //itemResponse.scoreInfo = scoreInfo;
                 postItemResponse(stream);
                 //processItem(stream);
