@@ -4,25 +4,114 @@
 var stringUtil = require('./../common/stringUtil');
 var constants = require('./../common/constants');
 var emailUtil = require('./../common/emailUtil');
-var Session = require("../model/session.js")
+var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
 
-function addFinishedSessionTestItem(itemResponse, callback) {
-    switch (itemResponse.item.type) {
-        case 2000:
-            addMicrophoneCheckResponse(itemResponse, callback);
-            break;
-        case 2062:
-            addNameFacesResponse(itemResponse, callback);
-            break;
-        case 20:
-            break;
-        default:
-            addAudioResponse(itemResponse, callback);
-            break;
-    }
+function addItemResponseToSession(itemResponse, sessionId, callback) {
 
+    if(itemResponse.item.type==2000 && itemResponse.item.item==3) {
+        addCameraPictureResponseToSession(itemResponse, sessionId, callback);
+    } else if(itemResponse.item.type = 2032) {
+        addQuickLitResponseToSession(itemResponse, sessionId,callback);
+    } else if( itemResponse.item == 20) { //TODO: get the item list of SubAudioResponses
+        addAudioResponseWithSubResponseToSession(itemResponse, sessionId, callback);
+    } else {
+        addAudioResponseToSession(itemResponse, sessionId, "AudioResponse", callback);
+    }
 }
+
+var addCameraPictureResponseToSession = function(itemResponse, sessionId, callback) {
+    addAudioResponseToSession(itemResponse, sessionId, "CameraPicture", function(err, results) {
+        if (err) {
+            logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
+            callback(err, null);
+            return;
+        }
+        var sqlAddCameraPicturesToSession = "insert into sessionstates_camerapicture " +
+            " (sessionId, testId, type, item, takenTime, elapseTime, takenType, takeItem, pngFileName) " +
+            " values (?,?,?,?,?,?,?,?,?)";
+        var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item,
+            itemResponse.picture.takenTime, itemResponse.picture.elapsedTime, itemResponse.picture.takenType,
+            itemResponse.picture.takenItem, itemResponse.picture.pngFileName];
+
+        dbPool.runQueryWithParams(sqlAddCameraPicturesToSession, params, function (err, results) {
+            if (err) {
+                logger.error("sqlAddCameraPicturesToSession failed for sessionId: " + sessionId);
+                callback(err, null);
+                return;
+            }
+            callback(null, constants.services.CALLBACK_SUCCESS);
+        });
+    });
+}
+
+var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) {
+    addAudioResponseToSession(itemResponse, sessionId, "QuickLitResponse", function(err, results) {
+        if(err) {
+            logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
+            callback(err, null);
+            return;
+        }
+
+        var sqlAddQuickLitWordsToSession = "insert into sessionstates_quicklit " +
+            " (sessionId, testId, type, item, word, isWord, isUsed, level, duration, isTouched, touchTimeStamp, wordIndex, isCorrect ) " +
+            " values ";
+        var params = [];
+
+        for(var i in itemResponse.words) {
+            var word = itemResponse.words[i];
+            if(i==itemResponse.words.length-1) {
+                sqlAddQuickLitWordsToSession = sqlAddQuickLitWordsToSession + " (?,?,?,?,?,?,?,?,?,?,?,?,?)"
+            } else {
+                sqlAddQuickLitWordsToSession = sqlAddQuickLitWordsToSession + " (?,?,?,?,?,?,?,?,?,?,?,?,?), "
+            }
+            params = params.concat([sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item,
+                word.word, word.isWord, word.isUsed, word.level, word.duration, word.isTouched, word.touchTimeStamp,
+                word.wordIndex, word.isCorrect]);
+        }
+        dbPool.runQueryWithParams(sqlAddQuickLitWordsToSession, params, function (err, results) {
+            if (err) {
+                logger.error("sqlAddQuickLitWordsToSession failed for sessionId: " + sessionId);
+                callback(err, null);
+                return;
+            }
+            callback(null, constants.services.CALLBACK_SUCCESS);
+        });
+    });
+};
+
+var addAudioResponseToSession = function(itemResponse, sessionId, responseType, callback) {
+    var sqlAddAudioResponseToSession = "insert into sessionstates " +
+        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status)" +
+        " values (?,?,?,?,?,?,?,?) ";
+    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, responseType, itemResponse.startTime, itemResponse.endTime, itemResponse.afilename, itemResponse.status];
+    dbPool.runQueryWithParams(sqlAddAudioResponseToSession, params, function (err, results) {
+        if (err) {
+            logger.error("addAudioResponseToSession() failed for sessionId: " + sessionId);
+            callback(err, null);
+            return;
+        }
+        callback(null, constants.services.CALLBACK_SUCCESS);
+    });
+}
+
+var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId, callback) {
+    var sqlAddMicrophoneCheckResponseToSession = "insert into sessionstates " +
+        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, subResponses )" +
+        " values (?,?,?,?,?,?,?,?,?) ";
+    var subResponses = itemResponse.subResponses;
+    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, "SubAudioResponse", itemResponse.startTime, itemResponse.endTime, itemResponse.afilename, itemResponse.status, subResponses];
+
+    dbPool.runQueryWithParams(sqlAddMicrophoneCheckResponseToSession, params, true, function (err, results) {
+        if (err) {
+            logger.error("getFinishedItemsInSession() failed for sessionId: " + unfinishedSessionId);
+            callback(err, null);
+            return;
+        }
+        callback(null, results);
+    });
+}
+
 
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
     var sqlGetFinishedItemsInSession = "select sessionId, testId, type, item, startTime, endTime, score, status from sessionstates where sessionId = ? order by startTime";
@@ -43,6 +132,7 @@ var markSessionEnd = function(sessionId, callback) {
     var endtime = new Date();
     dbPool.runQueryWithParams(sqlMarkSessionEnd, [endtime, sessionId], function (err, results) {
         if (err) {
+            logger.error('sqlMarkSessionEnd failed for session ' + sessionId);
             callback(err, null);
             return;
         }
@@ -118,7 +208,7 @@ var createUserSession = function(session, callback) {
 
     dbPool.runQueryWithParams(sqlCreateSession, params, function (err, results) {
         if (err) {
-            logger.error("create user session failed for email-"+session.email);
+            logger.error("sqlCreateSession failed for email-"+session.email);
             callback(err, null);
             return;
         }
@@ -131,11 +221,11 @@ var getUnfinishedSession = function(email,callback) {
     var sqlUnfinishedSession = "select sessionId, testId from sessions where email = ? and endtime is null order by startTime desc";
     dbPool.runQueryWithParams(sqlUnfinishedSession, [email], function (err, results) {
         if (err) {
-            logger.error("getUnfinishedSession() failed for email: " + email);
+            logger.error("sqlUnfinishedSession failed for email: " + email);
             callback(err, null);
             return;
         }
-        logger.info("getUnfinishedSession() - with results - " + results);
+        logger.info("sqlUnfinishedSession - with results - " + results);
         console.dir(results);
         if(results==null || results.length==0) {
             callback(null, null);

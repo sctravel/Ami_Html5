@@ -11,7 +11,7 @@ module.exports = function(app) {
     var LocalStrategy = require('passport-local').Strategy;
     var config = require('config');
     var userLogin = require('../src/login/userLogin');
-    var Session = require('../src/model/session');
+    var Session = require('../src/model/Session');
     var winston = require('winston');
 
     ///////////////////////////////////////////////////////////////////////
