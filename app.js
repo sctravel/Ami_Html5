@@ -83,6 +83,9 @@ fs.mkdir(constants.paths.UPLOAD_FOLDER,function(e){});
 var configUserLoginRoute = require('./routes/userLoginRoute');
 configUserLoginRoute(app);
 
+var configUserSessionRoute = require('./routes/userSessionRoute');
+configUserSessionRoute(app);
+
 var getTestsRoute = require('./routes/getTestsRoute');
 getTestsRoute(app);
 
@@ -156,10 +159,10 @@ app.post('/upload/audio/', function (req, res) {
     var buf =  new Buffer(req.body.blob, 'Base64'); // decode
     var filename = constants.paths.UPLOAD_FOLDER + "/test/question_" + id + ".wav";
     if(req.user) {
-        constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/question_" + id + ".wav"; //"+req.user+"_"+req.sessionId+"\\
+        filename = constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/question_" + id + ".wav"; //"+req.user+"_"+req.sessionId+"\\
     }
     fs.writeFile(filename, buf, function(err) {
-        res.sendStatus(err ? 500 : 200);
+        res.send(err);
         return;
     });
     logger.info("########upload wav file succeeded!");

@@ -15,34 +15,50 @@
     <script src="js/recorderjs/audioMain.js"></script>
     <link rel="stylesheet" href="/css/audioCss.css">
     <link rel="stylesheet" href="/css/trackTap.css">
+    <style>
+
+        #analyser {
+            display: inline-block;
+            background: #000000;
+            width:100%;
+            min-height: 15px;
+            max-height:50px;
+            box-shadow: 0px 0px 10px #000000;
+        }
+
+    </style>
 </head>
 <body>
 
 <div class="container">
 
     <div id="top" class="row panel-body ">
-        <div id="cameraDiv" class="col-sm-1">
-            <span><video id="camera" autoplay></video></span>
+        <div id="camera_div" class="col-lg-1">
+            <span><video id="camera" autoplay width="100%" height="100%"></video></span>
         </div>
-
-        <div id="spinner" class="col-lg-1 " >
-            <span class="vcenter">  <% include partials/timer.ejs %></span>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col-sm-4">
-            ...........
-        </div>
-        <div class="col-sm-4">
-            ...
-        </div>
-        <div class="col-sm-4">
-            ...
+        <div id="timer_div" class="col-lg-1">
+        <% include partials/timer.ejs %>
         </div>
     </div>
     <div id="videoContent" class="text-center">
-        <video id="video" width="100%" height="100%"></video>
+        <video id="video" width="50%" height="50%"></video>
     </div>
+    <div  id = "textContent" class ="row text-center" style="display: none;width:50%; height:50%"  >
+        <!-- Volume checker-->
+            <b>Hear This ?</b>
+    </div>
+
+    <div>
+
+        <div id="microphone"  class="row " >
+            <canvas id="analyser"  ></canvas>
+        </div>
+
+        <div  id="footer" class="row " style="display: inline">
+            <button id="nextButton" style="width: 100%; height: 100%;">next</button>
+        </div>
+    </div>
+
     <div id="trackTap" style="display: none">
         <table>
             <tr>
@@ -58,19 +74,6 @@
                 <td id="td[5]" onclick="hit(5)"></td>
             </tr>
         </table>
-    </div>
-    <div id="viz" >
-        <canvas id="analyser" width="1024" height="400" style="display: none"></canvas>
-    </div>
-
-    <div id="instructionText" style="display: none"></div>
-
-
-        <img id="record" src="images/mic128.png" onclick="toggleRecording(this);" style="display: none">
-        <a id="save" href="#" style="display: none"><img src="images/save.svg"></a>
-
-    <div id="button">
-        <button id="nextButton"  width="1024" height="200" type="button" class="text-center btn-lg row " style="color: red">Next</button>
     </div>
 </div>
 
@@ -196,7 +199,7 @@
     var video = document.getElementById("video");
     var camera = document.getElementById("camera");
     var nextButton = document.getElementById("nextButton");
-    var instr = document.getElementById("instructionText");
+    var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
     var questionList;
     var item;
@@ -204,6 +207,7 @@
     var responseStartTime, responseEndTime;
     var index = -1;
     var pictureId = 0;
+    var picItemResponse = {};
     var interviewStartTime, interviewEndTime;
     JL("client").info("Interview started");
 
@@ -228,7 +232,7 @@
     }
 
     function postItemResponse(stream) {
-        $.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
+        /*$.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
             if(data!="ok") {
                 var errorMessage = "Upload response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
                 console.error(errorMessage);
@@ -237,7 +241,8 @@
                 JL("client").error("Upload response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
                 processItem(stream);
             }
-        })
+        })*/
+        processItem(stream);
     }
 
     function postPictureResponse() {
@@ -402,7 +407,7 @@
                         itemResponse.startTime = responseStartTime.toUTCString();
                         itemResponse.endTime = responseEndTime.toUTCString();
                         itemResponse.status = "NEXT_TOUCHED";
-                        postItemRepsonse(stream);
+                        postItemResponse(stream);
                     };
                 },
                 function() {
@@ -567,7 +572,7 @@
         var audioFileName = item.type+"."+item.item+".mp3";
         var source = audioFolder + audioFileName;
         var audio = new Audio(source);
-        var instr = document.getElementById("instructionText");
+        var instr = document.getElementById("textContent");
         instr.innerHTML = "Hear This ?";
         var nextButton = document.getElementById("nextButton");
         nextButton.style.display="inline";

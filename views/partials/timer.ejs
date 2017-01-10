@@ -36,17 +36,6 @@
     function startTimer(initTimeout, maxTimeout, initTimeoutFunction, maxTimeoutFunction) {
         var radius = 50;
         timer.style.display = "inline";
-
-<<<<<<< HEAD
-    function startTimer(timeout, radius, onEndFunction) {
-        var timerId = null;
-        var timer = document.getElementById('timer');
-        var loader = document.getElementById('loader');
-        var border = document.getElementById('border');
-        var π = Math.PI;
-         var α = 0
-            , t = timeout/ 2 / 360 * 1000; //draw 1 degree every t milli-seconds
-=======
         var loader = document.getElementById('loader')
         var border = document.getElementById('border')
         var π = Math.PI
@@ -54,7 +43,6 @@
             , t = maxTimeout/ 2 / 360 * 1000; //draw 1 degree every t milli-seconds
         var initA = initTimeout/maxTimeout*360;
         var initExecuted = false;
->>>>>>> c917b35a4c0981b30aab1be9890c0ea53db36e36
 
         (function draw() {
             α++;
