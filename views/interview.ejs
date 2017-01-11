@@ -788,7 +788,7 @@
     $.get("/questionSet", function(data) {
         questionList = data;
         nextButton.onclick = function () {
-            //audioS.play();
+            audioS.play();
             navigator.getUserMedia({audio: true, video: false}, function (stream) {
                 processItem(stream);
             }, function (error) {
