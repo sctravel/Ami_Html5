@@ -1,0 +1,6 @@
+1. all the transition audios (item from 2090 to 2100) doesn't have any binding audio.
+   Looks like many audio files in the assets/Audio not in items folder and not properly named.
+
+2. Missing " what does she feeling audio " for name the faces in items table.
+
+3. Audio decibels not scale in the same range in html5(from Audio WEB API) as in IOS (need to normalize or not? )

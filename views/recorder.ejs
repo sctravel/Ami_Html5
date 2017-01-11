@@ -1,66 +1,804 @@
-<!doctype html>
-<html>
+<!DOCTYPE html>
+<html lang="en">
 <head>
+    <title>Bootstrap Example</title>
     <meta charset="utf-8">
-    <title>DecibelMeter example</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
+    <link rel="stylesheet" href="/css/main.css">
+    <script src="/jquery/dist/jquery.min.js"></script>
+    <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/jsnlog.js/jsnlog.js"></script>
 
-    <link rel="stylesheet" href="font/decibel-meter/style.css">
-    <link rel="stylesheet" href="example.css">
+    <script src="js/recorderjs/audiodisplay.js"></script>
+    <script src="js/recorderjs/recorder.js"></script>
+    <script src="js/recorderjs/audioMain.js"></script>
+    <link rel="stylesheet" href="/css/audioCss.css">
+    <link rel="stylesheet" href="/css/trackTap.css">
+    <style>
+
+        #analyser {
+            display: inline-block;
+            background: #000000;
+            width:100%;
+            min-height: 15px;
+            max-height:50px;
+            box-shadow: 0px 0px 10px #000000;
+        }
+
+    </style>
 </head>
-
 <body>
 
-<div id="message">Click mic to toggle listening</div>
+<div class="container">
 
-<div id="meter" class="icon-microphone"><span></span></div>
+    <div id="top" class="row panel-body ">
+        <div id="camera_div" class="col-lg-1">
+            <span><video id="camera" autoplay width="100%" height="100%"></video></span>
+        </div>
+        <div id="timer_div" class="col-lg-1">
+            <% include partials/timer.ejs %>
+        </div>
+    </div>
+    <div>
+        <div id="videoContent" class="text-center row" style="display: none">
+            <video id="video" width="50%" height="50%"></video>
+        </div>
+        <div id="trackTap" style="display: none"  class="row">
+            <table>
+                <tr>
+                    <td id="td[0]" onclick="hit(0)"></td>
+                    <td id="td[1]" onclick="hit(1)"></td>
+                </tr>
+                <tr>
+                    <td id="td[2]" onclick="hit(2)"></td>
+                    <td id="td[3]" onclick="hit(3)"></td>
+                </tr>
+                <tr>
+                    <td id="td[4]" onclick="hit(4)"></td>
+                    <td id="td[5]" onclick="hit(5)"></td>
+                </tr>
+            </table>
+        </div>
+        <div  id="textContent" class ="row text-center" style="display: none;width:100%; height:100% ;color: red;"  >
+            <!-- Volume checker-->
+            Hear This ?
+        </div>
+    </div>
+    <audio id="audioS" src="assets/Audio/items/2000.3.mp3"></audio>
+    <div class="row " >
 
-<script src="../build/decibel-meter.js"></script>
+        <div id="microphone"  class="row " >
+            <canvas id="analyser"  ></canvas>
+        </div>
+
+        <div  id="footer" class="row " style="display: inline">
+            <button id="nextButton" style="width: 100%; height: 100%;">Click Here To Start</button>
+        </div>
+    </div>
+
+
+</div>
 
 <script>
-    // HTML elements
+    var td = new Array(),      //保存每个格子的地鼠
+        playing = false,       //游戏是否开始
+        score = 0,             //分数
+        total = 0,
+        beat = 0,              //鼠标点击次数
+        success = 0,           //命中率
+        knock = 0,             //鼠标点中老鼠图片次数
+        gameInterId = null,        //指定setInterval()的变量
+        gameTimerId = null;         //指定setTimeout()的变量
 
-    var meterEl = document.getElementById('meter'),
-        levelEl = document.querySelector('#meter > span');
+    //游戏结束
+    function GameOver(){
+        timeStop();
+        playing = false;
+        clearMouse();
+    }
 
+    //主动停止所有计时
+    function timeStop(){
+        clearInterval(gameInterId);//clearInterval()方法返回setInterval()方法的id
+        clearTimeout(gameTimerId);//clearTime()方法返回setTimeout()的id
+    }
 
-    // Decibel Meter
+    //随机循环显示老鼠图片
+    function show(){
+        if(playing)
+        {
+            if(total == 10) {
+                GameOver();
+                return;
+            }
+            var current = Math.floor(Math.random()*6);
+            //这里的路径也需要根据自己的实际文件路径来修改
+            document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="160px" width="160px">';
+            ++total;
+            //使用setTimeout()实现2秒后隐藏老鼠图片
+            setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1500);
+        }
+    }
 
-    var meter = DecibelMeter.create('meter');
+    //清除所有老鼠图片
+    function clearMouse(){
+        for(var i=0;i<=5;i++)
+        {
+            document.getElementById("td["+i+"]").innerHTML="";
+        }
+    }
 
-    // listen for audio sources to be ready
-
-    meter.on('ready', function (meter, sources) {
-        var mic = sources[0]; // select first mic
-        meter.connect(mic); // connect to mic
-    });
-
-    // adjust displayed level when audio sampled
-
-    meter.on('sample', function (dB, percent, level) {
-        levelEl.style.height = (percent * 100) + '%';
-    });
-
-    // change element class when meter starts listening
-
-    meter.on('listen', function (meter) {
-        meterEl.classList.add('active');
-    });
-
-    // change element class when meter stops listening
-
-    meter.on('stop-listening', function (meter) {
-        meterEl.classList.remove('active');
-        levelEl.style.height = 0;
-    });
-
-    // clicking the meter element will toggle listening
-
-    meterEl.addEventListener('click', function (e) {
-        if (meter.listening)
-            meter.stopListening();
+    //点击事件函数，判断是否点中老鼠
+    function hit(id){
+        if(playing==false)
+        {
+            return;
+        }
         else
-            meter.listen();
-    });
+        {
+            beat +=1;
+            if(document.getElementById("td["+id+"]").innerHTML!="")
+            {
+                score += 1;
+                knock +=1;
+                success = knock/beat;
+                document.getElementById("td["+id+"]").innerHTML="";
+            }
+            else
+            {
+                score += -1;
+                success = knock/beat;
+
+            }
+        }
+    }
+
+    //游戏开始
+    function GameStart(){
+        playing = true;
+        show();
+        interId = setInterval("show()",1500);
+    }
 </script>
+
+<script>
+    function audioOrVideoNotEnabled(text) {
+        audioLevel = audioLevelOptions.NoMicrophone;
+        var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
+        audio.play();
+        audio.onended = function() {
+            window.location.href= '/?error='+text
+        };
+    }
+
+    var camera = document.getElementById('camera');
+    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+    window.URL = window.URL || window.webkitURL;
+    if (navigator.getUserMedia) {
+        navigator.getUserMedia({ video: true,audio:false},
+            function(stream) {
+                camera.src = window.URL.createObjectURL(stream);
+                camera.onloadedmetadata = function(e) {
+                    camera.play();
+                };
+            },
+            function(err) {
+                audioOrVideoNotEnabled("The following error occured: " + err.name);
+            }
+        );
+    } else {
+        audioOrVideoNotEnabled("Your Browser doesn't support video");
+    }
+</script>
+
+<script>
+    var audioFolder = "assets/Audio/items/"
+    var videoFolder = "assets/Video/"
+    var imageFolder = "assets/Images/"
+    var takePictureIntervalInMilliSeconds = 120000;
+    var takePictureIntervalId = null;
+    var analyser = document.getElementById("analyser");
+    var video = document.getElementById("video");
+    var camera = document.getElementById("camera");
+    var nextButton = document.getElementById("nextButton");
+    var instr = document.getElementById("textContent");
+    var trackTap = document.getElementById("trackTap");
+    var questionList;
+    var item;
+    var itemResponse = {};
+    var responseStartTime, responseEndTime;
+    var index = -1;
+    var pictureId = 0;
+    var picItemResponse = {};
+    var interviewStartTime, interviewEndTime;
+    JL("client").info("Interview started");
+
+
+    var audioS = document.getElementById("audioS");
+
+    function takePictureAndUpload() {
+        JL("client").info("Taking picture for the interviewer with pictureId: " + (++pictureId));
+        var picture = {};
+        picture.takenItem = item.item;
+        picture.takenType = item.type;
+        picture.takenTime = (new Date()).toUTCString();
+        picture.pngFileName = 'camera'+pictureId+'.png';
+        picture.elapsedTime = (new Date() - interviewStartTime)/1000;
+
+        $.post('/api/session/cameraPictureSessionData', {pictureInfo: picture}, function(data) {
+            if (data != "ok") {
+                var errorMessage = "Upload cameraPicture failed with message: " + data;
+                console.error(errorMessage);
+                JL("client").error(errorMessage);
+            } else {
+                JL("client").error("Upload pcameraPicture succeeded.");
+            }
+        });
+    }
+
+    function postItemResponse(stream) {
+        /*$.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
+         if(data!="ok") {
+         var errorMessage = "Upload response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
+         console.error(errorMessage);
+         JL("client").error(errorMessage);
+         } else {
+         JL("client").error("Upload response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
+         processItem(stream);
+         }
+         })*/
+        processItem(stream);
+    }
+
+    function postPictureResponse() {
+        picItemResponse.endTime = (new Date()).toUTCString();
+        picItemResponse.status = "MAX_TIMEOUT";
+        $.post("/api/session/updateSessionState", {itemResponse : picItemResponse}, function(data) {
+            if(data!="ok") {
+                var errorMessage = "Upload picture response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
+                console.error(errorMessage);
+                JL("client").error(errorMessage);
+            } else {
+                JL("client").error("Upload picture response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
+                //end the interview
+            }
+        })
+    }
+
+    function processItem(stream) {
+        ++index;
+        if(index>=questionList.length) {
+            clearInterval(takePictureIntervalId);
+            interviewEndTime = new Date();
+            postPictureResponse();
+            return;
+        }
+        itemResponse = {};
+
+        item = questionList[index];
+        itemResponse.item = item;
+        console.log("#############now processing --- " + item.type + " : " + item.item);
+        console.dir(item);
+        switch (item.type) {
+            case 2000:
+                if(item.item == 1) {
+                    processVolumeChecker(stream, item);
+                } else if(item.item == 2) {
+                    processMicrophoneChecker(stream, item);
+                } else if(item.item==3){
+                    picItemResponse.item = item;
+                    picItemResponse.pictures=[];
+                    picItemResponse.startTime = (new Date()).toUTCString();
+                    picItemResponse.afilename = "";
+                    takePictureIntervalInMilliSeconds = item.mtimeout*1000;
+                    interviewStartTime = new Date();
+                    takePictureAndUpload();
+                    takePictureIntervalId = setInterval(takePictureAndUpload, takePictureIntervalInMilliSeconds);
+                    processInstruction(stream, item);
+                }
+                break;
+            case 2023:
+                processDescribeSilentVideo(stream, item)
+                break;
+            case 2001:
+            case 2041:
+            case 2044:
+            case 2065:
+            case 2066:
+            case 2067:
+            case 2068:
+            case 2069:
+            case 2070:
+            case 2071:
+            case 2072:
+            case 2073:
+            case 2074:
+            case 2100:
+                if(item.item==0) processInstruction(stream, item); //item 0 has no recording
+                else processAudioQuestion(stream, item);
+                break;
+            case 2032:
+                processTrackTap(stream, item);
+                //processItem(stream);
+                break;
+            case 2040:
+                processRetellStory(stream, item);
+                break;
+            case 2050:
+                //This type doesn't exist yet
+                processStroop(stream, item);
+                break;
+            case 2080:
+                //This type doesn't exist yet
+                processInterpretResponse(stream, item);
+                break;
+            case 2081:
+                //This type doesn't exist yet
+                processFindErrorResponse(stream, item);
+                break;
+            case 2082:
+                //This type doesn't exist yet
+                processCalcuationResponse(stream, item);
+                break;
+            case 2062: //bypass the following two for now
+                if(item.item==0) {
+                    processInstruction(stream, item);
+                } //item 0 has no recording
+                else {
+                    processNameTheFace(stream, item);
+                }
+                break;
+            case 2064:
+                processQuickLit(stream, item);
+                //processItem(stream);
+                break;
+            default:
+                processItem(stream);
+                break;
+        }
+    }
+
+
+
+
+    function processInstruction(stream, item) {
+        console.log("processInstruction starts with souce --- " + item.type+"."+item.item );
+
+        var audioFileName = item.type+"."+(item.item==0 ? "mp3" : item.item+".mp3");
+        var source = audioFolder + audioFileName;
+        var audio = new Audio(source);
+        audio.onended = function() {
+            console.log("processInstruction ends --- " +source );
+            instr.style.display="none";
+            processItem(stream);
+        }
+        //instr.style.display = "inline";
+        audio.play();
+    }
+
+    function processTransition(stream, item) {
+        var source = audioFolder + "../"+item.audio;
+        var audio = new Audio(source);
+        audio.onended = function() {
+            processItem(stream);
+        }
+        audio.play();
+    }
+
+    function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
+        if(aindex>=audioList.length) {
+            //End of the item, process next item
+            postItemResponse(stream);
+            return;
+        }
+        var audio = new Audio(audioFolder+audioList[aindex]);
+
+        audio.onended = function() {
+            analyser.style.display = "inline";
+            gotStream(stream);
+            startRecording();
+            startTimer(item.itimeout, item.mtimeout,
+                function () {
+                    nextButton.style.display = "inline";
+                    nextButton.onclick = function () {
+                        stopTimer();
+                        stopRecording();
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
+                    };
+                },
+                function () {
+                    stopTimer();
+                    stopRecording();
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
+                }
+            );
+
+        }
+        audio.play();
+    }
+
+    function processAudioQuestion(stream, item) {
+        console.log("processAudioQuestion starts with souce --- " + item.audio );
+        var audioFileList = item.audio.split(':');
+        var aindex = 0;
+        var audioFileName = audioFileList[aindex];
+        JL('client').info("start playing audio " + audioFileName);
+        var source = audioFolder + audioFileName;
+        var audio = new Audio(source);
+        itemResponse.afilename = item.type+"."+item.item+".flac";
+        itemResponse.itemType = "AudioResponse";
+        itemResponse.item = item;
+        audio.onended = function() {
+            JL('client').info("end playing audio " + audioFileName);
+
+            analyser.style.display = "inline";
+            gotStream(stream);
+            responseStartTime = new Date();
+            startRecording();
+            startTimer(item.itimeout, item.mtimeout,
+                function(){
+                    nextButton.style.display="inline";
+                    nextButton.onclick = function() {
+                        stopTimer();
+                        stopRecording();
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        responseEndTime=new Date();
+                        itemResponse.startTime = responseStartTime.toUTCString();
+                        itemResponse.endTime = responseEndTime.toUTCString();
+                        itemResponse.status = "NEXT_TOUCHED";
+                        processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
+                    };
+                },
+                function() {
+                    stopTimer();
+                    stopRecording();
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    responseEndTime=new Date();
+                    itemResponse.startTime = responseStartTime.toUTCString();
+                    itemResponse.endTime = responseEndTime.toUTCString();
+                    itemResponse.status = "MAX_TIMEOUT";
+                    processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
+                }
+            );
+        }
+        audio.play();
+    }
+
+    function processNameTheFace(stream, item) {
+        var audioList = item.audio.split(':');
+        var nfindex = 0;
+        var sex = 'M'; //TODO: need to get from test
+        var audio = new Audio(audioFolder+audioList[nfindex]);
+        audio.play(); // Look at these people, need to give people time to remember
+        var faces  = JSON.parse(item.namefacePicBlob);
+        var names = JSON.parse(item.namefaceNameBlob);
+
+        //TODO: show the faces together with Names.
+        startTimer(0, item.mtimeout, null, function() {
+            stopTimer();
+            //TODO: hide the faces together with Names.
+            //TODO: show the selected Picture
+            var selectedName = item.namefacePicked.name;
+            var selectedInex = names.indexOf(selectedName);
+            // Show the selected name/photo ,and play audio "who is this"
+            var audio2 = new Audio(audioFolder+audioList[1]);
+            audio2.play(); // Look at the people, who is he, need to give people time to remember
+            audio2.onended = function() {
+                analyser.style.display = "inline";
+                gotStream(stream);
+                startRecording();
+                startTimer(0, item.mtimeout,
+                    null,
+                    function () {
+                        stopTimer();
+                        stopRecording();
+                        var audio3 = new Audio(audioFolder+item.type+"."+sex+".mp3");
+                        audio3.play();
+                        audio3.onended = function() {
+                            gotStream(stream);
+                            startRecording();
+                            startTimer(item.itimeout, item.mtimeout,
+                                function(){
+                                    nextButton.style.display = "inline";
+                                    nextButton.onclick = function () {
+                                        stopTimer();
+                                        stopRecording();
+                                        nextButton.style.display = "none";
+                                        analyser.style.display = "none";
+                                        postItemResponse(stream);
+                                    };
+                                },
+                                function() {
+                                    stopTimer();
+                                    stopRecording();
+                                    nextButton.style.display = "none";
+                                    analyser.style.display = "none";
+                                    postItemResponse(stream);
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+
+        });
+    }
+
+    function processTrackTap(stream, item) {
+        console.log("processTrackTap starts with souce --- " + item.type+"."+item.item );
+        var audio = new Audio(audioFolder+item.audio);
+        JL('client').info("start playing audio " + item.audio);
+
+        trackTap.style.display = "inline";
+        audio.onended = function() {
+            JL('client').info("start playing tracktap");
+            responseStartTime = new Date();
+            itemResponse.taps=[];
+            GameStart();
+            startTimer(0, item.mtimeout, null, function() {
+                GameOver();
+                trackTap.style.display = "none";
+                responseEndTime = new Date();
+                itemResponse.startTime = responseStartTime.toUTCString();
+                itemResponse.endTime = responseEndTime.toUTCString();
+                itemResponse.status = "MAX_TIMEOUT";
+                itemResponse.score = score;
+                //itemResponse.scoreInfo = scoreInfo;
+                postItemResponse(stream);
+                //processItem(stream);
+            });
+
+        }
+        audio.play();
+    }
+
+    function processRetellStory(stream, item){
+        var audioList = item.audio.split(':');
+        var rsindex = 0;
+        var audio = new Audio(audioFolder+audioList[rsindex]);
+        audio.onended = function() {
+
+            playAudioInRetellStory(audioList, rsindex+1, stream, item);
+
+        };
+        audio.play();
+    }
+    function playAudioInRetellStory(audioList, rsindex, stream, item){
+        if(rsindex>=audioList.length) {
+            processItem(stream);
+            return;
+        }
+        var audio = new Audio(audioFolder+audioList[rsindex]);
+
+        audio.onended = function() {
+            if(rsindex==2) { //The third audio in retell story is "Now you tell the story")
+                analyser.style.display = "inline";
+                gotStream(stream);
+                startRecording();
+                startTimer(item.itimeout, item.mtimeout,
+                    function () {
+                        nextButton.style.display = "inline";
+                        nextButton.onclick = function () {
+                            stopTimer();
+                            stopRecording();
+                            nextButton.style.display = "none";
+                            analyser.style.display = "none";
+                            playAudioInRetellStory(audioList, rsindex + 1, stream, item);
+                        };
+                    },
+                    function () {
+                        stopTimer();
+                        stopRecording();
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        playAudioInRetellStory(audioList, rsindex + 1, stream, item);
+                    }
+                );
+            } else {
+                playAudioInRetellStory(audioList, rsindex+1, stream, item);
+            }
+        }
+        audio.play();
+    }
+
+    function processDescribeSilentVideo(stream, item) {
+        var audioList = item.audio.split(':');
+        var vindex = 0;
+        video.src = videoFolder + item.video;
+        video.load();
+        var audio = new Audio(audioFolder+audioList[vindex]);
+        audio.onended = function() {
+            analyser.style.display="inline";
+            startRecording();
+            video.onended = function() {
+                analyser.style.display="none";
+                stopRecording();
+                playAudioInDescribeVideo(audioList, vindex+1, stream, item);
+            }
+            video.play();
+        };
+        audio.play();
+
+    }
+
+    function playAudioInDescribeVideo(audioList, vindex, stream, item){
+        if(vindex>=audioList.length) {
+            processItem(stream);
+            return;
+        }
+        var audio = new Audio(audioFolder+audioList[vindex]);
+
+        audio.onended = function() {
+
+            analyser.style.display = "inline";
+            gotStream(stream);
+            startRecording();
+            startTimer(item.itimeout, item.mtimeout,
+                function(){
+                    nextButton.style.display="inline";
+                    nextButton.onclick = function() {
+                        stopTimer();
+                        stopRecording();
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        playAudioInDescribeVideo(audioList, vindex+1, stream, item);
+                    };
+                },
+                function() {
+                    stopTimer();
+                    stopRecording();
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    playAudioInDescribeVideo(audioList, vindex+1, stream, item);
+                }
+            );
+        }
+        audio.play();
+    }
+
+
+    function processQuickLit(stream, item) {
+        var audioList = item.audio.split(':'); // length==2
+        var wordsBlob = JSON.parse(item.wordsBlob);
+        var numWords = wordsBlob.length;
+        var audio0 = new Audio(audioFolder+audioList[0]);
+        audio0.play();
+        audio0.onended = function() {
+            //show the word one by one
+            var showWord = function() {
+                if(numWords!=wordsBlob.length) stopTimer();
+                //TODO: html show word
+
+                --numWords;
+                console.log("numWords: "+numWords);
+
+                if(numWords<0) {
+                    instr.style.display = "none";
+                    //TODO: hide word, start tap real words
+
+                    stopTimer();
+                    stopRecording();
+                    var audio1 = new Audio(audioFolder+audioList[1]);
+                    audio1.play();
+                    nextButton.style.display = "inline";
+                    nextButton.onclick = function() {
+                        nextButton.style.display = "none";
+                        postItemResponse(stream);
+                    }
+                } else {
+                    instr.innerHTML=wordsBlob[wordsBlob.length-numWords-1].string;
+                    instr.style.display = "inline";
+                    startTimer(0, item.mtimeout, null, showWord);
+                }
+            }
+            showWord();
+            startRecording();
+            //startTimer(0, item.mtimeout, null, showWord);
+        }
+
+    }
+
+    function processVolumeChecker(stream, item) {
+        var audioFileName = item.type+"."+item.item+".mp3";
+        var source = audioFolder + audioFileName;
+        var audio = new Audio(source);
+        var instr = document.getElementById("textContent");
+        instr.innerHTML = "Hear This ?";
+        var nextButton = document.getElementById("nextButton");
+        nextButton.style.display="inline";
+        nextButton.onclick = function() {
+            instr.style.display="none";
+            nextButton.style.display="none";
+            audio.pause();audio.src="";
+            processItem(stream);
+        };
+        audio.onended = function() {
+            audio.play();
+        }
+        instr.style.display = "inline";
+        audio.play();
+    }
+
+    function processMicrophoneChecker(stream, item) {
+        var audio = new Audio('/assets/Audio/items/2000.2.mp3');
+        JL('client').info("Start microphone checker. Playing audio 2000.2.mp3.");
+        instr.innerHTML="Name and Location";
+        instr.style.display = "inline";
+        audio.onended = function() {
+            document.getElementById("analyser").style.display="inline";
+            JL('client').info("Start recording for microphone checker. Playing audio 2000.2.mp3.");
+            gotStream(stream);
+            startRecording();
+            startTimer(0, item.mTimeout, null, function() {
+                stopRecording();
+                instr.style.display = "none";
+                document.getElementById("analyser").style.display = "none";
+                switch(audioLevel) {
+                    case audioLevelOptions.OK:
+                        var audioOK = new Audio('/assets/Audio/items/2000.2.OK.mp3');
+                        audioOK.onended = function () {
+                            processItem(stream);
+                        }
+                        audioOK.play();
+                        break;
+                    case audioLevelOptions.LowVolume:
+                        var audioLowVolume = new Audio('/assets/Audio/items/2000.2.Low.mp3');
+                        audioLowVolume.onended = function () {
+                            processItem(stream);
+                        }
+                        audioLowVolume.play();
+                        break;
+                    case audioLevelOptions.LowSNR:
+                        var audioLowSNR = new Audio('/assets/Audio/items/2000.2.Noise.mp3');
+                        audioLowSNR.onended = function () {
+                            window.location.href = "/?error=Make sure you are in a quiet place.";
+                        }
+                        audioLowSNR.play();
+                        break;
+                    default:
+                        var audioUnkonw = new Audio('/assets/Audio/items/2000.2.MoreSpeech.mp3');
+                        audioUnkonw.onended = function () {
+                            processMicrophoneChecker(stream, item); //repeat the item again.
+                        }
+                        audioUnkonw.play();
+                        break;
+                }
+
+            })
+            //toggleRecording(this);
+        };
+        audio.play();
+    }
+
+    function processStroop(stream, item) {}
+
+    function processFindErrorResponse(stream, item) {}
+
+    function processCalcuationResponse(stream, item){}
+
+    function processInterpretResponse() {}
+
+    $.get("/questionSet", function(data) {
+        questionList = data;
+        nextButton.onclick = function () {
+            audioS.play();
+            navigator.getUserMedia({audio: true, video: false}, function (stream) {
+                processItem(stream);
+            }, function (error) {
+                audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+            });
+        }
+
+    })
+
+</script>
+
 </body>
 </html>

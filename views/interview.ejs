@@ -477,8 +477,8 @@
         var sex = 'M'; //TODO: need to get from test
         var audio = new Audio(audioFolder+audioList[nfindex]);
         audio.play(); // Look at these people, need to give people time to remember
-        var faces  = JSON.parse(item.namefacePicBlob);
-        var names = JSON.parse(item.namefaceNameBlob);
+        var facePictureFiles  = item.namefacePicBlob;
+        var names = item.namefaceNameBlob;
 
         //TODO: show the faces together with Names.
         startTimer(0, item.mtimeout, null, function() {

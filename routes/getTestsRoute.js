@@ -1,6 +1,6 @@
 module.exports = function(app) {
 
-var testsUtil = require('../lib/db/testsUtil');
+var testsUtil = require('../src/db/testsUtil');
 
 /* GET test listing. */
 app.get('/tests', function(req, res, next) {
