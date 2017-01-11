@@ -59,7 +59,7 @@
             <video id="video"></video>
         </div>
         <div id="nameFacesContent" class="text-center row" style="color : white; display: none;">
-                <div id="4faces" class="text-center row col-lg-6 col-lg-offset-3" style="float:inherit" >
+                <div id="4faces" class="text-center row col-lg-6 col-lg-offset-3" >
                     <div class="row">
                         <div class="img col-lg-3">
                             <img id="face0"  width="100%" height="100%" >
@@ -88,19 +88,19 @@
                     </div>
                 </div>
         </div>
-        <div id="trackTap" style="display: none"  class="row">
-            <table>
-                <tr>
-                    <td id="td[0]" onclick="hit(0)"></td>
-                    <td id="td[1]" onclick="hit(1)"></td>
+        <div id="trackTap" style="display: none"  class="text-center row ">
+            <table class="col-lg-6 col-lg-offset-2">
+                <tr class="row"  >
+                    <td id="td[0]" class="col-lg-3" onclick="hit(0)"></td>
+                    <td id="td[1]" class="col-lg-3" onclick="hit(1)"></td>
                 </tr>
-                <tr>
-                    <td id="td[2]" onclick="hit(2)"></td>
-                    <td id="td[3]" onclick="hit(3)"></td>
+                <tr  class="row"  >
+                    <td id="td[2]" class="col-lg-3" onclick="hit(2)"></td>
+                    <td id="td[3]" class="col-lg-3" onclick="hit(3)"></td>
                 </tr>
-                <tr>
-                    <td id="td[4]" onclick="hit(4)"></td>
-                    <td id="td[5]" onclick="hit(5)"></td>
+                <tr  class="row" >
+                    <td id="td[4]" class="col-lg-3" onclick="hit(4)"></td>
+                    <td id="td[5]" class="col-lg-3" onclick="hit(5)"></td>
                 </tr>
             </table>
         </div>
@@ -173,7 +173,7 @@
             }
             var current = Math.floor(Math.random()*6);
             //这里的路径也需要根据自己的实际文件路径来修改
-            document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="160px" width="160px">';
+            document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="100%" width="100%">';
             ++total;
             //使用setTimeout()实现2秒后隐藏老鼠图片
             setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1500);
@@ -558,6 +558,8 @@
             document.getElementById("face"+p).src = nameFacesImageFolder + fileN;
             document.getElementById("name"+p).innerHTML = names[p].name;
         }
+        fourFacesDiv.style.display = "inline";
+        testFaceDiv.style.display = "none"
         //TODO: show the faces together with Names.
         startTimer(0, item.mtimeout, null, function() {
             stopTimer();
@@ -618,6 +620,7 @@
         console.log("processTrackTap starts with souce --- " + item.type+"."+item.item );
         var audio = new Audio(audioFolder+item.audio);
         JL('client').info("start playing audio " + item.audio);
+        analyser.style.display = 'none';
         nextButton.style.display = 'none';
         trackTap.style.display = "inline";
         audio.onended = function() {
