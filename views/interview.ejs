@@ -755,7 +755,7 @@
 
     function processQuickLit(stream, item) {
         var audioList = item.audio.split(':'); // length==2
-        var wordsBlob = JSON.parse(item.wordsBlob);
+        var wordsBlob = item.wordsBlob;
         var numWords = wordsBlob.length;
         var audio0 = new Audio(audioFolder+audioList[0]);
         audio0.play();

@@ -13,7 +13,7 @@ exports.getTests = function (callback) {
         ' ON ti.item = i.item and ti.type= i.type and t.test=ti.test and ty.type = i.type and t.test=? order by seq'
 
     var sqlTestCounts = 'select count(*) AS counts from tests'
-    var sqlQuicklits = 'select * from quicklits ORDER BY RAND() limit 6';
+    var sqlQuicklits = 'select * from quicklits ORDER BY RAND()';
     var sqlNameFacePictures = 'select subjectid, filename, feeling from photoes';
     var sqlNameFaceNames = 'SELECT name, gender, nameset FROM names';
 
@@ -25,16 +25,15 @@ exports.getTests = function (callback) {
         }
         testNum = Math.floor(results[0].counts*Math.random())+1
         console.dir(Math.floor(results[0].counts*Math.random()));
-        dbPool.runQueryWithParams(sqlQuicklits,function (err, results) {
+        dbPool.runQueryWithParams(sqlQuicklits,function (err, allWordsResults) {
             if(err) {
                 console.error(err);
                 callback(err,null);
                 return;
             }
-
-            total_word_count = Math.random()*6+1
-            var random_results =  results.slice(0,total_word_count)
-            words_json = JSON.stringify(random_results);
+            var wordSetIndex = 0;
+            //May need to select words by level later
+            var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10), allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
 
             dbPool.runQueryWithParams(sqlNameFacePictures,function (err, picResults) {
                 if(err) {
@@ -87,8 +86,9 @@ exports.getTests = function (callback) {
                         }
 
                         for (var i = 0; i < results.length; i++) {
-                            if(results[i].type == 2064)
-                                results[i].wordsBlob = words_json;
+                            if(results[i].type == 2064) {
+                                results[i].wordsBlob = wordSet[wordSetIndex++];
+                            }
                             else if(results[i].type == 2062 && results[i].item==1){
                                 results[i].namefacePicBlob = femaleFacesSet;
                                 results[i].namefaceNameBlob = femaleNames;
