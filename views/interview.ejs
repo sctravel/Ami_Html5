@@ -16,6 +16,20 @@
     <link rel="stylesheet" href="/css/audioCss.css">
     <link rel="stylesheet" href="/css/trackTap.css">
     <style>
+        .col-centered{
+            float: none;
+            margin: 0 auto;
+        }
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .responsive {
+            padding: 0 6px;
+            float:left;
+            width: 49.99999%;
+        }
 
         #analyser {
             display: inline-block;
@@ -41,8 +55,40 @@
         </div>
     </div>
     <div>
-        <div id="videoContent" class="text-center row" style="display: none">
+        <div id="videoContent" class="text-center row" style="display: none; width="60%"; height="60%"">
             <video id="video"></video>
+        </div>
+        <div id="nameFacesContent" class="col-lg-8 col-lg-offset-2" style="color : white; display: none">
+                <div id="4faces" class="responsive col-lg-8 col-lg-offset-2" >
+                    <div class="row">
+                        <div class="img col-lg-4">
+                            <img id="face0" >
+                            <div style="color:white;text-align: center" id="name0"></div>
+                        </div>
+                        <div class="col-lg-1"></div>
+                        <div class="img col-lg-4">
+                            <img id="face1"  >
+                            <div style="color:white;text-align: center" id="name1"></div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="img col-lg-4">
+                            <img id="face2"  >
+                            <div style="color:white;text-align: center" id="name2"></div>
+                        </div>
+                        <div class="col-lg-1"></div>
+                        <div class="img col-lg-4">
+                            <img id="face3" >
+                            <div style="color:white;text-align: center" id="name3"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div id="testFaceDiv" class="responsive" style="display: none;">
+                    <div class="img col-lg-6">
+                        <img id="testFace" >
+                    </div>
+                </div>
         </div>
         <div id="trackTap" style="display: none"  class="row">
             <table>
@@ -66,16 +112,14 @@
         </div>
     </div>
     <audio id="audioS" src="assets/Audio/items/2000.3.mp3"></audio>
-    <div class="row " >
-
-        <div id="microphone"  class="row " >
-            <canvas id="analyser"  ></canvas>
-        </div>
-
-        <div  id="footer" class="row " style="display: inline">
-            <button id="nextButton" style="width: 100%; height: 100%;">Click Here To Start</button>
-        </div>
+    <div id="microphone"  class="row " >
+        <canvas id="analyser"  ></canvas>
     </div>
+
+    <div  id="footer" class="row " style="display: inline">
+        <button id="nextButton" style="width: 100%; height: 100%;">Click Here To Start</button>
+    </div>
+
 
 
 </div>
@@ -196,6 +240,7 @@
     var audioFolder = "assets/Audio/items/"
     var videoFolder = "assets/Video/"
     var imageFolder = "assets/Images/"
+    var nameFacesImageFolder = "assets/Images/2062/"
     var takePictureIntervalInMilliSeconds = 120000;
     var takePictureIntervalId = null;
     var analyser = document.getElementById("analyser");
@@ -205,6 +250,8 @@
     var nextButton = document.getElementById("nextButton");
     var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
+    var nameFacesContent = document.getElementById("nameFacesContent");
+
     var questionList;
     var item;
     var itemResponse = {};
@@ -485,7 +532,16 @@
         audio.play(); // Look at these people, need to give people time to remember
         var facePictureFiles  = item.namefacePicBlob;
         var names = item.namefaceNameBlob;
+        var fourFacesDiv = document.getElementById("4faces");
+        var testFaceDiv = document.getElementById("testFaceDiv");
+        var testFace = document.getElementById("testFace");
 
+        nameFacesContent.style.display = "inline";
+        for(var p in facePictureFiles) {
+            var fileN = facePictureFiles[p];
+            document.getElementById("face"+p).src = nameFacesImageFolder + fileN;
+            document.getElementById("name"+p).innerHTML = names[p].name;
+        }
         //TODO: show the faces together with Names.
         startTimer(0, item.mtimeout, null, function() {
             stopTimer();
@@ -495,6 +551,9 @@
             var selectedInex = names.indexOf(selectedName);
             // Show the selected name/photo ,and play audio "who is this"
             var audio2 = new Audio(audioFolder+audioList[1]);
+            testFace.src = nameFacesImageFolder+item.namefacePicPicked.filename
+            testFaceDiv.style.display = "inline";
+            fourFacesDiv.style.display = "none";
             audio2.play(); // Look at the people, who is he, need to give people time to remember
             audio2.onended = function() {
                 analyser.style.display = "inline";
@@ -516,6 +575,7 @@
                                     nextButton.onclick = function () {
                                         stopTimer();
                                         stopRecording();
+                                        nameFacesContent.style.display="none";
                                         nextButton.style.display = "none";
                                         analyser.style.display = "none";
                                         postItemResponse(stream);
@@ -524,6 +584,7 @@
                                 function() {
                                     stopTimer();
                                     stopRecording();
+                                    nameFacesContent.style.display="none";
                                     nextButton.style.display = "none";
                                     analyser.style.display = "none";
                                     postItemResponse(stream);
