@@ -76,7 +76,7 @@ function isLoggedIn(req, res, next) {
         res.redirect("/");
     }
 }
-exports.isLoggedIn = isLoggedIn;
+global.isLoggedIn = isLoggedIn;
 
 fs.mkdir(constants.paths.UPLOAD_FOLDER,function(e){});
 

@@ -22,11 +22,13 @@ function addItemResponseToSession(itemResponse, sessionId, callback) {
     }
 }
 
+exports.addItemResponseToSession = addItemResponseToSession;
+
 var addIndividualPictureResponseToSession = function(picture, sessionId, callback) {
         var sqlAddCameraPicturesToSession = "insert into sessionstates_camerapicture " +
-            " (sessionId, takenTime, elapseTime, takenType, takeItem, pngFileName) " +
+            " (sessionId, takenTime, elapseTime, takenType, takenItem, pngFileName) " +
             " values (?,?,?,?,?,?)";
-        var params = [sessionId, picture.takenTime, picture.elapsedTime, picture.takenType, picture.takenItem, picture.pngFileName];
+        var params = [sessionId, new Date(picture.takenTime), picture.elapsedTime, picture.takenType, picture.takenItem, picture.pngFileName];
 
         dbPool.runQueryWithParams(sqlAddCameraPicturesToSession, params, function (err, results) {
             if (err) {
@@ -93,7 +95,7 @@ var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) 
                 sqlAddQuickLitWordsToSession = sqlAddQuickLitWordsToSession + " (?,?,?,?,?,?,?,?,?,?,?,?,?), "
             }
             params = params.concat([sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item,
-                word.word, word.isWord, word.isUsed, word.level, word.duration, word.isTouched, word.touchTimeStamp,
+                word.word, word.isWord, word.isUsed, word.level, word.duration, word.isTouched, new Date(word.touchTimeStamp),
                 word.wordIndex, word.isCorrect]);
         }
         dbPool.runQueryWithParams(sqlAddQuickLitWordsToSession, params, function (err, results) {
@@ -111,7 +113,7 @@ var addAudioResponseToSession = function(itemResponse, sessionId, responseType, 
     var sqlAddAudioResponseToSession = "insert into sessionstates " +
         " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, score)" +
         " values (?,?,?,?,?,?,?,?) ";
-    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, responseType, itemResponse.startTime, itemResponse.endTime, itemResponse.afilename, itemResponse.status, itemResponse.score];
+    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, responseType, new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, itemResponse.score==null ? -1 : itemResponse.score];
     dbPool.runQueryWithParams(sqlAddAudioResponseToSession, params, function (err, results) {
         if (err) {
             logger.error("addAudioResponseToSession() failed for sessionId: " + sessionId);
@@ -127,7 +129,7 @@ var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId,
         " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, subResponses )" +
         " values (?,?,?,?,?,?,?,?,?) ";
     var subResponses = itemResponse.subResponses;
-    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, "SubAudioResponse", itemResponse.startTime, itemResponse.endTime, itemResponse.afilename, itemResponse.status, subResponses];
+    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, "SubAudioResponse", new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, subResponses];
 
     dbPool.runQueryWithParams(sqlAddMicrophoneCheckResponseToSession, params, true, function (err, results) {
         if (err) {

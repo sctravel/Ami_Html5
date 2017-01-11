@@ -5,7 +5,6 @@ module.exports = function(app) {
     this.name = 'userLoginRoute';
     var constants = require('../src/common/constants');
     var stringUtil = require('../src/common/stringUtil');
-    var isLoggedIn = require('../app').isLoggedIn;
     var logFormatter = require('../app').logFormatter;
     var passport = require('passport');
     var LocalStrategy = require('passport-local').Strategy;

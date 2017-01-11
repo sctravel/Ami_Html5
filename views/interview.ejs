@@ -40,41 +40,44 @@
         <% include partials/timer.ejs %>
         </div>
     </div>
-    <div id="videoContent" class="text-center">
-        <video id="video" width="50%" height="50%"></video>
-    </div>
-    <div  id = "textContent" class ="row text-center" style="display: none;width:50%; height:50%"  >
-        <!-- Volume checker-->
-            <b>Hear This ?</b>
-    </div>
-
     <div>
+        <div id="videoContent" class="text-center row" style="display: none">
+            <video id="video" width="50%" height="50%"></video>
+        </div>
+        <div id="trackTap" style="display: none"  class="row">
+            <table>
+                <tr>
+                    <td id="td[0]" onclick="hit(0)"></td>
+                    <td id="td[1]" onclick="hit(1)"></td>
+                </tr>
+                <tr>
+                    <td id="td[2]" onclick="hit(2)"></td>
+                    <td id="td[3]" onclick="hit(3)"></td>
+                </tr>
+                <tr>
+                    <td id="td[4]" onclick="hit(4)"></td>
+                    <td id="td[5]" onclick="hit(5)"></td>
+                </tr>
+            </table>
+        </div>
+        <div  id="textContent" class ="row text-center" style="display: none;width:100%; height:100% ;color: red;"  >
+            <!-- Volume checker-->
+                Hear This ?
+        </div>
+    </div>
+    <audio id="audioS" src="assets/Audio/items/2000.3.mp3"></audio>
+    <div class="row " >
 
         <div id="microphone"  class="row " >
             <canvas id="analyser"  ></canvas>
         </div>
 
         <div  id="footer" class="row " style="display: inline">
-            <button id="nextButton" style="width: 100%; height: 100%;">next</button>
+            <button id="nextButton" style="width: 100%; height: 100%;">Click Here To Start</button>
         </div>
     </div>
 
-    <div id="trackTap" style="display: none">
-        <table>
-            <tr>
-                <td id="td[0]" onclick="hit(0)"></td>
-                <td id="td[1]" onclick="hit(1)"></td>
-            </tr>
-            <tr>
-                <td id="td[2]" onclick="hit(2)"></td>
-                <td id="td[3]" onclick="hit(3)"></td>
-            </tr>
-            <tr>
-                <td id="td[4]" onclick="hit(4)"></td>
-                <td id="td[5]" onclick="hit(5)"></td>
-            </tr>
-        </table>
-    </div>
+
 </div>
 
 <script>
@@ -211,8 +214,11 @@
     var interviewStartTime, interviewEndTime;
     JL("client").info("Interview started");
 
+
+    var audioS = document.getElementById("audioS");
+
     function takePictureAndUpload() {
-        JL("client").info("Taking picture for the interviewer with pictureId: " + (pictureId++));
+        JL("client").info("Taking picture for the interviewer with pictureId: " + (++pictureId));
         var picture = {};
         picture.takenItem = item.item;
         picture.takenType = item.type;
@@ -220,7 +226,7 @@
         picture.pngFileName = 'camera'+pictureId+'.png';
         picture.elapsedTime = (new Date() - interviewStartTime)/1000;
 
-        $.post('/api/session/cameraPictureSessionData', {itemResponse: picture}, function(data) {
+        $.post('/api/session/cameraPictureSessionData', {pictureInfo: picture}, function(data) {
             if (data != "ok") {
                 var errorMessage = "Upload cameraPicture failed with message: " + data;
                 console.error(errorMessage);
@@ -287,6 +293,7 @@
                     picItemResponse.afilename = "";
                     takePictureIntervalInMilliSeconds = item.mtimeout*1000;
                     interviewStartTime = new Date();
+                    takePictureAndUpload();
                     takePictureIntervalId = setInterval(takePictureAndUpload, takePictureIntervalInMilliSeconds);
                     processInstruction(stream, item);
                 }
@@ -338,13 +345,13 @@
                 if(item.item==0) {
                     processInstruction(stream, item);
                 } //item 0 has no recording
-                else {//processNameTheFace(stream, item);
-                    processItem(stream);
+                else {
+                    processNameTheFace(stream, item);
                 }
                 break;
             case 2064:
-                //processQuickLit(stream, item);
-                processItem(stream);
+                processQuickLit(stream, item);
+                //processItem(stream);
                 break;
             default:
                 processItem(stream);
@@ -366,7 +373,7 @@
             instr.style.display="none";
             processItem(stream);
         }
-        instr.style.display = "inline";
+        //instr.style.display = "inline";
         audio.play();
     }
 
@@ -379,9 +386,47 @@
         audio.play();
     }
 
+    function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
+        if(aindex>=audioList.length) {
+            //End of the item, process next item
+            postItemResponse(stream);
+            return;
+        }
+        var audio = new Audio(audioFolder+audioList[aindex]);
+
+        audio.onended = function() {
+            analyser.style.display = "inline";
+            gotStream(stream);
+            startRecording();
+            startTimer(item.itimeout, item.mtimeout,
+                function () {
+                    nextButton.style.display = "inline";
+                    nextButton.onclick = function () {
+                        stopTimer();
+                        stopRecording();
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
+                    };
+                },
+                function () {
+                    stopTimer();
+                    stopRecording();
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
+                }
+            );
+
+        }
+        audio.play();
+    }
+
     function processAudioQuestion(stream, item) {
-        console.log("processAudioQuestion starts with souce --- " + item.type+"."+item.item );
-        var audioFileName = item.type+"."+item.item+".mp3";
+        console.log("processAudioQuestion starts with souce --- " + item.audio );
+        var audioFileList = item.audio.split(':');
+        var aindex = 0;
+        var audioFileName = audioFileList[aindex];
         JL('client').info("start playing audio " + audioFileName);
         var source = audioFolder + audioFileName;
         var audio = new Audio(source);
@@ -407,7 +452,7 @@
                         itemResponse.startTime = responseStartTime.toUTCString();
                         itemResponse.endTime = responseEndTime.toUTCString();
                         itemResponse.status = "NEXT_TOUCHED";
-                        postItemResponse(stream);
+                        processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
                     };
                 },
                 function() {
@@ -419,7 +464,7 @@
                     itemResponse.startTime = responseStartTime.toUTCString();
                     itemResponse.endTime = responseEndTime.toUTCString();
                     itemResponse.status = "MAX_TIMEOUT";
-                    postItemResponse(stream);
+                    processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
                 }
             );
         }
@@ -427,7 +472,63 @@
     }
 
     function processNameTheFace(stream, item) {
+        var audioList = item.audio.split(':');
+        var nfindex = 0;
+        var sex = 'M'; //TODO: need to get from test
+        var audio = new Audio(audioFolder+audioList[nfindex]);
+        audio.play(); // Look at these people, need to give people time to remember
+        var faces  = JSON.parse(item.namefacePicBlob);
+        var names = JSON.parse(item.namefaceNameBlob);
 
+        //TODO: show the faces together with Names.
+        startTimer(0, item.mtimeout, null, function() {
+            stopTimer();
+            //TODO: hide the faces together with Names.
+            //TODO: show the selected Picture
+            var selectedName = item.namefacePicked.name;
+            var selectedInex = names.indexOf(selectedName);
+            // Show the selected name/photo ,and play audio "who is this"
+            var audio2 = new Audio(audioFolder+audioList[1]);
+            audio2.play(); // Look at the people, who is he, need to give people time to remember
+            audio2.onended = function() {
+                analyser.style.display = "inline";
+                gotStream(stream);
+                startRecording();
+                startTimer(0, item.mtimeout,
+                    null,
+                    function () {
+                        stopTimer();
+                        stopRecording();
+                        var audio3 = new Audio(audioFolder+item.type+"."+sex+".mp3");
+                        audio3.play();
+                        audio3.onended = function() {
+                            gotStream(stream);
+                            startRecording();
+                            startTimer(item.itimeout, item.mtimeout,
+                                function(){
+                                    nextButton.style.display = "inline";
+                                    nextButton.onclick = function () {
+                                        stopTimer();
+                                        stopRecording();
+                                        nextButton.style.display = "none";
+                                        analyser.style.display = "none";
+                                        postItemResponse(stream);
+                                    };
+                                },
+                                function() {
+                                    stopTimer();
+                                    stopRecording();
+                                    nextButton.style.display = "none";
+                                    analyser.style.display = "none";
+                                    postItemResponse(stream);
+                                }
+                            );
+                        }
+                    }
+                );
+            }
+
+        });
     }
 
     function processTrackTap(stream, item) {
@@ -514,7 +615,6 @@
         video.load();
         var audio = new Audio(audioFolder+audioList[vindex]);
         audio.onended = function() {
-            var analyser = document.getElementById("analyser");
             analyser.style.display="inline";
             startRecording();
             video.onended = function() {
@@ -565,7 +665,44 @@
 
 
     function processQuickLit(stream, item) {
-        
+        var audioList = item.audio.split(':'); // length==2
+        var wordsBlob = JSON.parse(item.wordsBlob);
+        var numWords = wordsBlob.length;
+        var audio0 = new Audio(audioFolder+audioList[0]);
+        audio0.play();
+        audio0.onended = function() {
+            //show the word one by one
+            var showWord = function() {
+                if(numWords!=wordsBlob.length) stopTimer();
+                //TODO: html show word
+
+                --numWords;
+                console.log("numWords: "+numWords);
+
+                if(numWords<0) {
+                    instr.style.display = "none";
+                    //TODO: hide word, start tap real words
+
+                    stopTimer();
+                    stopRecording();
+                    var audio1 = new Audio(audioFolder+audioList[1]);
+                    audio1.play();
+                    nextButton.style.display = "inline";
+                    nextButton.onclick = function() {
+                        nextButton.style.display = "none";
+                        postItemResponse(stream);
+                    }
+                } else {
+                    instr.innerHTML=wordsBlob[wordsBlob.length-numWords-1].string;
+                    instr.style.display = "inline";
+                    startTimer(0, item.mtimeout, null, showWord);
+                }
+            }
+            showWord();
+            startRecording();
+            //startTimer(0, item.mtimeout, null, showWord);
+        }
+
     }
     
     function processVolumeChecker(stream, item) {
@@ -592,6 +729,8 @@
     function processMicrophoneChecker(stream, item) {
         var audio = new Audio('/assets/Audio/items/2000.2.mp3');
         JL('client').info("Start microphone checker. Playing audio 2000.2.mp3.");
+        instr.innerHTML="Name and Location";
+        instr.style.display = "inline";
         audio.onended = function() {
             document.getElementById("analyser").style.display="inline";
             JL('client').info("Start recording for microphone checker. Playing audio 2000.2.mp3.");
@@ -599,6 +738,7 @@
             startRecording();
             startTimer(0, item.mTimeout, null, function() {
                 stopRecording();
+                instr.style.display = "none";
                 document.getElementById("analyser").style.display = "none";
                 switch(audioLevel) {
                     case audioLevelOptions.OK:
@@ -647,11 +787,15 @@
 
     $.get("/questionSet", function(data) {
         questionList = data;
-        navigator.getUserMedia({audio: true, video: false}, function (stream) {
-            processItem(stream);
-        }, function (error) {
-            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
-        });
+        nextButton.onclick = function () {
+            //audioS.play();
+            navigator.getUserMedia({audio: true, video: false}, function (stream) {
+                processItem(stream);
+            }, function (error) {
+                audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+            });
+        }
+
     })
 
 </script>

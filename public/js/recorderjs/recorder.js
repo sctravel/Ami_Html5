@@ -115,15 +115,15 @@
     Recorder.startUpload = function(blob, postUrl) {
         var url = (window.URL || window.webkitURL).createObjectURL(blob);
         //var data = new FormData();
-        //data.append('file', blob);
-        blobToBase64(blob, function(base64){ // encode
+        //TODO: enable upload
+        /*blobToBase64(blob, function(base64){ // encode
             var update = {'blob': base64, "id": item.type+"."+item.item};
             $.post(postUrl, update, function(err) {
                     if(err=="ok")
                         console.log("success");
                 }
             );
-        });
+        });*/
 
     }
     window.Recorder = Recorder;
