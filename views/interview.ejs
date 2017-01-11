@@ -42,7 +42,7 @@
     </div>
     <div>
         <div id="videoContent" class="text-center row" style="display: none">
-            <video id="video" width="50%" height="50%"></video>
+            <video id="video"></video>
         </div>
         <div id="trackTap" style="display: none"  class="row">
             <table>
@@ -201,6 +201,7 @@
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
     var camera = document.getElementById("camera");
+    var videoContent = document.getElementById("videoContent");
     var nextButton = document.getElementById("nextButton");
     var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
@@ -314,6 +315,11 @@
             case 2072:
             case 2073:
             case 2074:
+            case 2091:
+            case 2094:
+            case 2095:
+            case 2096:
+            case 2098:
             case 2100:
                 if(item.item==0) processInstruction(stream, item); //item 0 has no recording
                 else processAudioQuestion(stream, item);
@@ -485,7 +491,7 @@
             stopTimer();
             //TODO: hide the faces together with Names.
             //TODO: show the selected Picture
-            var selectedName = item.namefacePicked.name;
+            var selectedName = item.namefaceNamePicked.name;
             var selectedInex = names.indexOf(selectedName);
             // Show the selected name/photo ,and play audio "who is this"
             var audio2 = new Audio(audioFolder+audioList[1]);
@@ -611,6 +617,7 @@
     function processDescribeSilentVideo(stream, item) {
         var audioList = item.audio.split(':');
         var vindex = 0;
+        videoContent.style.display="inline";
         video.src = videoFolder + item.video;
         video.load();
         var audio = new Audio(audioFolder+audioList[vindex]);
@@ -630,6 +637,8 @@
 
     function playAudioInDescribeVideo(audioList, vindex, stream, item){
         if(vindex>=audioList.length) {
+            videoContent.style.display="none";
+
             processItem(stream);
             return;
         }
@@ -788,7 +797,7 @@
     $.get("/questionSet", function(data) {
         questionList = data;
         nextButton.onclick = function () {
-            audioS.play();
+            //audioS.play();
             navigator.getUserMedia({audio: true, video: false}, function (stream) {
                 processItem(stream);
             }, function (error) {
