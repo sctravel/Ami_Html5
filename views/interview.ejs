@@ -47,46 +47,44 @@
 <div class="container">
 
     <div id="top" class="row panel-body ">
-        <div id="camera_div" class="col-lg-1">
+        <div id="camera_div" class="col-lg-2">
             <span><video id="camera" autoplay width="100%" height="100%"></video></span>
         </div>
-        <div id="timer_div" class="col-lg-1">
-        <% include partials/timer.ejs %>
+        <div id="timer_div" class="col-lg-offset-7 col-lg-1">
+            <% include partials/timer.ejs %>
         </div>
     </div>
     <div>
-        <div id="videoContent" class="text-center row" style="display: none; width="60%"; height="60%"">
+        <div id="videoContent" class="text-center row" style="display: none; width:'60%'; height:'60%'">
             <video id="video"></video>
         </div>
-        <div id="nameFacesContent" class="col-lg-8 col-lg-offset-2" style="color : white; display: none">
-                <div id="4faces" class="responsive col-lg-8 col-lg-offset-2" >
+        <div id="nameFacesContent" class="text-center row" style="color : white; display: none;">
+                <div id="4faces" class="text-center row col-lg-6 col-lg-offset-3" style="float:inherit" >
                     <div class="row">
-                        <div class="img col-lg-4">
-                            <img id="face0" >
+                        <div class="img col-lg-3">
+                            <img id="face0"  width="100%" height="100%" >
                             <div style="color:white;text-align: center" id="name0"></div>
                         </div>
-                        <div class="col-lg-1"></div>
-                        <div class="img col-lg-4">
-                            <img id="face1"  >
+                        <div class="img col-lg-3">
+                            <img id="face1" width="100%" height="100%"  >
                             <div style="color:white;text-align: center" id="name1"></div>
                         </div>
                     </div>
                     <div class="row">
-                        <div class="img col-lg-4">
-                            <img id="face2"  >
+                        <div class="img col-lg-3">
+                            <img id="face2"  width="100%" height="100%" >
                             <div style="color:white;text-align: center" id="name2"></div>
                         </div>
-                        <div class="col-lg-1"></div>
-                        <div class="img col-lg-4">
-                            <img id="face3" >
+                        <div class="img col-lg-3">
+                            <img id="face3" width="100%" height="100%" >
                             <div style="color:white;text-align: center" id="name3"></div>
 
                         </div>
                     </div>
                 </div>
-                <div id="testFaceDiv" class="responsive" style="display: none;">
+                <div id="testFaceDiv" class="text-center row col-lg-6 col-lg-offset-3" style="display: none;">
                     <div class="img col-lg-6">
-                        <img id="testFace" >
+                        <img id="testFace" width="70%" height="70%"  >
                     </div>
                 </div>
         </div>
@@ -106,19 +104,36 @@
                 </tr>
             </table>
         </div>
-        <div  id="textContent" class ="row text-center" style="display: none;width:100%; height:100% ;color: red;"  >
+        <div  id="textContent" class ="row text-center" style=" padding-top:20%; display: none;width:100%; height:100% ;color: white; font: Arial; font-size: 30px; font-weight: bold;"  >
             <!-- Volume checker-->
                 Hear This ?
         </div>
-    </div>
-    <audio id="audioS" src="assets/Audio/items/2000.3.mp3"></audio>
-    <div id="microphone"  class="row " >
-        <canvas id="analyser"  ></canvas>
+        <div id="textShowAll">
+
+            <div id="row1" class="row" style="color:white">
+                <div style="width:50%; text-align: center"><b>test1</b></div>
+            </div>
+            <div id="row2" class="row" style="  color:white">
+                <div style="width:50%;float: right;text-align: center"><b>test2</b></div>
+            </div>
+            <div id="row1" class="row" style="color:white">
+                <div style="width:50%; text-align: center"><b>test3</b></div>
+            </div>
+            <div id="row2" class="row" style="  color:white">
+                <div style="width:50%;float: right;text-align: center"><b>test2</b></div>
+            </div>
+        </div>
     </div>
 
-    <div  id="footer" class="row " style="display: inline">
-        <button id="nextButton" style="width: 100%; height: 100%;">Click Here To Start</button>
+    <div id="bottom">
+        <div id="microphone"  class="row" >
+            <canvas id="analyser"  ></canvas>
+        </div>
+        <div  id="footer" class="row" >
+            <button id="nextButton" class="btn-primary btn-lg"style="height:100%;">Click Here To Start</button>
+        </div>
     </div>
+
 
 
 
@@ -417,7 +432,7 @@
 
     function processInstruction(stream, item) {
         console.log("processInstruction starts with souce --- " + item.type+"."+item.item );
-
+        nextButton.style.display = 'none';
         var audioFileName = item.type+"."+(item.item==0 ? "mp3" : item.item+".mp3");
         var source = audioFolder + audioFileName;
         var audio = new Audio(source);
@@ -431,6 +446,7 @@
     }
 
     function processTransition(stream, item) {
+        nextButton.style.display = 'none';
         var source = audioFolder + "../"+item.audio;
         var audio = new Audio(source);
         audio.onended = function() {
@@ -535,7 +551,7 @@
         var fourFacesDiv = document.getElementById("4faces");
         var testFaceDiv = document.getElementById("testFaceDiv");
         var testFace = document.getElementById("testFace");
-
+        nextButton.style.display = "none";
         nameFacesContent.style.display = "inline";
         for(var p in facePictureFiles) {
             var fileN = facePictureFiles[p];
@@ -602,7 +618,7 @@
         console.log("processTrackTap starts with souce --- " + item.type+"."+item.item );
         var audio = new Audio(audioFolder+item.audio);
         JL('client').info("start playing audio " + item.audio);
-
+        nextButton.style.display = 'none';
         trackTap.style.display = "inline";
         audio.onended = function() {
             JL('client').info("start playing tracktap");
@@ -782,6 +798,7 @@
         var instr = document.getElementById("textContent");
         instr.innerHTML = "Hear This ?";
         var nextButton = document.getElementById("nextButton");
+        nextButton.innerHTML="Next";
         nextButton.style.display="inline";
         nextButton.onclick = function() {
             instr.style.display="none";

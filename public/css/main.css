@@ -1,113 +1,201 @@
-/* For mobile phones: */
-html {
-    height: 100%;
-}
 
-body{
-    background-image: url("/images/background.png");
+    /* For mobile phones: */
 
 
-}
-#camera {
-    float:left;display:inline-block;
-}
-#camera_canvas {
+    /*html {
+        height: 100%;
 
-    min-width: 50px;
-    max-width: 150px;
-    min-height: 75px;
-    max-height:175px;
-    width:auto;
-    height:auto;
-}
+    }
 
-#camera_spot {
+    body{
+        background-image: url("/images/background.png");
 
-    min-width: 50px;
-    max-width: 150px;
-    min-height: 50px;
-    max-height:175px;
-    width:15%;
-    height:12px;
-}
+    }
+    #camera {
+        float:left;display:inline-block;
+    }
+    #camera_canvas {
 
-#spinner {
-    float:right;
-}
+        min-width: 50px;
+        max-width: 150px;
+        min-height: 75px;
+        max-height:175px;
+        width:auto;
+        height:auto;
+    }
 
-#footer{
+    #camera_spot {
+
+        min-width: 50px;
+        max-width: 150px;
+        min-height: 50px;
+        max-height:175px;
+        width:15%;
+        height:12px;
+    }
+
+    #spinner {
+        float:right;
+    }
+
+    #footer{
+        background-color: #ffffff;
+        position: fixed;
+        bottom: 0;
+        width: 100%;
+        display:none;
+    }
+    #content{
+        width: 100%;
+        min-height:200px ;
+        max-height: 60%;
+    }
+    #microphone{
+        width:100%;
+
+        position:absolute;
+        bottom:42px;
+    }
+
+    #video{
+        width: 100%;
+        min-height:200px ;
+        max-height: 500px;
+    }
+    #next_button_block{
+        background-color: #00B7FF;;
+    }
+    @media only screen and (min-width: 700px) {
+
+        {
+            width: 900px;
+            margin: 0 auto;
+            width: auto;
+        }
+    }
+
+    div.img {
+        border: 1px solid #ccc;
+    }
+
+    div.img:hover {
+        border: 1px solid #777;
+    }
+
+    div.img img {
+        width: 100%;
+        height: auto;
+    }
+
+    div.desc {
+        padding: 15px;
+        text-align: center;
+    }
+
+    * {
+        box-sizing: border-box;
+    }
+
+    .responsive {
+        padding: 0 6px;
+        float:left;
+        width: 49.99999%;
+    }
+
+
+
+    .clearfix:after {
+        content: "";
+        display: table;
+        clear: both;
+    }
+    .volumeChecker{
+        color: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: initial;
+        font-size:28px;
+
+    }
+
+    svg {
+        display: block;
+        margin: auto;
+    }
+
+    #loader
+    { fill: #cccccc }
+
+    #border
+    { border-color: #ffffff ;}*/
+
+html{
+    max-width:1000px;
+    height:100%;
+    margin:auto;
     background-color: #ffffff;
-    position: fixed;
-    bottom: 0;
-    width: 100%;
-    display:none;
 }
-#content{
-    width: 100%;
-    min-height:200px ;
-    max-height: 60%;
-}
-#microphone{
+
+body {
+    min-height: 100%;
+    height:100%;
     width:100%;
+    background-image:  url("/images/background.png");
+    background-size: contain;
+    margin:auto;
+}
+#main_frame{
+    width:80%;
+    min-height:100%;
+    height:100%;
+    margin:0 auto;
 
-    position:absolute;
-    bottom:42px;
 }
 
+
+
+#videoContent{
+    height:60px;
+}
 #video{
-    width: 100%;
-    min-height:200px ;
-    max-height: 500px;
-}
-#next_button_block{
-    background-color: #00B7FF;;
-}
-@media only screen and (min-width: 768px) {
-    /* For desktop: */
+    width: auto;
+    height: 60%;
 
+    /* Center the video */
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
 }
+#bottom {
+    position: absolute;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    padding: 1rem;
 
-div.img {
-    border: 1px solid #ccc;
-}
-
-div.img:hover {
-    border: 1px solid #777;
-}
-
-div.img img {
-    width: 100%;
-    height: auto;
-}
-
-div.desc {
-    padding: 15px;
     text-align: center;
+    margin:0 auto;
+    width:60%;
+    background: transparent;
+}
+#textContent{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color:red;
 }
 
-* {
-    box-sizing: border-box;
+#textShowAll{
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    color:red;
+    width:50%
 }
-
-.responsive {
-    padding: 0 6px;
-    float:left;
-    width: 49.99999%;
-}
-
-
-
-.clearfix:after {
-    content: "";
-    display: table;
-    clear: both;
-}
-.volumeChecker{
-    color: white;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: initial;
-    font-size:28px;
-
-}
+main.css
