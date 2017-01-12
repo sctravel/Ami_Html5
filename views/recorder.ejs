@@ -9,13 +9,27 @@
     <script src="/jquery/dist/jquery.min.js"></script>
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
     <script src="/jsnlog.js/jsnlog.js"></script>
-
+    <script src="js/tracktap.js"></script>
     <script src="js/recorderjs/audiodisplay.js"></script>
     <script src="js/recorderjs/recorder.js"></script>
     <script src="js/recorderjs/audioMain.js"></script>
     <link rel="stylesheet" href="/css/audioCss.css">
     <link rel="stylesheet" href="/css/trackTap.css">
     <style>
+        .col-centered{
+            float: none;
+            margin: 0 auto;
+        }
+        .clearfix:after {
+            content: "";
+            display: table;
+            clear: both;
+        }
+        .responsive {
+            padding: 0 6px;
+            float:left;
+            width: 49.99999%;
+        }
 
         #analyser {
             display: inline-block;
@@ -33,134 +47,100 @@
 <div class="container">
 
     <div id="top" class="row panel-body ">
-        <div id="camera_div" class="col-lg-1">
+        <div id="camera_div" class="col-lg-2">
             <span><video id="camera" autoplay width="100%" height="100%"></video></span>
         </div>
-        <div id="timer_div" class="col-lg-1">
+        <div id="timer_div" class="col-lg-offset-7 col-lg-1">
             <% include partials/timer.ejs %>
         </div>
     </div>
+
+    <div style="display: none"><audio id="audioGlobal" src="http://192.168.1.4/assets/Audio/items/2000.1.mp3"></audio></div>
+
     <div>
-        <div id="videoContent" class="text-center row" style="display: none">
-            <video id="video" width="50%" height="50%"></video>
+        <div id="videoContent" class="text-center row" style="display: none; width:'60%'; height:'60%'">
+            <video id="video"></video>
         </div>
-        <div id="trackTap" style="display: none"  class="row">
-            <table>
-                <tr>
-                    <td id="td[0]" onclick="hit(0)"></td>
-                    <td id="td[1]" onclick="hit(1)"></td>
+        <div id="nameFacesContent" class="text-center row" style="color : white; display: none;">
+            <div id="4faces" class="text-center row col-lg-6 col-lg-offset-3" >
+                <div class="row">
+                    <div class="img col-lg-3">
+                        <img id="face0"  width="100%" height="100%" >
+                        <div style="color:white;text-align: center" id="name0"></div>
+                    </div>
+                    <div class="img col-lg-3">
+                        <img id="face1" width="100%" height="100%"  >
+                        <div style="color:white;text-align: center" id="name1"></div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="img col-lg-3">
+                        <img id="face2"  width="100%" height="100%" >
+                        <div style="color:white;text-align: center" id="name2"></div>
+                    </div>
+                    <div class="img col-lg-3">
+                        <img id="face3" width="100%" height="100%" >
+                        <div style="color:white;text-align: center" id="name3"></div>
+
+                    </div>
+                </div>
+            </div>
+            <div id="testFaceDiv" class="text-center row col-lg-6 col-lg-offset-3" style="display: none;">
+                <div class="img col-lg-6">
+                    <img id="testFace" width="70%" height="70%"  >
+                </div>
+            </div>
+        </div>
+        <div id="trackTap" style="display: none"  class="text-center row ">
+            <table class="col-lg-6 col-lg-offset-2">
+                <tr class="row"  >
+                    <td id="td[0]" class="col-lg-3" onclick="hit(0)"></td>
+                    <td id="td[1]" class="col-lg-3" onclick="hit(1)"></td>
                 </tr>
-                <tr>
-                    <td id="td[2]" onclick="hit(2)"></td>
-                    <td id="td[3]" onclick="hit(3)"></td>
+                <tr  class="row"  >
+                    <td id="td[2]" class="col-lg-3" onclick="hit(2)"></td>
+                    <td id="td[3]" class="col-lg-3" onclick="hit(3)"></td>
                 </tr>
-                <tr>
-                    <td id="td[4]" onclick="hit(4)"></td>
-                    <td id="td[5]" onclick="hit(5)"></td>
+                <tr  class="row" >
+                    <td id="td[4]" class="col-lg-3" onclick="hit(4)"></td>
+                    <td id="td[5]" class="col-lg-3" onclick="hit(5)"></td>
                 </tr>
             </table>
         </div>
-        <div  id="textContent" class ="row text-center" style="display: none;width:100%; height:100% ;color: red;"  >
+        <div  id="textContent" class ="row text-center" style=" padding-top:20%; display: none;width:100%; height:100% ;color: white; font: Arial; font-size: 30px; font-weight: bold;"  >
             <!-- Volume checker-->
             Hear This ?
         </div>
-    </div>
-    <audio id="audioS" src="assets/Audio/items/2000.3.mp3"></audio>
-    <div class="row " >
+        <div id="textShowAll">
 
-        <div id="microphone"  class="row " >
+            <div id="row1" class="row" style="color:white">
+                <div style="width:50%; text-align: center"><b>test1</b></div>
+            </div>
+            <div id="row2" class="row" style="  color:white">
+                <div style="width:50%;float: right;text-align: center"><b>test2</b></div>
+            </div>
+            <div id="row1" class="row" style="color:white">
+                <div style="width:50%; text-align: center"><b>test3</b></div>
+            </div>
+            <div id="row2" class="row" style="  color:white">
+                <div style="width:50%;float: right;text-align: center"><b>test2</b></div>
+            </div>
+        </div>
+    </div>
+
+    <div id="bottom">
+        <div id="microphone"  class="row" >
             <canvas id="analyser"  ></canvas>
         </div>
-
-        <div  id="footer" class="row " style="display: inline">
-            <button id="nextButton" style="width: 100%; height: 100%;">Click Here To Start</button>
+        <div  id="footer" class="row" >
+            <button id="nextButton" class="btn-primary btn-lg"style="height:100%;">Click Here To Start</button>
         </div>
     </div>
+
+
 
 
 </div>
-
-<script>
-    var td = new Array(),      //保存每个格子的地鼠
-        playing = false,       //游戏是否开始
-        score = 0,             //分数
-        total = 0,
-        beat = 0,              //鼠标点击次数
-        success = 0,           //命中率
-        knock = 0,             //鼠标点中老鼠图片次数
-        gameInterId = null,        //指定setInterval()的变量
-        gameTimerId = null;         //指定setTimeout()的变量
-
-    //游戏结束
-    function GameOver(){
-        timeStop();
-        playing = false;
-        clearMouse();
-    }
-
-    //主动停止所有计时
-    function timeStop(){
-        clearInterval(gameInterId);//clearInterval()方法返回setInterval()方法的id
-        clearTimeout(gameTimerId);//clearTime()方法返回setTimeout()的id
-    }
-
-    //随机循环显示老鼠图片
-    function show(){
-        if(playing)
-        {
-            if(total == 10) {
-                GameOver();
-                return;
-            }
-            var current = Math.floor(Math.random()*6);
-            //这里的路径也需要根据自己的实际文件路径来修改
-            document.getElementById("td["+current+"]").innerHTML = '<img src="assets/images/Target_Off.png" height="160px" width="160px">';
-            ++total;
-            //使用setTimeout()实现2秒后隐藏老鼠图片
-            setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1500);
-        }
-    }
-
-    //清除所有老鼠图片
-    function clearMouse(){
-        for(var i=0;i<=5;i++)
-        {
-            document.getElementById("td["+i+"]").innerHTML="";
-        }
-    }
-
-    //点击事件函数，判断是否点中老鼠
-    function hit(id){
-        if(playing==false)
-        {
-            return;
-        }
-        else
-        {
-            beat +=1;
-            if(document.getElementById("td["+id+"]").innerHTML!="")
-            {
-                score += 1;
-                knock +=1;
-                success = knock/beat;
-                document.getElementById("td["+id+"]").innerHTML="";
-            }
-            else
-            {
-                score += -1;
-                success = knock/beat;
-
-            }
-        }
-    }
-
-    //游戏开始
-    function GameStart(){
-        playing = true;
-        show();
-        interId = setInterval("show()",1500);
-    }
-</script>
 
 <script>
     function audioOrVideoNotEnabled(text) {
@@ -193,17 +173,21 @@
 </script>
 
 <script>
-    var audioFolder = "assets/Audio/items/"
-    var videoFolder = "assets/Video/"
+    var audioFolder = "https://192.168.1.4:3000/assets/Audio/items/"
+    var videoFolder = "https://192.168.1.4:3000/assets/Video/"
     var imageFolder = "assets/Images/"
+    var nameFacesImageFolder = "assets/Images/2062/"
     var takePictureIntervalInMilliSeconds = 120000;
     var takePictureIntervalId = null;
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
     var camera = document.getElementById("camera");
+    var videoContent = document.getElementById("videoContent");
     var nextButton = document.getElementById("nextButton");
     var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
+    var nameFacesContent = document.getElementById("nameFacesContent");
+
     var questionList;
     var item;
     var itemResponse = {};
@@ -212,12 +196,12 @@
     var pictureId = 0;
     var picItemResponse = {};
     var interviewStartTime, interviewEndTime;
+    var audioGlobal = document.getElementById('audioGlobal');
     JL("client").info("Interview started");
 
-
-    var audioS = document.getElementById("audioS");
-
     function takePictureAndUpload() {
+
+
         JL("client").info("Taking picture for the interviewer with pictureId: " + (++pictureId));
         var picture = {};
         picture.takenItem = item.item;
@@ -267,6 +251,7 @@
     }
 
     function processItem(stream) {
+        alert('processItem');
         ++index;
         if(index>=questionList.length) {
             clearInterval(takePictureIntervalId);
@@ -275,7 +260,8 @@
             return;
         }
         itemResponse = {};
-
+        nextButton.style.display = 'none';
+        nextButton.onclick=function(){}
         item = questionList[index];
         itemResponse.item = item;
         console.log("#############now processing --- " + item.type + " : " + item.item);
@@ -314,6 +300,11 @@
             case 2072:
             case 2073:
             case 2074:
+            case 2091:
+            case 2094:
+            case 2095:
+            case 2096:
+            case 2098:
             case 2100:
                 if(item.item==0) processInstruction(stream, item); //item 0 has no recording
                 else processAudioQuestion(stream, item);
@@ -364,26 +355,27 @@
 
     function processInstruction(stream, item) {
         console.log("processInstruction starts with souce --- " + item.type+"."+item.item );
-
+        nextButton.style.display = 'none';
         var audioFileName = item.type+"."+(item.item==0 ? "mp3" : item.item+".mp3");
-        var source = audioFolder + audioFileName;
-        var audio = new Audio(source);
-        audio.onended = function() {
-            console.log("processInstruction ends --- " +source );
+        audioGlobal.src = audioFolder + audioFileName;
+        audioGlobal.onended = function() {
+            console.log("processInstruction ends --- " +audioFileName );
             instr.style.display="none";
             processItem(stream);
         }
+
         //instr.style.display = "inline";
-        audio.play();
+        audioGlobal.play();
     }
 
     function processTransition(stream, item) {
-        var source = audioFolder + "../"+item.audio;
-        var audio = new Audio(source);
-        audio.onended = function() {
+        nextButton.style.display = 'none';
+        var source = audioFolder+item.audio; //TODO: not used
+        audioGlobal.src = source;
+        audioGlobal.onended = function() {
             processItem(stream);
         }
-        audio.play();
+        audioGlobal.play();
     }
 
     function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
@@ -392,9 +384,9 @@
             postItemResponse(stream);
             return;
         }
-        var audio = new Audio(audioFolder+audioList[aindex]);
+        audioGlobal.src = audioFolder+audioList[aindex];
 
-        audio.onended = function() {
+        audioGlobal.onended = function() {
             analyser.style.display = "inline";
             gotStream(stream);
             startRecording();
@@ -419,7 +411,7 @@
             );
 
         }
-        audio.play();
+        audioGlobal.play();
     }
 
     function processAudioQuestion(stream, item) {
@@ -428,12 +420,12 @@
         var aindex = 0;
         var audioFileName = audioFileList[aindex];
         JL('client').info("start playing audio " + audioFileName);
-        var source = audioFolder + audioFileName;
-        var audio = new Audio(source);
+        audioGlobal.src = audioFolder + audioFileName;
+
         itemResponse.afilename = item.type+"."+item.item+".flac";
         itemResponse.itemType = "AudioResponse";
         itemResponse.item = item;
-        audio.onended = function() {
+        audioGlobal.onended = function() {
             JL('client').info("end playing audio " + audioFileName);
 
             analyser.style.display = "inline";
@@ -468,7 +460,7 @@
                 }
             );
         }
-        audio.play();
+        audioGlobal.play();
     }
 
     function processNameTheFace(stream, item) {
@@ -477,18 +469,32 @@
         var sex = 'M'; //TODO: need to get from test
         var audio = new Audio(audioFolder+audioList[nfindex]);
         audio.play(); // Look at these people, need to give people time to remember
-        var faces  = JSON.parse(item.namefacePicBlob);
-        var names = JSON.parse(item.namefaceNameBlob);
-
+        var facePictureFiles  = item.namefacePicBlob;
+        var names = item.namefaceNameBlob;
+        var fourFacesDiv = document.getElementById("4faces");
+        var testFaceDiv = document.getElementById("testFaceDiv");
+        var testFace = document.getElementById("testFace");
+        nextButton.style.display = "none";
+        nameFacesContent.style.display = "inline";
+        for(var p in facePictureFiles) {
+            var fileN = facePictureFiles[p];
+            document.getElementById("face"+p).src = nameFacesImageFolder + fileN;
+            document.getElementById("name"+p).innerHTML = names[p].name;
+        }
+        fourFacesDiv.style.display = "inline";
+        testFaceDiv.style.display = "none"
         //TODO: show the faces together with Names.
         startTimer(0, item.mtimeout, null, function() {
             stopTimer();
             //TODO: hide the faces together with Names.
             //TODO: show the selected Picture
-            var selectedName = item.namefacePicked.name;
+            var selectedName = item.namefaceNamePicked.name;
             var selectedInex = names.indexOf(selectedName);
             // Show the selected name/photo ,and play audio "who is this"
             var audio2 = new Audio(audioFolder+audioList[1]);
+            testFace.src = nameFacesImageFolder+item.namefacePicPicked.filename
+            testFaceDiv.style.display = "inline";
+            fourFacesDiv.style.display = "none";
             audio2.play(); // Look at the people, who is he, need to give people time to remember
             audio2.onended = function() {
                 analyser.style.display = "inline";
@@ -510,6 +516,7 @@
                                     nextButton.onclick = function () {
                                         stopTimer();
                                         stopRecording();
+                                        nameFacesContent.style.display="none";
                                         nextButton.style.display = "none";
                                         analyser.style.display = "none";
                                         postItemResponse(stream);
@@ -518,6 +525,7 @@
                                 function() {
                                     stopTimer();
                                     stopRecording();
+                                    nameFacesContent.style.display="none";
                                     nextButton.style.display = "none";
                                     analyser.style.display = "none";
                                     postItemResponse(stream);
@@ -535,7 +543,8 @@
         console.log("processTrackTap starts with souce --- " + item.type+"."+item.item );
         var audio = new Audio(audioFolder+item.audio);
         JL('client').info("start playing audio " + item.audio);
-
+        analyser.style.display = 'none';
+        nextButton.style.display = 'none';
         trackTap.style.display = "inline";
         audio.onended = function() {
             JL('client').info("start playing tracktap");
@@ -611,6 +620,7 @@
     function processDescribeSilentVideo(stream, item) {
         var audioList = item.audio.split(':');
         var vindex = 0;
+        videoContent.style.display="inline";
         video.src = videoFolder + item.video;
         video.load();
         var audio = new Audio(audioFolder+audioList[vindex]);
@@ -630,6 +640,8 @@
 
     function playAudioInDescribeVideo(audioList, vindex, stream, item){
         if(vindex>=audioList.length) {
+            videoContent.style.display="none";
+
             processItem(stream);
             return;
         }
@@ -666,7 +678,7 @@
 
     function processQuickLit(stream, item) {
         var audioList = item.audio.split(':'); // length==2
-        var wordsBlob = JSON.parse(item.wordsBlob);
+        var wordsBlob = item.wordsBlob;
         var numWords = wordsBlob.length;
         var audio0 = new Audio(audioFolder+audioList[0]);
         audio0.play();
@@ -707,23 +719,27 @@
 
     function processVolumeChecker(stream, item) {
         var audioFileName = item.type+"."+item.item+".mp3";
+
         var source = audioFolder + audioFileName;
-        var audio = new Audio(source);
-        var instr = document.getElementById("textContent");
+        audioGlobal.src = source;
         instr.innerHTML = "Hear This ?";
         var nextButton = document.getElementById("nextButton");
-        nextButton.style.display="inline";
-        nextButton.onclick = function() {
-            instr.style.display="none";
-            nextButton.style.display="none";
-            audio.pause();audio.src="";
-            processItem(stream);
-        };
-        audio.onended = function() {
-            audio.play();
+        nextButton.innerHTML="Next";
+
+        audioGlobal.onended = function() {
+            audioGlobal.play();
+            nextButton.style.display = "inline";
+            nextButton.onclick = function() {
+                instr.style.display="none";
+                nextButton.style.display="none";
+                audioGlobal.pause();
+                audioGlobal.src="";
+                processItem(stream);
+            };
+
         }
         instr.style.display = "inline";
-        audio.play();
+        audioGlobal.play();
     }
 
     function processMicrophoneChecker(stream, item) {
@@ -785,10 +801,11 @@
 
     function processInterpretResponse() {}
 
+
+
     $.get("/questionSet", function(data) {
         questionList = data;
         nextButton.onclick = function () {
-            audioS.play();
             navigator.getUserMedia({audio: true, video: false}, function (stream) {
                 processItem(stream);
             }, function (error) {
