@@ -189,21 +189,16 @@ body {
     color:red;
 }
 
-#textShowAll{
-    display: none;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%,-50%);
-    color:red;
-    width:50%
-}
     #textShowAll{
         display: none;
         position: absolute;
         top: 50%;
         left: 50%;
         transform: translate(-50%,-50%);
-        color:white;
+        color:green;
         width:50%
+    }
+    .highlight{
+        font-weight: bold;
+        color: white;
     }

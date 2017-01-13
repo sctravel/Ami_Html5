@@ -54,6 +54,9 @@
             <% include partials/timer.ejs %>
         </div>
     </div>
+
+    <div style="display: none"><audio id="audioGlobal" src="http://192.168.1.4/assets/Audio/items/2000.1.mp3"></audio></div>
+
     <div>
         <div id="videoContent" class="text-center row" style="display: none; width:'60%'; height:'60%'">
             <video id="video"></video>
@@ -109,23 +112,23 @@
                 Hear This ?
         </div>
         <div id="textShowAll" >
-            <div  class="row" style="color:white">
-                <div id="word0" style="width:50%; text-align: center"><b></b></div>
+            <div  class="row" style="color:green">
+                <div id="word0" style="width:50%; text-align: center;" onclick=toggleHighlight(this)><b></b></div>
             </div>
-            <div  class="row" style="  color:white">
-                <div  id="word1" style="width:50%;float: right;text-align: center"><b></b></div>
+            <div  class="row" style="  color:green">
+                <div  id="word1" style="width:50%;float: right;text-align: center" onclick=toggleHighlight(this)><b></b></div>
             </div>
-            <div  class="row" style="color:white">
-                <div  id="word2" style="width:50%; text-align: center"><b></b></div>
+            <div  class="row" style="color:green">
+                <div  id="word2" style="width:50%; text-align: center" onclick=toggleHighlight(this)><b></b></div>
             </div>
-            <div  class="row" style="  color:white">
-                <div  id="word3" style="width:50%;float: right;text-align: center"><b></b></div>
+            <div  class="row" style="  color:green">
+                <div  id="word3" style="width:50%;float: right;text-align: center" onclick=toggleHighlight(this)><b></b></div>
             </div>
-            <div  class="row" style="  color:white">
-                <div  id="word4" style="width:50%;text-align: center"><b></b></div>
+            <div  class="row" style="  color:green">
+                <div  id="word4" style="width:50%;text-align: center" onclick=toggleHighlight(this)><b></b></div>
             </div>
-            <div  class="row" style="  color:white">
-                <div  id="word5" style="width:50%;float: right;text-align: center"><b></b></div>
+            <div  class="row" style="  color:green">
+                <div  id="word5" style="width:50%;float: right;text-align: center" onclick=toggleHighlight(this)><b></b></div>
             </div>
         </div>
     </div>
@@ -175,8 +178,8 @@
 </script>
 
 <script>
-    var audioFolder = "assets/Audio/items/"
-    var videoFolder = "assets/Video/"
+    var audioFolder = "https://192.168.1.4:3000/assets/Audio/items/"
+    var videoFolder = "https://192.168.1.4:3000/assets/Video/"
     var imageFolder = "assets/Images/"
     var nameFacesImageFolder = "assets/Images/2062/"
     var takePictureIntervalInMilliSeconds = 120000;
@@ -189,7 +192,7 @@
     var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
     var nameFacesContent = document.getElementById("nameFacesContent");
-
+    var selectedWords = new Set();
     var questionList;
     var item;
     var itemResponse = {};
@@ -198,12 +201,12 @@
     var pictureId = 0;
     var picItemResponse = {};
     var interviewStartTime, interviewEndTime;
+    var audioGlobal = document.getElementById('audioGlobal');
     JL("client").info("Interview started");
 
-
-    var audioS = document.getElementById("audioS");
-
     function takePictureAndUpload() {
+
+
         JL("client").info("Taking picture for the interviewer with pictureId: " + (++pictureId));
         var picture = {};
         picture.takenItem = item.item;
@@ -261,7 +264,8 @@
             return;
         }
         itemResponse = {};
-
+        nextButton.style.display = 'none';
+        nextButton.onclick=function(){}
         item = questionList[index];
         itemResponse.item = item;
         console.log("#############now processing --- " + item.type + " : " + item.item);
@@ -357,25 +361,25 @@
         console.log("processInstruction starts with souce --- " + item.type+"."+item.item );
         nextButton.style.display = 'none';
         var audioFileName = item.type+"."+(item.item==0 ? "mp3" : item.item+".mp3");
-        var source = audioFolder + audioFileName;
-        var audio = new Audio(source);
-        audio.onended = function() {
-            console.log("processInstruction ends --- " +source );
+        audioGlobal.src = audioFolder + audioFileName;
+        audioGlobal.onended = function() {
+            console.log("processInstruction ends --- " +audioFileName );
             instr.style.display="none";
             processItem(stream);
         }
+
         //instr.style.display = "inline";
-        audio.play();
+        audioGlobal.play();
     }
 
     function processTransition(stream, item) {
         nextButton.style.display = 'none';
-        var source = audioFolder + "../"+item.audio;
-        var audio = new Audio(source);
-        audio.onended = function() {
+        var source = audioFolder+item.audio; //TODO: not used
+        audioGlobal.src = source;
+        audioGlobal.onended = function() {
             processItem(stream);
         }
-        audio.play();
+        audioGlobal.play();
     }
 
     function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
@@ -384,9 +388,9 @@
             postItemResponse(stream);
             return;
         }
-        var audio = new Audio(audioFolder+audioList[aindex]);
+        audioGlobal.src = audioFolder+audioList[aindex];
 
-        audio.onended = function() {
+        audioGlobal.onended = function() {
             analyser.style.display = "inline";
             gotStream(stream);
             startRecording();
@@ -411,7 +415,7 @@
             );
 
         }
-        audio.play();
+        audioGlobal.play();
     }
 
     function processAudioQuestion(stream, item) {
@@ -420,12 +424,12 @@
         var aindex = 0;
         var audioFileName = audioFileList[aindex];
         JL('client').info("start playing audio " + audioFileName);
-        var source = audioFolder + audioFileName;
-        var audio = new Audio(source);
+        audioGlobal.src = audioFolder + audioFileName;
+
         itemResponse.afilename = item.type+"."+item.item+".flac";
         itemResponse.itemType = "AudioResponse";
         itemResponse.item = item;
-        audio.onended = function() {
+        audioGlobal.onended = function() {
             JL('client').info("end playing audio " + audioFileName);
 
             analyser.style.display = "inline";
@@ -460,7 +464,7 @@
                 }
             );
         }
-        audio.play();
+        audioGlobal.play();
     }
 
     function processNameTheFace(stream, item) {
@@ -675,6 +679,15 @@
         audio.play();
     }
 
+    var toggleHighlight = function(div) {
+        if(div.classList.contains('highlight')) {
+            div.classList.remove('highlight');
+            selectedWords.delete(div.id);
+        } else {
+            div.classList.add('highlight');
+            selectedWords.add(div.id);
+        }
+    }
 
     function processQuickLit(stream, item) {
         var audioList = item.audio.split(':'); // length==2
@@ -686,8 +699,6 @@
             //show the word one by one
             var showWord = function() {
                 if(numWords!=wordsBlob.length) stopTimer();
-                //TODO: html show word
-
 
                 --numWords;
                 console.log("numWords: "+numWords);
@@ -710,6 +721,8 @@
                         nextButton.style.display = "none";
                         var textShowAll =document.getElementById("textShowAll");
                         textShowAll.style.display="none";
+
+                        selectedWords = new Set();
                         postItemResponse(stream);
                     }
                 } else {
@@ -727,24 +740,27 @@
     
     function processVolumeChecker(stream, item) {
         var audioFileName = item.type+"."+item.item+".mp3";
+
         var source = audioFolder + audioFileName;
-        var audio = new Audio(source);
-        var instr = document.getElementById("textContent");
+        audioGlobal.src = source;
         instr.innerHTML = "Hear This ?";
         var nextButton = document.getElementById("nextButton");
         nextButton.innerHTML="Next";
-        nextButton.style.display="inline";
-        nextButton.onclick = function() {
-            instr.style.display="none";
-            nextButton.style.display="none";
-            audio.pause();audio.src="";
-            processItem(stream);
-        };
-        audio.onended = function() {
-            audio.play();
+
+        audioGlobal.onended = function() {
+            audioGlobal.play();
+            nextButton.style.display = "inline";
+            nextButton.onclick = function() {
+                instr.style.display="none";
+                nextButton.style.display="none";
+                audioGlobal.pause();
+                audioGlobal.src="";
+                processItem(stream);
+            };
+
         }
         instr.style.display = "inline";
-        audio.play();
+        audioGlobal.play();
     }
     
     function processMicrophoneChecker(stream, item) {
@@ -806,10 +822,11 @@
 
     function processInterpretResponse() {}
 
+
+
     $.get("/questionSet", function(data) {
         questionList = data;
         nextButton.onclick = function () {
-            //audioS.play();
             navigator.getUserMedia({audio: true, video: false}, function (stream) {
                 processItem(stream);
             }, function (error) {
