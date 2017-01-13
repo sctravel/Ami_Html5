@@ -720,10 +720,14 @@
                     nextButton.style.display = "inline";
                     nextButton.onclick = function() {
                         nextButton.style.display = "none";
+                        for(var wordDiv of selectedWords) {
+                            document.getElementById(wordDiv).classList.remove('highlight');
+                        }
                         var textShowAll =document.getElementById("textShowAll");
                         textShowAll.style.display="none";
 
                         selectedWords = new Set();
+
                         postItemResponse(stream);
                     }
                 } else {
