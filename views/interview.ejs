@@ -122,7 +122,7 @@
                 <div  id="word3" style="width:50%;float: right;text-align: center"><b></b></div>
             </div>
             <div  class="row" style="  color:white">
-                <div  id="word4" style="width:50%;float: right;text-align: center"><b></b></div>
+                <div  id="word4" style="width:50%;text-align: center"><b></b></div>
             </div>
             <div  class="row" style="  color:white">
                 <div  id="word5" style="width:50%;float: right;text-align: center"><b></b></div>
@@ -694,11 +694,9 @@
 
                 if(numWords<0) {
                     instr.style.display = "none";
-                    //TODO: hide word, start tap real words
-                    test = wordsBlob;
-                    alert("test");
+                    //TODO: hide word, start tap real word;
                     var textShowAll =document.getElementById("textShowAll");
-                    textShowAll.setAttribute("display","inline");
+                    textShowAll.style.display="inline";
                     for(var i =0; i <wordsBlob.length; i++ ){
                        var word_slot =  document.getElementById("word" + i);
                         word_slot.innerHTML= wordsBlob[i].string;
@@ -710,6 +708,8 @@
                     nextButton.style.display = "inline";
                     nextButton.onclick = function() {
                         nextButton.style.display = "none";
+                        var textShowAll =document.getElementById("textShowAll");
+                        textShowAll.style.display="none";
                         postItemResponse(stream);
                     }
                 } else {
