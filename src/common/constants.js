@@ -38,5 +38,14 @@ exports.itemTypes = {
     "TrackTapResponse" : "TrackTapResponse",
     "Polite_Request": "Polite_Request",
     "CameraPicture" : "CameraPicture"
+}
 
+exports.itemTypeNameToType = {
+    "MicrophoneAudioResponse": [2000], //2000.3
+    "AudioResponse" : [2071,2040, 2070, 2067, 2044, 2074, 2100],
+    "SubAudioResponse" : [2072, 2073, 2062, 2023],
+    "QuickLitResponse" : [2064],
+    "TrackTapResponse" : [2032],
+    "Polite_Request": [],
+    "CameraPicture" : []
 }

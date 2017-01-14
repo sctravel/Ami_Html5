@@ -8,14 +8,14 @@ var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
 
 function addItemResponseToSession(itemResponse, sessionId, callback) {
-
+    console.dir(itemResponse);
     if(itemResponse.item.type==2000 && itemResponse.item.item==3) {
-        addAudioResponseToSession(itemResponse, "CameraPicture", callback);
-    } else if(itemResponse.item.type = 2032) {
+        addMicrophoneAudioResponseToSession(itemResponse, sessionId, "MicrophoneAudioResponse", callback);
+    } else if(itemResponse.item.type == 2032) {
         addTrackTapResponseToSession(itemResponse, sessionId,callback);
-    } else if(itemResponse.item.type = 2064) {
+    } else if(itemResponse.item.type == 2064) {
         addQuickLitResponseToSession(itemResponse, sessionId,callback);
-    } else if( itemResponse.item == 20) { //TODO: get the item list of SubAudioResponses
+    } else if( itemResponse.subresponses!=null && itemResponse.subresponses.length > 1) { //TODO: get the item list of SubAudioResponses
         addAudioResponseWithSubResponseToSession(itemResponse, sessionId, callback);
     } else {
         addAudioResponseToSession(itemResponse, sessionId, "AudioResponse", callback);
@@ -110,33 +110,41 @@ var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) 
 };
 
 var addAudioResponseToSession = function(itemResponse, sessionId, responseType, callback) {
+    logger.info("Entering add AudioResponse To SessionStates Table for " + itemResponse.type+"."+itemResponse.item);
+
     var sqlAddAudioResponseToSession = "insert into sessionstates " +
         " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, score)" +
-        " values (?,?,?,?,?,?,?,?) ";
-    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, responseType, new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, itemResponse.score==null ? -1 : itemResponse.score];
+        " values (?,?,?,?,?,?,?,?,?,?) ";
+    var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item, responseType, new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, itemResponse.score==null ? -1 : itemResponse.score];
     dbPool.runQueryWithParams(sqlAddAudioResponseToSession, params, function (err, results) {
         if (err) {
             logger.error("addAudioResponseToSession() failed for sessionId: " + sessionId);
             callback(err, null);
             return;
         }
+        logger.info("Successfully added AudioResponse To SessionStates Table for " + itemResponse.type+"."+itemResponse.item);
         callback(null, constants.services.CALLBACK_SUCCESS);
     });
 }
 
 var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId, callback) {
+    logger.info("Entering add SubAudioResponse To SessionStates Table for " + itemResponse.type+"."+itemResponse.item);
+
     var sqlAddMicrophoneCheckResponseToSession = "insert into sessionstates " +
         " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, subResponses )" +
         " values (?,?,?,?,?,?,?,?,?) ";
-    var subResponses = itemResponse.subResponses;
-    var params = [sessionId, itemResponse.item.testId, itemResponse.item.type, itemResponse.item.item, "SubAudioResponse", new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, subResponses];
+    var subResponses = itemResponse.subresponses;
+    console.dir(subResponses);
+    var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item, "SubAudioResponse", new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, JSON.stringify(subResponses)];
 
-    dbPool.runQueryWithParams(sqlAddMicrophoneCheckResponseToSession, params, true, function (err, results) {
+    dbPool.runQueryWithParams(sqlAddMicrophoneCheckResponseToSession, params, function (err, results) {
         if (err) {
-            logger.error("getFinishedItemsInSession() failed for sessionId: " + unfinishedSessionId);
+            logger.error("addAudioResponseWithSubResponseToSession() failed for sessionId: " + sessionId);
             callback(err, null);
             return;
         }
+        logger.info("Successfully added SubAudioResponse To SessionStates Table for " + itemResponse.type+"."+itemResponse.item);
+
         callback(null, results);
     });
 }
