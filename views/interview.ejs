@@ -183,8 +183,10 @@
     var videoFolder = websiteUrl + "/assets/Video/"
     var imageFolder = "assets/Images/"
     var nameFacesImageFolder = "assets/Images/2062/"
+    
     var takePictureIntervalInMilliSeconds = 120000;
     var takePictureIntervalId = null;
+
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
     var camera = document.getElementById("camera");
@@ -193,11 +195,13 @@
     var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
     var nameFacesContent = document.getElementById("nameFacesContent");
+
     var selectedWords = new Set();
     var questionList;
-    var item;
-    var itemResponse = {};
-    var responseStartTime, responseEndTime;
+
+    var item,itemStatus;
+    var itemResponse = {}, itemSubResponse = {};
+    var responseStartTime, responseEndTime, subResponseStartTime, subResponseEndTime, subResponseStart,subResponseDuration;
     var index = -1;
     var pictureId = 0;
     var picItemResponse = {};
@@ -215,36 +219,37 @@
         picture.takenTime = (new Date()).toUTCString();
         picture.pngFileName = 'camera'+pictureId+'.png';
         picture.elapsedTime = (new Date() - interviewStartTime)/1000;
-
+        //TODO: upload picture to S3
         $.post('/api/session/cameraPictureSessionData', {pictureInfo: picture}, function(data) {
             if (data != "ok") {
                 var errorMessage = "Upload cameraPicture failed with message: " + data;
                 console.error(errorMessage);
                 JL("client").error(errorMessage);
             } else {
-                JL("client").error("Upload pcameraPicture succeeded.");
+                JL("client").error("Upload CameraPicture succeeded.");
             }
         });
     }
 
     function postItemResponse(stream) {
-        /*$.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
+        $.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
             if(data!="ok") {
                 var errorMessage = "Upload response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
                 console.error(errorMessage);
                 JL("client").error(errorMessage);
             } else {
                 JL("client").error("Upload response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
-                processItem(stream);
+                //processItem(stream);
             }
-        })*/
+        })
         processItem(stream);
     }
 
-    function postPictureResponse() {
+    function postPictureResponseAndMarkEnd() {
         picItemResponse.endTime = (new Date()).toUTCString();
         picItemResponse.status = "MAX_TIMEOUT";
-        $.post("/api/session/updateSessionState", {itemResponse : picItemResponse}, function(data) {
+        //TODO mark end and redirect to thank you page
+        /*$.post("/api/session/updateSessionState", {itemResponse : picItemResponse}, function(data) {
             if(data!="ok") {
                 var errorMessage = "Upload picture response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
                 console.error(errorMessage);
@@ -253,24 +258,27 @@
                 JL("client").error("Upload picture response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
                 //end the interview
             }
-        })
+        })*/
     }
 
+    function initializeItemProcessingVariables() {
+        itemResponse = {};
+        itemResponse.subResponses = [];
+        itemSubResponse = {};
+        nextButton.style.display = 'none';
+        nextButton.onclick=function(){}
+    }
     function processItem(stream) {
         ++index;
         if(index>=questionList.length) {
             clearInterval(takePictureIntervalId);
             interviewEndTime = new Date();
-            postPictureResponse();
+            postPictureResponseAndMarkEnd();
             return;
         }
-        itemResponse = {};
-        nextButton.style.display = 'none';
-        nextButton.onclick=function(){}
         item = questionList[index];
+        initializeItemProcessingVariables();
         itemResponse.item = item;
-        console.log("#############now processing --- " + item.type + " : " + item.item);
-        console.dir(item);
         switch (item.type) {
             case 2000:
                 if(item.item == 1) {
@@ -321,22 +329,6 @@
             case 2040:
                 processRetellStory(stream, item);
                 break;
-            case 2050:
-                //This type doesn't exist yet
-                processStroop(stream, item);
-                break;
-            case 2080:
-                //This type doesn't exist yet
-                processInterpretResponse(stream, item);
-                break;
-            case 2081:
-                //This type doesn't exist yet
-                processFindErrorResponse(stream, item);
-                break;
-            case 2082:
-                //This type doesn't exist yet
-                processCalcuationResponse(stream, item);
-                break;
             case 2062: //bypass the following two for now
                 if(item.item==0) {
                     processInstruction(stream, item);
@@ -350,6 +342,7 @@
                 //processItem(stream);
                 break;
             default:
+                JL('client').info("Skipping not defined item: " + item.type+"."+item.item);
                 processItem(stream);
                 break;
         }
@@ -386,21 +379,43 @@
     function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
         if(aindex>=audioList.length) {
             //End of the item, process next item
+            responseEndTime=new Date();
+            itemResponse.startTime = responseStartTime.toUTCString();
+            itemResponse.endTime = responseEndTime.toUTCString();
+            if(aindex>1) {
+                itemResponse.subresponses.push(itemSubResponse);
+            }
             postItemResponse(stream);
             return;
         }
-        audioGlobal.src = audioFolder+audioList[aindex];
+        itemResponse.subresponses.push(itemSubResponse);
 
+
+        audioGlobal.src = audioFolder+audioList[aindex];
+        itemSubResponse = {};
         audioGlobal.onended = function() {
             analyser.style.display = "inline";
             gotStream(stream);
             startRecording();
+            subResponseStartTime = new Date();
+            itemSubResponse.startTime = subResponseStartTime.toUTCString();
+            itemSubResponse.extraInfo='the No. '+(aindex+1) +' recording';
+            itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
+            itemSubResponse.start=subResponseStart+subResponseDuration; //start equals last subresponse end;
+            subResponseStart = itemSubResponse.start;
+
             startTimer(item.itimeout, item.mtimeout,
                 function () {
                     nextButton.style.display = "inline";
                     nextButton.onclick = function () {
                         stopTimer();
                         stopRecording();
+                        subResponseEndTime = new Date();
+                        itemResponse.status = "NEXT_TOUCHED";
+                        itemSubResponse.status = "NEXT_TOUCHED";
+                        itemSubResponse.endTime = subResponseEndTime.toUTCString();
+                        subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                        itemSubResponse.duration = subResponseDuration;
                         nextButton.style.display = "none";
                         analyser.style.display = "none";
                         processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
@@ -409,6 +424,12 @@
                 function () {
                     stopTimer();
                     stopRecording();
+                    subResponseEndTime = new Date();
+                    itemResponse.status = "MAX_TIMEOUT";
+                    itemSubResponse.status = "MAX_TIMEOUT";
+                    itemSubResponse.endTime = subResponseEndTime.toUTCString();
+                    subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.duration = subResponseDuration;
                     nextButton.style.display = "none";
                     analyser.style.display = "none";
                     processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
@@ -428,39 +449,54 @@
         audioGlobal.src = audioFolder + audioFileName;
 
         itemResponse.afilename = item.type+"."+item.item+".flac";
-        itemResponse.itemType = "AudioResponse";
+        itemResponse.itemType = audioFileList.length >1 ? "SubAudioResponse" : "AudioResponse";
         itemResponse.item = item;
+        itemResponse.subresponses=[];
         audioGlobal.onended = function() {
             JL('client').info("end playing audio " + audioFileName);
 
             analyser.style.display = "inline";
             gotStream(stream);
-            responseStartTime = new Date();
+            responseStartTime = subResponseStartTime = new Date();
             startRecording();
+            itemSubResponse.startTime = subResonseStartTime.toUTCString();
+            itemSubResponse.extraInfo='the No. '+(aindex+1) +' recording';
+            itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
+            subResponseStart = itemSubResponse.start= 0;
+
+
             startTimer(item.itimeout, item.mtimeout,
                 function(){
                     nextButton.style.display="inline";
                     nextButton.onclick = function() {
+                        JL('client').info("Next Button clicked in No."+(aindex+1)+" question of " + item.type+"."+item.item);
                         stopTimer();
                         stopRecording();
                         nextButton.style.display = "none";
                         analyser.style.display = "none";
-                        responseEndTime=new Date();
-                        itemResponse.startTime = responseStartTime.toUTCString();
-                        itemResponse.endTime = responseEndTime.toUTCString();
+
+                        subResponseEndTime = new Date();
                         itemResponse.status = "NEXT_TOUCHED";
+                        itemSubResponse.status = "NEXT_TOUCHED";
+                        itemSubResponse.endTime = subResponseEndTime.toUTCString();
+                        subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                        itemSubResponse.duration = subResponseDuration;
                         processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
                     };
                 },
                 function() {
                     stopTimer();
                     stopRecording();
+                    JL('client').info("Max timeout reached in No."+(aindex+1)+" question of " + item.type+"."+item.item);
+
                     nextButton.style.display = "none";
                     analyser.style.display = "none";
-                    responseEndTime=new Date();
-                    itemResponse.startTime = responseStartTime.toUTCString();
-                    itemResponse.endTime = responseEndTime.toUTCString();
+                    subResponseEndTime = new Date();
                     itemResponse.status = "MAX_TIMEOUT";
+                    itemSubResponse.status = "MAX_TIMEOUT";
+                    itemSubResponse.endTime = subResponseEndTime.toUTCString();
+                    subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.duration = subResponseDuration;
                     processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
                 }
             );
@@ -471,7 +507,7 @@
     function processNameTheFace(stream, item) {
         var audioList = item.audio.split(':');
         var nfindex = 0;
-        var sex = 'M'; //TODO: need to get from test
+        var sex = item.item==1 ? 'F' : 'M';
         var audio = new Audio(audioFolder+audioList[nfindex]);
         audio.play(); // Look at these people, need to give people time to remember
         var facePictureFiles  = item.namefacePicBlob;
@@ -488,11 +524,8 @@
         }
         fourFacesDiv.style.display = "inline";
         testFaceDiv.style.display = "none"
-        //TODO: show the faces together with Names.
         startTimer(0, item.mtimeout, null, function() {
             stopTimer();
-            //TODO: hide the faces together with Names.
-            //TODO: show the selected Picture
             var selectedName = item.namefaceNamePicked.name;
             var selectedInex = names.indexOf(selectedName);
             // Show the selected name/photo ,and play audio "who is this"
@@ -762,7 +795,6 @@
                 audioGlobal.src="";
                 processItem(stream);
             };
-
         }
         instr.style.display = "inline";
         audioGlobal.play();
@@ -819,25 +851,16 @@
         audio.play();
     }
 
-    function processStroop(stream, item) {}
-
-    function processFindErrorResponse(stream, item) {}
-
-    function processCalcuationResponse(stream, item){}
-
-    function processInterpretResponse() {}
-
-
-
     $.get("/questionSet", function(data) {
         questionList = data;
-        nextButton.onclick = function () {
-            navigator.getUserMedia({audio: true, video: false}, function (stream) {
+        navigator.getUserMedia({audio: true, video: false}, function (stream) {
+            nextButton.onclick = function () {
                 processItem(stream);
-            }, function (error) {
-                audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
-            });
-        }
+            }
+        }, function (error) {
+            audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
+        });
+
 
     })
 
