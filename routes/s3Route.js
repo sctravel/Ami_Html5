@@ -11,12 +11,11 @@ module.exports = function(app) {
         console.log(fileName)
 
         var AWS = require('aws-sdk');
+
+        AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY})
         var s3 = new AWS.S3();
         console.log('Start getting presigned URL: ', fileName);
         const util = require('util')
-     
-        AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY})
-
         // Tried with and without this. Since s3 is not region-specific, I don't
         // think it should be necessary.
         // AWS.config.update({region: 'us-west-2'})
@@ -24,14 +23,15 @@ module.exports = function(app) {
         const myBucket = 'amipaces'
         //file name from post request
         const myKey = fileName
-        const signedUrlExpireSeconds = 60 * 5
+        const signedUrlExpireSeconds = 60 * 100
 
-        const url = s3.getSignedUrl('getObject', {
+        const url = s3.getSignedUrl('putObject', {
             Bucket: myBucket,
             Key: myKey,
-            Expires: signedUrlExpireSeconds
+            Expires: signedUrlExpireSeconds,
+            ContentType:'text/csv'
         })
-        console.log(url)
+        console.log("curl -v --upload-file items.csv \""+url+"\"")
         res.send(url)
     });
 }
