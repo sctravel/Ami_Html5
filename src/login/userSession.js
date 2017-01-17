@@ -131,11 +131,13 @@ var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId,
     logger.info("Entering add SubAudioResponse To SessionStates Table for " + itemResponse.type+"."+itemResponse.item);
 
     var sqlAddMicrophoneCheckResponseToSession = "insert into sessionstates " +
-        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, subResponses )" +
-        " values (?,?,?,?,?,?,?,?,?) ";
-    var subResponses = itemResponse.subresponses;
+        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, subResponses, snrDB )" +
+        " values (?,?,?,?,?,?,?,?,?,?) ";
     console.dir(subResponses);
-    var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item, "SubAudioResponse", new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, JSON.stringify(subResponses)];
+    var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item,
+        "SubAudioResponse", new Date(itemResponse.startTime), new Date(itemResponse.endTime),
+        itemResponse.afilename, itemResponse.status,
+        JSON.stringify(itemResponse.subresponses), JSON.stringify(itemResponse.snrDB)];
 
     dbPool.runQueryWithParams(sqlAddMicrophoneCheckResponseToSession, params, function (err, results) {
         if (err) {
@@ -151,7 +153,7 @@ var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId,
 
 
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
-    var sqlGetFinishedItemsInSession = "select sessionId, testId, type, item, startTime, endTime, score, status from sessionstates where sessionId = ? order by startTime";
+    var sqlGetFinishedItemsInSession = "select sessionId, testId, type, item, startTime, endTime, score, status, subresponses from sessionstates where sessionId = ? order by startTime";
     dbPool.runQueryWithParams(sqlGetFinishedItemsInSession, [unfinishedSessionId], function (err, results) {
         if (err) {
             logger.error("getFinishedItemsInSession() failed for sessionId: " + unfinishedSessionId);
