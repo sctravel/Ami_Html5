@@ -7,6 +7,7 @@ var td = new Array(),      //保存每个格子的地鼠
     total = 0,
     beat = 0,              //鼠标点击次数
     success = 0,           //命中率
+    showTime,
     knock = 0,             //鼠标点中老鼠图片次数
     gameInterId = null,        //指定setInterval()的变量
     gameTimerId = null;         //指定setTimeout()的变量
@@ -28,6 +29,7 @@ function timeStop(){
 function show(){
     if(playing)
     {
+        showTime = new Date();
         if(total == 10) {
             GameOver();
             return;
@@ -51,6 +53,7 @@ function clearMouse(){
 
 //点击事件函数，判断是否点中老鼠
 function hit(id){
+    var tap =  {};
     if(playing==false)
     {
         return;
@@ -63,13 +66,10 @@ function hit(id){
             score += 1;
             knock +=1;
             success = knock/beat;
+            tap.latency = (new Date()) - showTime;
+            tap.distance = 0;
+            itemResponse.taps.push(tap);
             document.getElementById("td["+id+"]").innerHTML="";
-        }
-        else
-        {
-            score += -1;
-            success = knock/beat;
-
         }
     }
 }

@@ -18,6 +18,7 @@ var uploadURL = "/upload/audio/";
 var isRecording = false, isAnalysing = false;
 
 var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95;
+var noiseLevel, signalLevel;
 var latestSNR = 0;
 var currentMaxAudioPoint = 0;
 var audioData = [];
@@ -42,8 +43,8 @@ function evaluateAudio(audioData, lowSignal, minSNR) {
         audioLevel = audioLevelOptions.UnKnown;
         return;
     }
-    var noiseLevel = percentile(audioData, noiseLevelPercentile);
-    var signalLevel = percentile(audioData, signalLevelPercentile);
+    noiseLevel = percentile(audioData, noiseLevelPercentile);
+    signalLevel = percentile(audioData, signalLevelPercentile);
     var snr = signalLevel - noiseLevel;
     console.log("noiseLevel: "+ noiseLevel+"; signalLevel: "+ signalLevel + "; snr: " + snr+ "; currentMaxAudioPoint: " +currentMaxAudioPoint);
     if(signalLevel < lowSignal) audioLevel=audioLevelOptions.LowVolume;

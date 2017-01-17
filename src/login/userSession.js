@@ -132,8 +132,8 @@ var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId,
 
     var sqlAddMicrophoneCheckResponseToSession = "insert into sessionstates " +
         " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, subResponses, snrDB )" +
-        " values (?,?,?,?,?,?,?,?,?,?) ";
-    console.dir(subResponses);
+        " values (?,?,?,?,?,?,?,?,?,?, ?) ";
+
     var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item,
         "SubAudioResponse", new Date(itemResponse.startTime), new Date(itemResponse.endTime),
         itemResponse.afilename, itemResponse.status,
