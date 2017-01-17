@@ -29,6 +29,23 @@ module.exports = function(app) {
         });
     });
 
+    app.post('/api/session/endSession', isLoggedIn, function (req, res) {
+        var cameraPictureResponse = req.body.cameraPictureResponse;
+        userSession.addItemResponseToSession(cameraPictureResponse, req.user.sessionId, function(err, results) {
+            if(err) {
+                logger.error("post cameraPictureResponse failed with error: " + err);
+                return;
+            }
+            userSession.markSessionEnd(req.user.sessionId, function(err, results){
+                if(err){
+                    logger.error("markSessionEnd failed with error: " + err);
+                    return;
+                }
+                res.send(constants.services.CALLBACK_SUCCESS);
+            })
+        });
+    });
+
 
 }
 

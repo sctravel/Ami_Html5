@@ -182,7 +182,7 @@ app.post('*.logger', isLoggedIn, function (req, res) {
     res.send('');
 });
 
-
+var xmlb = require('./src/common/xmlBuilder');
 
 ////////////////////////////////////
 //Recipient Pages / Services
