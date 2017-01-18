@@ -13,6 +13,8 @@
     <script src="js/recorderjs/audiodisplay.js"></script>
     <script src="js/recorderjs/recorder.js"></script>
     <script src="js/recorderjs/audioMain.js"></script>
+    <script src="js/utility.js"></script>
+
     <link rel="stylesheet" href="/css/audioCss.css">
     <link rel="stylesheet" href="/css/trackTap.css">
     <style>
@@ -147,65 +149,7 @@
 
 </div>
 
-<script>
-
-
-    var padLeft = function(word, pad) {
-        return pad.substring(0, pad.length - word.length) + word;
-    }
-
-    var toUTCDateTimeString = function(date) {
-        //Example: 2017-01-02 15:30:55.752 +0000
-        var hour = date.getUTCHours();
-        hour = (hour < 10 ? "0" : "") + hour;
-
-        var min  = date.getUTCMinutes();
-        min = (min < 10 ? "0" : "") + min;
-
-        var sec  = date.getUTCSeconds();
-        sec = (sec < 10 ? "0" : "") + sec;
-
-        var year = date.getUTCFullYear();
-
-        var month = date.getUTCMonth() + 1;
-        month = (month < 10 ? "0" : "") + month;
-
-        var day  = date.getUTCDate();
-        day = (day < 10 ? "0" : "") + day;
-
-        var milliSec = padLeft(date.getUTCMilliseconds()+'', '000');
-
-        return date.getFullYear()+"-"+month+"-"+day+" "+hour+":"+min+":"+sec+"."+milliSec+" +0000";
-    }
-
-    function audioOrVideoNotEnabled(text) {
-        audioLevel = audioLevelOptions.NoMicrophone;
-        var audio = new Audio('/assets/Audio/EnableInterviewAccess.mp3');
-        audio.play();
-        audio.onended = function() {
-            window.location.href= '/?error='+text
-        };
-    }
-
-    var camera = document.getElementById('camera');
-    navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    window.URL = window.URL || window.webkitURL;
-    if (navigator.getUserMedia) {
-        navigator.getUserMedia({ video: true,audio:false},
-            function(stream) {
-                camera.src = window.URL.createObjectURL(stream);
-                camera.onloadedmetadata = function(e) {
-                    camera.play();
-                };
-            },
-            function(err) {
-                audioOrVideoNotEnabled("The following error occured: " + err.name);
-            }
-        );
-    } else {
-        audioOrVideoNotEnabled("Your Browser doesn't support video");
-    }
-</script>
+<script src="js/camera.js"></script>
 
 <script>
     var websiteUrl = "https://localhost:3000";
@@ -241,8 +185,6 @@
     JL("client").info("Interview started");
 
     function takePictureAndUpload() {
-
-
         JL("client").info("Taking picture for the interviewer with pictureId: " + (++pictureId));
         var picture = {};
         picture.takenItem = item.item;
@@ -300,6 +242,7 @@
         nextButton.style.display = 'none';
         nextButton.onclick=function(){}
     }
+
     function processItem(stream) {
         ++index;
         if(index>=questionList.length) {
@@ -1189,17 +1132,17 @@
 
     }
 
+    startCamera();
     $.get("/questionSet", function(data) {
         questionList = data;
         navigator.getUserMedia({audio: true, video: false}, function (stream) {
             nextButton.onclick = function () {
+
                 processItem(stream);
             }
         }, function (error) {
             audioOrVideoNotEnabled("Please make sure your microphone is enabled.");
         });
-
-
     })
 
 </script>
