@@ -12,28 +12,23 @@
   $( '#upload-form' ).submit(function( event ) {
         event.preventDefault();
         var form = this;
-
-        alert(document.getElementById('image').files[0]);
         var input = document.getElementById('image').value;
         var file = input.split("\\");
         var fileName = file[file.length-1];
-        alert(document.getElementById('image').files[0])
 
-        $.get( "/getPresignedURL", { fileName: fileName }, function( dataURL ) {
-           alert(dataURL)
+        $.get( "/getPresignedURL", { fileName: fileName, type: document.getElementById('image').files[0].type}, function( dataURL ) {
+
             $.ajax({
                 type : 'PUT',
                 url : dataURL,
                 data : document.getElementById('image').files[0],
                 processData: false,  // tell jQuery not to convert to form data
-                contentType: document.getElementById('image').files[0].type,//might need be commented out
+                contentType: document.getElementById('image').files[0].type,
                 success: function(json) { console.log('Upload complete!') },
                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                     console.log('Upload error: ' + XMLHttpRequest.responseText);
                 }
                 });
-
-                 alert("upload to s3 finished");
          });
     
     });
