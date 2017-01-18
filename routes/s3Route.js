@@ -7,6 +7,7 @@ module.exports = function(app) {
     app.get('/getPresignedURL', function (req,res){
         console.log("getPresignedURL")
         var fileName = req.query.fileName;
+        var type = req.query.type;
 
         console.log(fileName)
 
@@ -29,7 +30,7 @@ module.exports = function(app) {
             Bucket: myBucket,
             Key: myKey,
             Expires: signedUrlExpireSeconds,
-            ContentType:'text/csv'
+            ContentType:type//'text/csv'
         })
         console.log("curl -v --upload-file items.csv \""+url+"\"")
         res.send(url)
