@@ -1,0 +1,38 @@
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.1/jquery.min.js"></script>
+
+
+<html>
+<form id = "upload-form" class="upload-form">
+   <input id="image" type="file" name="image" />
+   <button type="submit">No need to click me!</button>
+</form>
+
+<script type="text/javascript">
+var parts = [
+  new Blob(['you construct a file...'], {type: 'text/plain'}),
+  ' Same way as you do with blob',
+  new Uint16Array([33])
+];
+
+// Construct a file
+var file = new File(parts, 'sample/sample.txt', {
+    lastModified: new Date(0), // optional - default = now
+    type: "overide/mimetype" // optional - default = ''
+});
+
+$.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
+    $.ajax({
+        type : 'PUT',
+        url : dataURL,
+        data : file,
+        processData: false,  // tell jQuery not to convert to form data
+        contentType: file.type,
+        success: function(json) { console.log('Upload complete!') },
+        error: function (XMLHttpRequest, textStatus, errorThrown) {
+            console.log('Upload error: ' + XMLHttpRequest.responseText);
+        }
+        });
+    });
+    
+</script>
