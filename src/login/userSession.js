@@ -17,7 +17,7 @@ function addItemResponseToSession(itemResponse, sessionId, callback) {
     } else if( itemResponse.subresponses!=null && itemResponse.subresponses.length > 1) { //TODO: get the item list of SubAudioResponses
         addAudioResponseWithSubResponseToSession(itemResponse, sessionId, callback);
     } else {
-        addAudioResponseToSession(itemResponse, sessionId, "AudioResponse", callback);
+        addAudioResponseToSession(itemResponse, sessionId, callback);
     }
 }
 
@@ -41,7 +41,7 @@ var addIndividualPictureResponseToSession = function(picture, sessionId, callbac
 exports.addIndividualPictureResponseToSession = addIndividualPictureResponseToSession;
 
 var addTrackTapResponseToSession = function(itemResponse, sessionId, callback) {
-    addAudioResponseToSession(itemResponse, sessionId, "TrackTapResponse", function(err, results) {
+    addAudioResponseToSession(itemResponse, sessionId, function(err, results) {
         if(err) {
             logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
             callback(err, null);
@@ -74,7 +74,7 @@ var addTrackTapResponseToSession = function(itemResponse, sessionId, callback) {
 }
 
 var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) {
-    addAudioResponseToSession(itemResponse, sessionId, "QuickLitResponse", function(err, results) {
+    addAudioResponseToSession(itemResponse, sessionId, function(err, results) {
         if(err) {
             logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
             callback(err, null);
@@ -108,13 +108,13 @@ var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) 
     });
 };
 
-var addAudioResponseToSession = function(itemResponse, sessionId, responseType, callback) {
+var addAudioResponseToSession = function(itemResponse, sessionId, callback) {
     logger.info("Entering add AudioResponse To SessionStates Table for " + itemResponse.item.type+"."+itemResponse.item.item);
 
     var sqlAddAudioResponseToSession = "insert into sessionstates " +
         " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, score)" +
         " values (?,?,?,?,?,?,?,?,?,?) ";
-    var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item, responseType, new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, itemResponse.score==null ? -999 : itemResponse.score];
+    var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item, itemResponse.itemType, new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, itemResponse.score==null ? -999 : itemResponse.score];
     dbPool.runQueryWithParams(sqlAddAudioResponseToSession, params, function (err, results) {
         if (err) {
             logger.error("addAudioResponseToSession() failed for sessionId: " + sessionId);
@@ -232,21 +232,7 @@ var addFinishedSessionTestItem = function(item, sessionId, callback) {
 
 }
 exports.addFinishedSessionTestItem = addFinishedSessionTestItem;
-var finishSession = function(email, sessionId, callback) {
-    markSessionEnd(function(err, results) {
-        if(err) {
-            callback(err, null);
-            return;
-        }
-        //TODO: var xml = generateSessionXML();
-        //TODO: uploadXMLToS3(xml, function(err, results){
-        //    callback(null, results);
-        //});
-        callback(null, constants.services.CALLBACK_SUCCESS);
-    });
 
-}
-exports.finishSession = finishSession;
 
 var createUserSession = function(session, callback) {
     var sqlCreateSession = 'insert into sessions ( sessionId, userId, email, starttime, testId) VALUES (?, ?, ?, ?, ?)';

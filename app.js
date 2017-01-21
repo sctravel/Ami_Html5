@@ -153,7 +153,16 @@ app.get('/game', function (req,res){
     res.render('game', {user: req.user});
 });
 
-
+app.post('/api/upload/picture/:name', function (req, res) {
+    var webcam = req.files.webcam;
+    var filename = constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/"+req.params.name; //"+req.user+"_"+req.sessionId+"\\
+    fs.writeFile(filename, webcam.data, function(err) {
+        res.send(err);
+        return;
+    });
+    logger.info("Upload picture " + filename + "succeeded for session: " + req.user.sessionId);
+    res.send("ok");
+});
 
 
 app.post('/api/upload/audio/', function (req, res) {

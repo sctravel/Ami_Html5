@@ -23,12 +23,7 @@ function getSessionStates(sessionId, callback) {
     });
 }
 
-var session={}
-session.sessionId = '20170120-015740-66604'
-session.email = 'tx3@gmail.com'
-session.startTime = new Date('2017-01-20 01:57:40')
-session.endTime = new Date('2017-01-20 02:06:30')
-session.testName = 'MinProduct'
+
 var buildSessionXml = function(session, callback) {
     var root = xmlbuilder.begin().ele('root', {'id': session.sessionId, 'name':session.testName, 'startTime':stringUtil.toUTCDateTimeString(session.startTime), 'endTime':stringUtil.toUTCDateTimeString(session.endTime), 'status':'COMPLETED'});
     root.ele('device')
@@ -169,6 +164,14 @@ var buildSessionXml = function(session, callback) {
 
 }
 
+/*
+ var session={}
+ session.sessionId = '20170120-015740-66604'
+ session.email = 'tx3@gmail.com'
+ session.startTime = new Date('2017-01-20 01:57:40')
+ session.endTime = new Date('2017-01-20 02:06:30')
+ session.testName = 'MinProduct'
+
 buildSessionXml(session, function(err, xmlString){
     if(err) {
         console.error(err);
@@ -182,7 +185,7 @@ buildSessionXml(session, function(err, xmlString){
         }
         //res.send(constants.services.CALLBACK_SUCCESS);
     });
-});
+});*/
 
 exports.buildSessionXml = buildSessionXml;
 /**
