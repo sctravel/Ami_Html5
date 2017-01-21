@@ -9,7 +9,8 @@ var audioContext = new AudioContext();
 var audioInput = null,
     realAudioInput = null,
     inputPoint = null,
-    audioRecorder = null;
+    audioRecorder = null,
+    gumStream = null;
 var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
@@ -32,11 +33,15 @@ var audioLevelOptions = {
     UnKnown : 5
 }
 
-/* TODO:
-
- - offer mono option
- - "Monitor input" switch
- */
+var blobToBase64 = function(blob, cb) {
+    var reader = new FileReader();
+    reader.onload = function() {
+        var dataUrl = reader.result;
+        var base64 = dataUrl.split(',')[1];
+        cb(base64);
+    };
+    reader.readAsDataURL(blob);
+};
 
 function evaluateAudio(audioData, lowSignal, minSNR) {
     if(audioData.length<10) {
@@ -54,28 +59,6 @@ function evaluateAudio(audioData, lowSignal, minSNR) {
     console.log("audioLevel after evaluation is "+audioLevel);
 }
 
-function saveAudio() {
-    audioRecorder.exportWAV( doneEncoding );
-    // could get mono instead by saying
-    // audioRecorder.exportMonoWAV( doneEncoding );
-}
-
-function gotBuffers( buffers ) {
-    //var canvas = document.getElementById( "wavedisplay" );
-
-    //drawBuffer( canvas.width, canvas.height, canvas.getContext('2d'), buffers[0] );
-
-    // the ONLY time gotBuffers is called is right after a new recording is completed -
-    // so here's where we should set up the download.
-    audioRecorder.exportWAV( doneEncoding );
-}
-
-function doneEncoding( blob ) {
-    //Recorder.setupDownload( blob, "myRecording" + ((recIndex<10)?"0":"") + recIndex + ".wav" );
-    Recorder.startUpload( blob, uploadURL );
-    recIndex++;
-}
-
 function startAnalysing() {
     audioData=[];
     currentMaxAudioPoint = 0;
@@ -90,6 +73,7 @@ function stopAnalysing() {
 }
 
 function startRecording() {
+    console.log("Start recording");
     if (!audioRecorder)
         return;
     audioRecorder.clear();
@@ -98,23 +82,57 @@ function startRecording() {
     startAnalysing();
 
 }
-function stopRecording() {
-    console.log("stop recording")
+
+function pauseRecording(){
     audioRecorder.stop();
     isRecording = false;
-    audioRecorder.getData( gotBuffers );
     stopAnalysing();
 }
 
-function toggleRecording( e ) {
-    if (e.classList.contains("recording")) {
-        // stop recording
-        e.classList.remove("recording");
-        stopRecording();
-    } else {
-        // start recording
-        startRecording();
-        e.classList.add("recording");
+function resumeRecording(){
+    audioRecorder.record();
+    isRecording = true;
+    startAnalysing();
+}
+
+function stopRecording() {
+    var flac_encoder_worker = new Worker('js/recorderjs/flac/EmsWorkerProxy.js');
+    console.log("stop recording")
+
+    if (audioRecorder) {
+        audioRecorder.stop();
+        isRecording = false;
+        stopAnalysing();
+        var uploadId = item.type+"."+item.item;
+        audioRecorder.getData(function(s) {
+            // convert wav to flac
+            var args = [ 'dummy.wav' ];
+            var inData = {};
+            inData['dummy.wav'] = new Uint8Array(s);
+            var outData = {};
+            outData['dummy.flac'] = { 'MIME': 'audio/flac' };
+            flac_encoder_worker.postMessage({ command: 'encode', args: args, outData: outData, fileData: inData });
+            //navigator.getUserMedia({audio: true}, gotStream, function(e) { console.log('No live audio input: ' + e); });
+
+            // Listen for messages by the flac_encoder_worker
+            flac_encoder_worker.onmessage = function(e) {
+                if (e.data && e.data.reply === 'done') {
+                    console.log(" adding audio files -- " + uploadId);
+                    blobToBase64(e.data.values['dummy.flac'].blob, function (base64) { // encode
+                        var update = {'blob': base64, "id": uploadId};
+                        $.post(postFlacUrl, update, function (data) {
+                            if (data == "ok") {
+                                console.log("UploadFlac succeeded");
+                                //callback();
+                            } else {
+                                console.error("Upload flac file failed for id: " + uploadId)
+                            }
+                        });
+
+                    });
+                }
+            }
+        });
     }
 }
 
@@ -189,6 +207,8 @@ function toggleMono() {
 }
 
 function gotStream(stream) {
+    console.log("GOT Stream!");
+    gumStream = stream;
     inputPoint = audioContext.createGain();
 
     // Create an AudioNode from the stream.
@@ -211,31 +231,6 @@ function gotStream(stream) {
     updateAnalysers();
 }
 
-function initAudio() {
-    if (!navigator.getUserMedia)
-        navigator.getUserMedia = navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
-    if (!navigator.cancelAnimationFrame)
-        navigator.cancelAnimationFrame = navigator.webkitCancelAnimationFrame || navigator.mozCancelAnimationFrame;
-    if (!navigator.requestAnimationFrame)
-        navigator.requestAnimationFrame = navigator.webkitRequestAnimationFrame || navigator.mozRequestAnimationFrame;
-
-    navigator.getUserMedia(
-        {
-            "audio": {
-                "mandatory": {
-                    "googEchoCancellation": "false",
-                    "googAutoGainControl": "false",
-                    "googNoiseSuppression": "false",
-                    "googHighpassFilter": "false"
-                },
-                "optional": []
-            },
-        }, gotStream, function(e) {
-            alert('Error getting audio');
-            console.log(e);
-        });
-}
-
 function percentile(arr, p) {
     if (arr.length === 0) return 0;
     if (typeof p !== 'number') throw new TypeError('p must be a number');
@@ -251,5 +246,3 @@ function percentile(arr, p) {
     if (upper >= arr.length) return arr[lower];
     return arr[lower] * (1 - weight) + arr[upper] * weight;
 }
-
-window.addEventListener('load', initAudio );

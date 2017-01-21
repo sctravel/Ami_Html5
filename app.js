@@ -14,7 +14,7 @@ var _ = require("underscore");
 global.fs = require('fs');
 var JL = require('jsnlog').JL;
 var winston = require('winston');
-var xmlBuilder = require('./src/common/xmlBuilder');
+var busboyBodyParser = require('busboy-body-parser');
 
 var logFormatter = function(options) {
     return (new Date()).toISOString() +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
@@ -51,9 +51,12 @@ app.use(passport.initialize());
 app.use(passport.session());
 app.use(flash());
 app.use(express.methodOverride());
-//app.use(busboyBodyParser({ limit: '15mb' }));
-app.use(bodyParser.json({limit: "50mb"}));
-app.use(bodyParser.urlencoded({ limit: "50mb", extended: true }));
+app.use(busboyBodyParser({ limit: '15mb' }));
+/*app.use(bodyParser.json({limit: "10mb"}));
+app.use(bodyParser.raw({limit: "10mb"}));
+app.use(bodyParser.text({limit: "10mb"}));
+app.use(bodyParser.urlencoded({ limit: "10mb", extended: true }));
+app.use(express.bodyParser({limit: '50mb'}))*/
 
 
 ///////////////////////////////////////////////////////////////////////////
@@ -153,19 +156,19 @@ app.get('/game', function (req,res){
 
 
 
-app.post('/upload/audio/', function (req, res) {
-    logger.info("########start uploading wav file");
+app.post('/api/upload/audio/', function (req, res) {
+    logger.info("########start uploading flac file");
     var id = req.body.id;
     var buf =  new Buffer(req.body.blob, 'Base64'); // decode
-    var filename = constants.paths.UPLOAD_FOLDER + "/test/question_" + id + ".wav";
+    var filename = constants.paths.UPLOAD_FOLDER + "/test/"+ id + ".flac";
     if(req.user) {
-        filename = constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/question_" + id + ".wav"; //"+req.user+"_"+req.sessionId+"\\
+        filename = constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/" + id + ".flac"; //"+req.user+"_"+req.sessionId+"\\
     }
     fs.writeFile(filename, buf, function(err) {
         res.send(err);
         return;
     });
-    logger.info("########upload wav file succeeded!");
+    logger.info("########upload flac file succeeded!");
     res.send("ok");
 });
 
@@ -182,7 +185,6 @@ app.post('*.logger', isLoggedIn, function (req, res) {
     res.send('');
 });
 
-var xmlb = require('./src/common/xmlBuilder');
 
 ////////////////////////////////////
 //Recipient Pages / Services

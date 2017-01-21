@@ -36,16 +36,24 @@ module.exports = function(app) {
                 logger.error("post cameraPictureResponse failed with error: " + err);
                 return;
             }
-            userSession.markSessionEnd(req.user.sessionId, function(err, results){
+            userSession.markSessionEnd(req.user, function(err, xmlString){
                 if(err){
                     logger.error("markSessionEnd failed with error: " + err);
+                    res.send(constants.services.CALLBACK_FAILED);
                     return;
                 }
-                res.send(constants.services.CALLBACK_SUCCESS);
+                //TODO: write xml and upload to S3
+                var xmlFileName = 'logs/'+req.user.sessionId+"_session.xml";
+                fs.writeFile(xmlFileName, xmlString, function(err) {
+                    if(err) {
+                        logger.error("Write xmlString to file failed. " + err);
+                        res.send(constants.services.CALLBACK_FAILED);
+                        return
+                    }
+                    res.send(constants.services.CALLBACK_SUCCESS);
+                });
             })
         });
     });
-
-
 }
 

@@ -6,6 +6,7 @@ var constants = require('./../common/constants');
 var emailUtil = require('./../common/emailUtil');
 var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
+var xmlBuilder = require('../common/xmlBuilder');
 
 function addItemResponseToSession(itemResponse, sessionId, callback) {
     console.dir(itemResponse);
@@ -164,16 +165,24 @@ function getFinishedItemsInSession(unfinishedSessionId, callback) {
 
 }
 
-var markSessionEnd = function(sessionId, callback) {
+var markSessionEnd = function(userSession, callback) {
     var sqlMarkSessionEnd = 'update sessions set endtime = ? where sessionId= ? ';
     var endtime = new Date();
-    dbPool.runQueryWithParams(sqlMarkSessionEnd, [endtime, sessionId], function (err, results) {
+    userSession.endTime = endtime;
+    dbPool.runQueryWithParams(sqlMarkSessionEnd, [endtime, userSession.sessionId], function (err, results) {
         if (err) {
-            logger.error('sqlMarkSessionEnd failed for session ' + sessionId);
+            logger.error('sqlMarkSessionEnd failed for session ' + userSession.sessionId);
             callback(err, null);
             return;
         }
-        callback(null, constants.services.CALLBACK_SUCCESS);
+        xmlBuilder.buildSessionXml(userSession, function(err, xmlString){
+            if(err) {
+                logger.error("Build Session XML error. " + err);
+                callback(err, null);
+                return;
+            }
+            callback(null, xmlString);
+        });
     });
 }
 exports.markSessionEnd = markSessionEnd;
