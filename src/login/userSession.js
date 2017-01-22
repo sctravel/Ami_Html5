@@ -7,6 +7,8 @@ var emailUtil = require('./../common/emailUtil');
 var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
 var xmlBuilder = require('../common/xmlBuilder');
+var _=require('underscore');
+var memoryCache = require('memory-cache');
 
 function addItemResponseToSession(itemResponse, sessionId, callback) {
     console.dir(itemResponse);
@@ -169,6 +171,7 @@ var markSessionEnd = function(userSession, callback) {
     var sqlMarkSessionEnd = 'update sessions set endtime = ? where sessionId= ? ';
     var endtime = new Date();
     userSession.endTime = endtime;
+    userSession.testName = globalCache.get(userSession.testId).testName;
     dbPool.runQueryWithParams(sqlMarkSessionEnd, [endtime, userSession.sessionId], function (err, results) {
         if (err) {
             logger.error('sqlMarkSessionEnd failed for session ' + userSession.sessionId);
@@ -269,3 +272,84 @@ var getUnfinishedSession = function(email,callback) {
 
 }
 exports.getUnfinishedSession = getUnfinishedSession;
+
+var getCompleteTestById = function (testId, callback) {
+
+    var sqlQuicklits = 'select * from quicklits ORDER BY RAND()';
+    var sqlNameFacePictures = 'select subjectid, filename, feeling from photoes';
+    var sqlNameFaceNames = 'SELECT name, gender, nameset FROM names';
+
+        dbPool.runQueryWithParams(sqlQuicklits,function (err, allWordsResults) {
+            if(err) {
+                console.error(err);
+                callback(err,null);
+                return;
+            }
+            var wordSetIndex = 0;
+            //May need to select words by level later
+            var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10), allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
+
+            dbPool.runQueryWithParams(sqlNameFacePictures,function (err, picResults) {
+                if(err) {
+                    logger.error(err);
+                    callback(err,null);
+                    return;
+                }
+
+                dbPool.runQuery(sqlNameFaceNames,function (err, nameResults) {
+                    if(err) {
+                        logger.error(err);
+                        callback(err,null);
+                        return;
+                    }
+
+                    var femaleFacesSet = ["FE1_Neutral.jpg", "FE2_Neutral.jpg", "FE3_Neutral.jpg", "FE4_Neutral.jpg"];
+                    var maleFacesSet = ["MA1_Neutral.jpg", "MA2_Neutral.jpg", "MA3_Neutral.jpg", "MA4_Neutral.jpg"];
+
+                    var maleRandIndex = Math.floor(4*Math.random());
+                    var femaleRandIndex = Math.floor(4*Math.random());
+                    var femaleSubjectId = femaleRandIndex+1; //1-4
+                    var maleSubjectId = maleRandIndex+5;  //5-8
+                    console.log("maleSubjectId-"+maleSubjectId+"; femaleSubjectId-"+femaleSubjectId);
+                    var maleNames = _.filter(nameResults, function(name){
+                        return name.nameset == maleSubjectId;
+                    });
+                    var femaleNames = _.filter(nameResults, function(name){
+                        return name.nameset == femaleSubjectId;
+                    });
+                    var maleNamePicked = maleNames[maleRandIndex];
+                    var femaleNamePicked = femaleNames[femaleRandIndex];
+
+                    var femalePicPicked = _.filter(picResults, function(photo){
+                        return photo.subjectid == femaleSubjectId;
+                    })[maleRandIndex]; //use maleRandIndex here to increase random
+                    var malePicPicked = _.filter(picResults, function(photo){
+                        return photo.subjectid == maleSubjectId;
+                    })[femaleRandIndex];//use femaleRandIndex here to increase random
+
+                    console.log('testId: '+  testId);
+                    var results = memoryCache.get(testId);
+
+
+                    for (var i = 0; i < results.length; i++) {
+                        if(results[i].type == 2064) {
+                            results[i].wordsBlob = wordSet[wordSetIndex++];
+                        }
+                        else if(results[i].type == 2062 && results[i].item==1){
+                            results[i].namefacePicBlob = femaleFacesSet;
+                            results[i].namefaceNameBlob = femaleNames;
+                            results[i].namefaceNamePicked = femaleNamePicked;
+                            results[i].namefacePicPicked = femalePicPicked;
+                        } else if(results[i].type == 2062 && results[i].item==2) {
+                            results[i].namefacePicBlob = maleFacesSet;
+                            results[i].namefaceNameBlob = maleNames;
+                            results[i].namefaceNamePicked = maleNamePicked;
+                            results[i].namefacePicPicked = malePicPicked;
+                        }
+                    }
+                    callback(null, results);
+                });
+            });
+        });
+}
+exports.getCompleteTestById = getCompleteTestById;

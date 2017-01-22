@@ -11,6 +11,7 @@
     "body-parser": "^1.15.2",
     "config": "*",
     "connect-flash": "*",
+    "cron": "^1.2.1",
     "dateformat": "*",
     "ejs": "*",
     "express": "3.4.8",

@@ -1172,7 +1172,7 @@
         } );
     }
 
-    $.get("/questionSet", function(data) {
+    $.get("/test", function(data) {
         questionList = data;
         navigator.getUserMedia({audio: true, video: false}, function (stream) {
             nextButton.onclick = function () {

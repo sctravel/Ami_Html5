@@ -1,24 +1,23 @@
 module.exports = function(app) {
+    var userSession = require('../src/login/userSession');
 
-var testsUtil = require('../src/db/testsUtil');
-
-/* GET test listing. */
-app.get('/tests', function(req, res, next) {
-     console.log("########start retrieving tests");
-         testsUtil.getTests(function (err, results) {
-            if (err) {
-                console.error("end calling tests: "+err);
-                return;
-            }
-            console.dir("end calling tests: " + results);
-
+    /* GET test listing. */
+    app.get('/test', isLoggedIn, function(req, res) {
+        console.log("########start retrieving tests");
+        console.dir(req.user);
+        userSession.getCompleteTestById(req.user.testId, function (err, results) {
+                if (err) {
+                    console.error("end calling tests: "+err);
+                    return;
+                }
+                console.dir("end calling tests: " + results);
 
 
-            res.send(results);
+                res.send(results);
         });
-     //res.setHeader('Content-Type', 'application/json');
-     //res.send(JSON.stringify(jsonObject));
-});
+         //res.setHeader('Content-Type', 'application/json');
+         //res.send(JSON.stringify(jsonObject));
+    });
 }
 
 //update progress

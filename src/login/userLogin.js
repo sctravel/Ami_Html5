@@ -4,8 +4,7 @@ var emailUtil = require('./../common/emailUtil');
 var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
 var userSession = require("./userSession");
-
-var testList = [1,2,3,4,5];
+var memoryCache = require("memory-cache");
 
 
 //user login with email and password
@@ -22,13 +21,13 @@ exports.manualLogin = function(email, pass, callback) {
             returnObj.isAuthenticated = true;
 
             if(unfinishedSession!=null) {
-                logger.info("Session for " + email + " already exists, with sessionId = " + unfinishedSession.testId + " and testId = " + unfinishedSession.sessionId);
+                logger.info("Session for " + email + " already exists, with sessionId = " + unfinishedSession.sessionId + " and testId = " + unfinishedSession.testId);
                 returnObj.session = new Session(email, email, unfinishedSession.testId);
                 returnObj.session.data.sessionId = unfinishedSession.sessionId;
                 callback(null, returnObj);
             } else {
-                var testIndex = Math.floor(testList.length * Math.random());
-                var testId = testList[testIndex]; //TODO: use actual test list from DB or cached
+                var testIndex = Math.floor(memoryCache.get(constants.cache.TEST_COUNT) * Math.random());
+                var testId = memoryCache.get(constants.cache.TEST_IDS)[testIndex];
                 returnObj.session = new Session(email, email, testId);
                 userSession.createUserSession(returnObj.session.data, function (err, results) {
                     if (err) {

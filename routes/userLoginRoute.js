@@ -26,8 +26,11 @@ module.exports = function(app) {
                 if(results.isAuthenticated == true ) {
                     //create a session dir for uploading files
                     fs.mkdir(constants.paths.UPLOAD_FOLDER+results.session.data.userId+"_"+results.session.data.sessionId+"/", function(e){});
-                    return done(null, {email:results.session.data.email, userId : results.session.data.userId,
-                        sessionId: results.session.data.sessionId, startTime: results.session.data.startTime} );
+                    return done(null, {email:results.session.data.email,
+                        userId : results.session.data.userId,
+                        sessionId: results.session.data.sessionId,
+                        startTime: results.session.data.startTime,
+                        testId: results.session.data.testId} );
                 } else {
                     return done(null, false, { message: results.errorMessage });
                 }
@@ -36,11 +39,11 @@ module.exports = function(app) {
     ));
 
     passport.serializeUser(function (user, done) {//保存user对象
-        done(null, {email:user.email, userId:user.userId, sessionId:user.sessionId, startTime: user.startTime});//可以通过数据库方式操作
+        done(null, {email:user.email, userId:user.userId, sessionId:user.sessionId, startTime: user.startTime, testId: user.testId});//可以通过数据库方式操作
     });
 
     passport.deserializeUser(function (user, done) {//删除user对象
-        done(null, {email:user.email, userId:user.userId, sessionId:user.sessionId, startTime: user.startTime});//可以通过数据库方式操作
+        done(null, {email:user.email, userId:user.userId, sessionId:user.sessionId, startTime: user.startTime, testId: user.testId});//可以通过数据库方式操作
     });
 
 

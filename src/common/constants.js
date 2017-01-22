@@ -21,6 +21,13 @@ exports.services = {
     CALLBACK_FAILED : 'failed'
 }
 
+exports.cache = {
+    TEST: "TEST",
+    TEST_IDS: "TEST_IDS",
+    TEST_COUNT: "TEST_COUNT",
+    timeoutInMilliSeconds: 86400000 // 1 day;
+}
+
 exports.responseStatus = {
     NEXT_TOUCHED: "NEXT_TOUCHED",
     INIT_TIMEOUT: "INIT_TIMEOUT",

@@ -8,16 +8,19 @@ var https = require('https');
 var path = require('path');
 var passport = require('passport');
 var constants = require('./src/common/constants.js');
+var stringUtil = require('./src/common/stringUtil');
 var flash = require('connect-flash');
 var bodyParser = require('body-parser');
 var _ = require("underscore");
-global.fs = require('fs');
 var JL = require('jsnlog').JL;
 var winston = require('winston');
 var busboyBodyParser = require('busboy-body-parser');
 
+global.fs = require('fs');
+//global.memoryCache = require('memory-cache');
+
 var logFormatter = function(options) {
-    return (new Date()).toISOString() +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
+    return stringUtil.toUTCDateTimeString(new Date()) +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
 };
 
 exports.logFormatter = logFormatter;
@@ -66,6 +69,9 @@ app.use(app.router);
 app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(express.static(path.join(__dirname, 'public')));
+
+var globalCache = require('./src/common/globalCache').globalCache;
+globalCache.initCache();
 
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());
@@ -121,20 +127,8 @@ app.get('/index2', function (req,res){
     res.render('index2',{error: req.flash('error'), success: req.flash('success'), message:req.flash('message') });
 });
 
-app.get('/adjustVolume', function (req,res){
-    res.render('adjustVolume',{user: req.user});
-});
-app.get('/testMic', function (req,res){
-    res.render('testMicVolumeAndNoise',{user: req.user});
-});
 app.get('/testpage', function (req,res){
     res.sendfile("public/test.html");
-});
-
-app.get('/audio', function (req,res){
-    console.log(req.user);
-
-    res.render('recorder',{user: req.user});
 });
 
 app.get('/interview', isLoggedIn, function (req,res){
@@ -145,7 +139,6 @@ app.get('/interview', isLoggedIn, function (req,res){
 app.get('/questionSet', function(req, res){
     console.info("####################")
     var questionSet = JSON.parse(fs.readFileSync('./document/questionSet.json', 'utf8'));
-    //questionSet = _.where(questionSet, {test: 1});
     res.send(questionSet);
 });
 
@@ -190,7 +183,6 @@ app.post('*.logger', isLoggedIn, function (req, res) {
         var line = clientLog[i];
         winston.loggers.get(req.user.sessionId).info(line.t+": " + line.m);
     }
-    // Send empty response. This is ok, because client side jsnlog does not use response from server.
     res.send('');
 });
 

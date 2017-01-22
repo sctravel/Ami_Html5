@@ -25,7 +25,15 @@ function getSessionStates(sessionId, callback) {
 
 
 var buildSessionXml = function(session, callback) {
-    var root = xmlbuilder.begin().ele('root', {'id': session.sessionId, 'name':session.testName, 'startTime':stringUtil.toUTCDateTimeString(session.startTime), 'endTime':stringUtil.toUTCDateTimeString(session.endTime), 'status':'COMPLETED'});
+    var root = xmlbuilder.begin().ele('root',
+        {
+            'id': session.sessionId,
+            'name':session.testName==null ? 'Unknown' : session.testName,
+            'startTime':stringUtil.toUTCDateTimeString(session.startTime),
+            'endTime':stringUtil.toUTCDateTimeString(session.endTime),
+            'status':'COMPLETED'
+        },
+        '');
     root.ele('device')
             .ele('uid',{},'00000000-0000-0000-0000-000000000000')
             .insertAfter('model',{},'Html5')
