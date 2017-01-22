@@ -2,9 +2,7 @@ var stringUtil = require('./../common/stringUtil');
 var constants = require('./../common/constants');
 var emailUtil = require('./../common/emailUtil');
 var Session = require("../model/Session.js")
-var dbPool = require("../db/createDBConnectionPool");
 var userSession = require("./userSession");
-var memoryCache = require("memory-cache");
 
 
 //user login with email and password

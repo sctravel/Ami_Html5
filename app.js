@@ -17,7 +17,6 @@ var winston = require('winston');
 var busboyBodyParser = require('busboy-body-parser');
 
 global.fs = require('fs');
-//global.memoryCache = require('memory-cache');
 
 var logFormatter = function(options) {
     return stringUtil.toUTCDateTimeString(new Date()) +' ['+ (options.meta && Object.keys(options.meta).length ? options.meta.loggerName : '' )+'] ' +'['+ options.level.toUpperCase() +'] '+ (options.message ? options.message : '') ;
@@ -70,8 +69,9 @@ app.use(require('stylus').middleware(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'bower_components')));
 app.use(express.static(path.join(__dirname, 'public')));
 
-var globalCache = require('./src/common/globalCache').globalCache;
+var globalCache = require('./src/common/globalCache');
 globalCache.initCache();
+global.memoryCache = globalCache.memoryCache;
 
 if ('development' == app.get('env')) {
     app.use(express.errorHandler());

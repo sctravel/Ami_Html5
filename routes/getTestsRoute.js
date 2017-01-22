@@ -1,35 +1,28 @@
 module.exports = function(app) {
     var userSession = require('../src/login/userSession');
 
-    /* GET test listing. */
+    // GET complete test listing.
     app.get('/test', isLoggedIn, function(req, res) {
-        console.log("########start retrieving tests");
-        console.dir(req.user);
+        logger.info("Start retrieving tests for " + req.user.email);
         userSession.getCompleteTestById(req.user.testId, function (err, results) {
                 if (err) {
                     console.error("end calling tests: "+err);
                     return;
                 }
-                console.dir("end calling tests: " + results);
-
-
                 res.send(results);
         });
-         //res.setHeader('Content-Type', 'application/json');
-         //res.send(JSON.stringify(jsonObject));
+    });
+
+    // GET the unfinished test items in the session and continue
+    app.get('/remainingTest', isLoggedIn, function(req, res) {
+        logger.info("Start retrieving tests for " + req.user.email);
+        userSession.getCompleteTestById(req.user.testId, function (err, results) {
+            if (err) {
+                console.error("end calling tests: "+err);
+                return;
+            }
+            res.send(results);
+        });
     });
 }
 
-//update progress
-//app.get('/tests', function(req, res, next) {
-   // response.end(JSON.stringify(rows));
-//});
-
-//get progress
-
-//update session xml results
-
-//generate session xml results
-//app.get('/tests', function(req, res, next) {
- //   response.end(JSON.stringify(rows));
-//})
