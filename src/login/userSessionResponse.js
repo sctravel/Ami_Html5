@@ -80,9 +80,12 @@ var addAudioResponseToSession = function(itemResponse, sessionId, callback) {
     logger.info("Entering add AudioResponse To SessionStates Table for " + itemResponse.item.type+"."+itemResponse.item.item);
 
     var sqlAddAudioResponseToSession = "insert into sessionstates " +
-        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, score)" +
-        " values (?,?,?,?,?,?,?,?,?,?) ";
-    var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item, itemResponse.itemType, new Date(itemResponse.startTime), new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status, itemResponse.score==null ? -999 : itemResponse.score];
+        " (sessionId, testId, type, item, seq, itemType, startTime, endTime, afilename, status, score)" +
+        " values (?,?,?,?,?,?,?,?,?,?,?) ";
+    var params = [sessionId, itemResponse.item.test, itemResponse.item.type,
+        itemResponse.item.item, itemResponse.item.seq, itemResponse.itemType,
+        new Date(itemResponse.startTime), new Date(itemResponse.endTime),
+        itemResponse.afilename, itemResponse.status, itemResponse.score==null ? -999 : itemResponse.score];
     dbPool.runQueryWithParams(sqlAddAudioResponseToSession, params, function (err, results) {
         if (err) {
             logger.error("addAudioResponseToSession() failed for sessionId: " + sessionId);
@@ -98,12 +101,12 @@ var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId,
     logger.info("Entering add SubAudioResponse To SessionStates Table for " + itemResponse.item.type+"."+itemResponse.item.item);
 
     var sqlAddMicrophoneCheckResponseToSession = "insert into sessionstates " +
-        " (sessionId, testId, type, item, itemType, startTime, endTime, afilename, status, subResponses, snrDB )" +
-        " values (?,?,?,?,?,?,?,?,?,?, ?) ";
+        " (sessionId, testId, type, item, seq, itemType, startTime, endTime, afilename, status, subResponses, snrDB )" +
+        " values (?,?,?,?,?,?,?,?,?,?,?,?) ";
 
     var params = [sessionId, itemResponse.item.test, itemResponse.item.type, itemResponse.item.item,
-        "SubAudioResponse", new Date(itemResponse.startTime), new Date(itemResponse.endTime),
-        itemResponse.afilename, itemResponse.status,
+        itemResponse.item.seq, "SubAudioResponse", new Date(itemResponse.startTime),
+        new Date(itemResponse.endTime), itemResponse.afilename, itemResponse.status,
         JSON.stringify(itemResponse.subresponses), JSON.stringify(itemResponse.snrDB)];
 
     dbPool.runQueryWithParams(sqlAddMicrophoneCheckResponseToSession, params, function (err, results) {

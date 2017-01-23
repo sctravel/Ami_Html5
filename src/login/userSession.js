@@ -9,26 +9,6 @@ var dbPool = require("../db/createDBConnectionPool");
 var _=require('underscore');
 var xmlBuilder = require('../common/xmlBuilder');
 
-var getUnfinishedSession = function(email,callback) {
-    var sqlUnfinishedSession = "select sessionId, testId, email, startTime from sessions where email = ? and endtime is null order by startTime desc";
-    dbPool.runQueryWithParams(sqlUnfinishedSession, [email], function (err, results) {
-        if (err) {
-            logger.error("sqlUnfinishedSession failed for email: " + email);
-            callback(err, null);
-            return;
-        }
-        logger.info("sqlUnfinishedSession - with results - " + results);
-        console.dir(results);
-        if(results==null || results.length==0) {
-            callback(null, null);
-        } else {
-            callback(null, results[0]);
-        }
-    });
-
-}
-exports.getUnfinishedSession = getUnfinishedSession;
-
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
     var sqlGetFinishedItemsInSession = "select * from sessionstates where sessionId = ? order by endTime";
     dbPool.runQueryWithParams(sqlGetFinishedItemsInSession, [unfinishedSessionId], function (err, finishedItems) {
@@ -42,51 +22,40 @@ function getFinishedItemsInSession(unfinishedSessionId, callback) {
 }
 
 //return null or empty array if there's no unFinished Item in Session
-var getUnFinishedTestItemsInSession = function(email, callback) { // or change to sessionID
+var getUnFinishedTestItemsInSession = function(sessionId, testId, callback) { // or change to sessionID
     //get status from sessionstates table to see whether there's any unfinished session
-    // If so
-    getUnfinishedSession(email, function(err, unfinishedSession){
+    var testItems = memoryCache.get(testId);
+    console.warn("number of total items: " + testItems.length + " for sessionId: " + sessionId);
+    getFinishedItemsInSession(sessionId, function(err, finishedItems) {
         if(err) {
-            logger.error("getFinishedTestItemsInSession() failed for email: " + email);
+            logger.error("getFinishedItemsInSession() failed. " + err);
             callback(err, null);
             return;
         }
-        if(unfinishedSession==null) {
-            callback(null, []);
+        if(finishedItems==null || finishedItems.length==0) {
+            logger.info("finishedItems is null or empty");
+            callback(null, testItems);
             return;
         }
-        getFinishedItemsInSession(unfinishedSession.sessionId, function(err, finishedItems) {
+        console.info("#####finished items: " + finishedItems.length);
+        //TODO: filter all tests in testId by the results exception type==2000 (volumn check);
+        var lastFinishedItem = finishedItems[finishedItems.length-1];
+        console.info("last finished item's seq is: " + lastFinishedItem.seq);
+        var remainingItems = _.filter(testItems, function(testItem) {
+            return (testItem.type==2000 &&testItem.item!=2) || testItem.seq > lastFinishedItem.seq;
+        })
+
+        getCompleteTestWithBaseTestItems(remainingItems, function(err, cItems) {
             if(err) {
                 callback(err, null);
                 return;
             }
-            var remainingTestItems = memoryCache.get(unfinishedSession.testId);
-            if(finishedItems==null || finishedItems.length==0) {
-                callback(null, remainingTestItems);
-                return;
-            }
-            //TODO: filter all tests in testId by the results exception type==2000 (volumn/speaker check);
-            callback(null, finishedItems);
-        });
+            callback(null, cItems);
+        })
     });
 }
 exports.getUnFinishedTestItemsInSession = getUnFinishedTestItemsInSession;
 
-var createUserSession = function(session, callback) {
-    var sqlCreateSession = 'insert into sessions ( sessionId, userId, email, starttime, testId) VALUES (?, ?, ?, ?, ?)';
-
-    var params = [session.sessionId, session.userId, session.email, session.startTime, session.testId];
-
-    dbPool.runQueryWithParams(sqlCreateSession, params, function (err, results) {
-        if (err) {
-            logger.error("sqlCreateSession failed for email-"+session.email);
-            callback(err, null);
-            return;
-        }
-        callback(null, constants.services.CALLBACK_SUCCESS);
-    });
-};
-exports.createUserSession = createUserSession;
 
 
 
@@ -109,7 +78,8 @@ var getCompleteTestWithBaseTestItems = function (testItems, callback) {
         }
         var wordSetIndex = 0;
         //May need to select words by level later
-        var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10), allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
+        var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10),
+            allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
 
         dbPool.runQueryWithParams(sqlNameFacePictures,function (err, picResults) {
             if(err) {
@@ -152,7 +122,7 @@ var getCompleteTestWithBaseTestItems = function (testItems, callback) {
                 for (var i = 0; i < testItems.length; i++) {
                     var testItem = testItems[i];
                     if(testItem.type == 2064) {
-                        testItem.wordsBlob = wordSet[wordSetIndex++];
+                        testItem.wordsBlob = wordSet[testItem.item-1];
                     }
                     else if(testItem.type == 2062 && testItem.item==1){
                         testItem.namefacePicBlob = femaleFacesSet;

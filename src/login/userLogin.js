@@ -2,15 +2,48 @@ var stringUtil = require('./../common/stringUtil');
 var constants = require('./../common/constants');
 var emailUtil = require('./../common/emailUtil');
 var Session = require("../model/Session.js")
-var userSession = require("./userSession");
+var dbPool = require("../db/createDBConnectionPool");
 
+var createUserSession = function(session, callback) {
+    var sqlCreateSession = 'insert into sessions ( sessionId, userId, email, starttime, testId) VALUES (?, ?, ?, ?, ?)';
+
+    var params = [session.sessionId, session.userId, session.email, session.startTime, session.testId];
+
+    dbPool.runQueryWithParams(sqlCreateSession, params, function (err, results) {
+        if (err) {
+            logger.error("sqlCreateSession failed for email-"+session.email);
+            callback(err, null);
+            return;
+        }
+        callback(null, constants.services.CALLBACK_SUCCESS);
+    });
+};
+
+var getUnfinishedSession = function(email,callback) {
+    var sqlUnfinishedSession = "select sessionId, testId, email, startTime from sessions where email = ? and endtime is null order by startTime desc";
+    dbPool.runQueryWithParams(sqlUnfinishedSession, [email], function (err, results) {
+        if (err) {
+            logger.error("sqlUnfinishedSession failed for email: " + email);
+            callback(err, null);
+            return;
+        }
+        logger.info("sqlUnfinishedSession - with results - " + results);
+        console.dir(results);
+        if(results==null || results.length==0) {
+            callback(null, null);
+        } else {
+            callback(null, results[0]);
+        }
+    });
+
+}
 
 //user login with email and password
 exports.manualLogin = function(email, pass, callback) {
     var returnObj = {};
     returnObj.isAuthenticated = false;
     if(pass == "ami_qa") { //TODO: here we hard code password
-        userSession.getUnfinishedSession(email, function(err, unfinishedSession){
+        getUnfinishedSession(email, function(err, unfinishedSession){
             if(err) {
                 logger.error(err);
                 callback(err, null);
@@ -27,7 +60,7 @@ exports.manualLogin = function(email, pass, callback) {
                 var testIndex = Math.floor(memoryCache.get(constants.cache.TEST_COUNT) * Math.random());
                 var testId = memoryCache.get(constants.cache.TEST_IDS)[testIndex];
                 returnObj.session = new Session(email, email, testId);
-                userSession.createUserSession(returnObj.session.data, function (err, results) {
+                createUserSession(returnObj.session.data, function (err, results) {
                     if (err) {
                         logger.error("createUserSession() failed for email: " + email);
                         callback(err, null);
@@ -37,7 +70,6 @@ exports.manualLogin = function(email, pass, callback) {
                     callback(null, returnObj);
                 });
             }
-            //create session entry in session table
         })
 
 
