@@ -57,7 +57,7 @@
         </div>
     </div>
 
-    <div style="display: none"><audio id="audioGlobal" src="http://192.168.1.4/assets/Audio/items/2000.1.mp3"></audio></div>
+    <div style="display: none"><audio id="audioGlobal"></audio></div>
 
     <div>
         <div id="videoContent" class="text-center row" style="display: none; width:'60%'; height:'60%'">
@@ -527,6 +527,7 @@
         nextButton.style.display = "none";
         nameFacesContent.style.display = "inline";
         var namesArray = [];
+        console.dir(facePictureFiles)
         for(var p in facePictureFiles) {
             var fileN = facePictureFiles[p];
             document.getElementById("face"+p).src = nameFacesImageFolder + fileN;
@@ -1176,6 +1177,7 @@
         questionList = data;
         navigator.getUserMedia({audio: true, video: false}, function (stream) {
             nextButton.onclick = function () {
+                alert('next');
                 processItem(stream);
             }
         }, function (error) {

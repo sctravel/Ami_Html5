@@ -50,6 +50,29 @@ module.exports = {
                 this.memoryCache.put(testId, testItems);
             })
 
+        });
+        testsUtil.getAllNameFaceNamesFromDB(function(err, names){
+            if(err) {
+                logger.error("initCache failed at getAllNameFaceNamesFromDB: " + err);
+                return;
+            }
+            this.memoryCache.put(constants.cache.NAMEFACES_NAMES, names);
+        });
+
+        testsUtil.getAllNameFacePhotoesFromDB(function (err, photoes) {
+            if(err) {
+                logger.error("initCache failed at getAllNameFacePhotoesFromDB: " + err);
+                return;
+            }
+            this.memoryCache.put(constants.cache.NAMEFACES_PHOTOES, photoes);
+        });
+
+        testsUtil.getAllQuickLitWordsFromDB(function (err, words) {
+            if(err) {
+                logger.error("initCache failed at getAllQuickLitWordsFromDB: " + err);
+                return;
+            }
+            this.memoryCache.put(constants.cache.QUICKLIT_WORDS, words);
         })
     },
 

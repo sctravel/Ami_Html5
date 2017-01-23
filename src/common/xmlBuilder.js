@@ -25,7 +25,7 @@ function getSessionStates(sessionId, callback) {
 
 
 var buildSessionXml = function(session, callback) {
-    var root = xmlbuilder.begin().ele('root',
+    var root = xmlbuilder.begin().ele('session',
         {
             'id': session.sessionId,
             'name':session.testName==null ? 'Unknown' : session.testName,

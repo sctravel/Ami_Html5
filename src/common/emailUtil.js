@@ -1,7 +1,6 @@
 /**
  * Created by xitu on 12/27/2016.
  */
-var logger = require('./logger');
 var nodemailer = require("nodemailer");
 var config = require('config');
 

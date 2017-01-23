@@ -25,6 +25,9 @@ exports.cache = {
     TEST: "TEST",
     TEST_IDS: "TEST_IDS",
     TEST_COUNT: "TEST_COUNT",
+    NAMEFACES_NAMES: "NAMEFACES_NAMES",
+    NAMEFACES_PHOTOES: "NAMEFACES_PHOTOES",
+    QUICKLIT_WORDS: "QUICKLIT_WORDS",
     timeoutInMilliSeconds: 86400000 // 1 day;
 }
 

@@ -15,10 +15,11 @@ var pool = mysql.createPool({
     host     : dbOptions.host,
     user     : dbOptions.user,
     password :  "sctravel",
-    database : dbOptions.database
+    database : dbOptions.database,
+    waitForConnections : false
 });
 
-exports.connection = mysql.createConnection(dbOptions);
+//exports.connection = mysql.createConnection(dbOptions);
 
 
 /**
@@ -28,22 +29,25 @@ exports.connection = mysql.createConnection(dbOptions);
  * @param callback: callback function to deal with the result
  */
 exports.runQueryWithParams = function(sql, params, callback) {
+    console.log("start runQueryWithParams");
 
     pool.getConnection(function(err,conn){
+        console.log("got connection in runQueryWithParams");
         if(err){
-            logger.error("Get connection from pool failed in runQueryWithParams.");
+            logger.error("Get connection from pool failed in runQueryWithParams." + err);
             callback(err,null);
             return;
         }
         conn.query(sql, params, function(err,results){
             if(err){
-                logger.error("Error in runQueryWithParams with SQL: "+sql+" and params: "+params);
+                logger.error("Error in runQueryWithParams with SQL: "+sql+" and params: "+params + "; " + err);
                 conn.release();
                 callback(err,null);
                 return;
             }
-            callback(null,results);
+            console.log("got results in runQueryWithParams");
             conn.release();
+            callback(null,results);
         })
     })
 }
@@ -67,8 +71,8 @@ exports.runQuery = function(sql, callback) {
                 callback(err,null);
                 return;
             }
-            callback(null,results);
             conn.release();
+            callback(null,results);
         })
     })
 }

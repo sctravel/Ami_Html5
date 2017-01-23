@@ -17,10 +17,10 @@ function getFinishedItemsInSession(unfinishedSessionId, callback) {
             callback(err, null);
             return;
         }
+        logger.info("#####finished items: " + finishedItems.length);
         callback(null, finishedItems);
     });
 }
-
 //return null or empty array if there's no unFinished Item in Session
 var getUnFinishedTestItemsInSession = function(sessionId, testId, callback) { // or change to sessionID
     //get status from sessionstates table to see whether there's any unfinished session
@@ -37,10 +37,10 @@ var getUnFinishedTestItemsInSession = function(sessionId, testId, callback) { //
             callback(null, testItems);
             return;
         }
-        console.info("#####finished items: " + finishedItems.length);
+        logger.info("#####finished items: " + finishedItems.length);
         //TODO: filter all tests in testId by the results exception type==2000 (volumn check);
         var lastFinishedItem = finishedItems[finishedItems.length-1];
-        console.info("last finished item's seq is: " + lastFinishedItem.seq);
+        logger.info("last finished item's seq is: " + lastFinishedItem.seq);
         var remainingItems = _.filter(testItems, function(testItem) {
             return (testItem.type==2000 &&testItem.item!=2) || testItem.seq > lastFinishedItem.seq;
         })
@@ -60,40 +60,22 @@ exports.getUnFinishedTestItemsInSession = getUnFinishedTestItemsInSession;
 
 
 var getCompleteTestWithBaseTestItems = function (testItems, callback) {
+    console.log("Entering getCompleteTestWithBaseTestItems() with testItems of " + testItems.length);
     if(testItems==null || testItems.length<1) {
         var err = "getCompleteTestWithBaseTestItems() failed. testItems is null or empty.";
         logger.error(err)
         callback(err, null);
     }
 
-    var sqlQuicklits = 'select * from quicklits ORDER BY RAND()';
-    var sqlNameFacePictures = 'select subjectid, filename, feeling from photoes';
-    var sqlNameFaceNames = 'SELECT name, gender, nameset FROM names';
-
-    dbPool.runQueryWithParams(sqlQuicklits,function (err, allWordsResults) {
-        if(err) {
-            console.error(err);
-            callback(err,null);
-            return;
-        }
+    var allWordsResults = memoryCache.get(constants.cache.QUICKLIT_WORDS);
         var wordSetIndex = 0;
         //May need to select words by level later
         var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10),
             allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
 
-        dbPool.runQueryWithParams(sqlNameFacePictures,function (err, picResults) {
-            if(err) {
-                logger.error(err);
-                callback(err,null);
-                return;
-            }
+                var picResults=memoryCache.get(constants.cache.NAMEFACES_PHOTOES);
 
-            dbPool.runQuery(sqlNameFaceNames,function (err, nameResults) {
-                if(err) {
-                    logger.error(err);
-                    callback(err,null);
-                    return;
-                }
+                var nameResults = memoryCache.get(constants.cache.NAMEFACES_NAMES);
 
                 var femaleFacesSet = ["FE1_Neutral.jpg", "FE2_Neutral.jpg", "FE3_Neutral.jpg", "FE4_Neutral.jpg"];
                 var maleFacesSet = ["MA1_Neutral.jpg", "MA2_Neutral.jpg", "MA3_Neutral.jpg", "MA4_Neutral.jpg"];
@@ -137,9 +119,6 @@ var getCompleteTestWithBaseTestItems = function (testItems, callback) {
                     }
                 }
                 callback(null, testItems);
-            });
-        });
-    });
 }
 exports.getCompleteTestWithBaseTestItems = getCompleteTestWithBaseTestItems;
 
