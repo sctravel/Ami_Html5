@@ -136,7 +136,7 @@ app.get('/interview', isLoggedIn, function (req,res){
     res.render('interview',{user: req.user});
 });
 
-app.get('/questionSet', function(req, res){
+app.get('/api/questionSet', function(req, res){
     console.info("####################")
     var questionSet = JSON.parse(fs.readFileSync('./document/questionSet.json', 'utf8'));
     res.send(questionSet);

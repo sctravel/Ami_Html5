@@ -235,8 +235,9 @@
                 console.error(errorMessage);
                 JL("client").error(errorMessage);
             } else {
-                JL("client").error("Upload picture response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
+                JL("client").info("Upload picture response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
                 //end the interview
+                JL("client").info("Interview completed.")
                 window.location.href="/";
             }
         })
@@ -309,7 +310,6 @@
                 break;
             case 2032:
                 processTrackTap(stream, item);
-                //processItem(stream);
                 break;
             case 2040:
                 processRetellStory(stream, item);
@@ -675,7 +675,6 @@
                 itemResponse.latency = 0; //"dummy" for now
                 //itemResponse.scoreInfo = scoreInfo;
                 postItemResponse(stream);
-                //processItem(stream);
             });
 
         }
@@ -698,7 +697,7 @@
     }
     function playAudioInRetellStory(audioList, rsindex, stream, item){
         if(rsindex>=audioList.length) {
-            processItem(stream);
+            postItemResponse(stream);
             return;
         }
         JL("client").info("Entering  playAudioInRetellStory for " +item.type+"."+item.item );
@@ -815,7 +814,7 @@
             itemResponse.startTime = responseStartTime.toUTCString();
             itemResponse.endTime = responseEndTime.toUTCString();
 
-            processItem(stream);
+            postItemResponse(stream);
             return;
         }
         JL("client").info("Entering playAudioInDescribeVideo for " +item.type+"."+item.item );
@@ -1177,7 +1176,6 @@
         questionList = data;
         navigator.getUserMedia({audio: true, video: false}, function (stream) {
             nextButton.onclick = function () {
-                alert('next');
                 processItem(stream);
             }
         }, function (error) {

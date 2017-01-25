@@ -32,18 +32,18 @@ var getUnFinishedTestItemsInSession = function(sessionId, testId, callback) { //
             callback(err, null);
             return;
         }
+        var remainingItems = testItems;
         if(finishedItems==null || finishedItems.length==0) {
             logger.info("finishedItems is null or empty");
-            callback(null, testItems);
-            return;
+        } else {
+            logger.info("#####finished items: " + finishedItems.length);
+            //TODO: filter all tests in testId by the results exception type==2000 (volumn check);
+            var lastFinishedItem = finishedItems[finishedItems.length-1];
+            logger.info("last finished item's seq is: " + lastFinishedItem.seq);
+            remainingItems = _.filter(testItems, function(testItem) {
+                return (testItem.type==2000 &&testItem.item!=2) || testItem.seq > lastFinishedItem.seq;
+            })
         }
-        logger.info("#####finished items: " + finishedItems.length);
-        //TODO: filter all tests in testId by the results exception type==2000 (volumn check);
-        var lastFinishedItem = finishedItems[finishedItems.length-1];
-        logger.info("last finished item's seq is: " + lastFinishedItem.seq);
-        var remainingItems = _.filter(testItems, function(testItem) {
-            return (testItem.type==2000 &&testItem.item!=2) || testItem.seq > lastFinishedItem.seq;
-        })
 
         getCompleteTestWithBaseTestItems(remainingItems, function(err, cItems) {
             if(err) {
@@ -142,12 +142,13 @@ var markSessionEnd = function(userSession, callback) {
     var endtime = new Date();
     userSession.endTime = endtime;
     userSession.testName = memoryCache.get(userSession.testId)[0].testName;
-    dbPool.runQueryWithParams(sqlMarkSessionEnd, [endtime, userSession.sessionId], function (err, results) {
+    dbPool.runQueryWithParams(sqlMarkSessionEnd, [userSession.endTime, userSession.sessionId], function (err, results) {
         if (err) {
             logger.error('sqlMarkSessionEnd failed for session ' + userSession.sessionId);
             callback(err, null);
             return;
         }
+        console.dir(userSession);
         xmlBuilder.buildSessionXml(userSession, function(err, xmlString){
             if(err) {
                 logger.error("Build Session XML error. " + err);
