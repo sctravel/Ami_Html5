@@ -19,40 +19,20 @@
     <link rel="stylesheet" href="/css/audioCss.css">
     <link rel="stylesheet" href="/css/trackTap.css">
     <style>
-        .col-centered{
-            float: none;
-            margin: 0 auto;
-        }
-        .clearfix:after {
-            content: "";
-            display: table;
-            clear: both;
-        }
-        .responsive {
-            padding: 0 6px;
-            float:left;
-            width: 49.99999%;
-        }
 
-        #analyser {
-            display: inline-block;
-            background: #000000;
-            width:100%;
-            min-height: 15px;
-            max-height:50px;
-            box-shadow: 0px 0px 10px #000000;
-        }
+
+
 
     </style>
 </head>
-<body>
+<body >
 
-<div class="container">
+<div >
 
     <div id="top" class="row panel-body ">
-        <div id="cameraDiv" class="col-lg-2" style="width:100%; height:100%;">
-        </div>
-        <div id="timer_div" class="col-lg-offset-7 col-lg-1">
+        <div id="cameraDiv" class="col-xs-2"></div>
+        <div id="fill" class="col-xs-7"></div>
+        <div id="timer_div" class="col-xs-1">
             <% include partials/timer.ejs %>
         </div>
     </div>
@@ -63,30 +43,46 @@
         <div id="videoContent" class="text-center row" style="display: none; width:'60%'; height:'60%'">
             <video id="video"></video>
         </div>
-        <div id="nameFacesContent" class="text-center row" style="color : white; display: none;">
-                <div id="4faces" class="text-center row col-lg-6 col-lg-offset-3" >
-                    <div class="row">
-                        <div class="img col-lg-3">
-                            <img id="face0"  width="100%" height="100%" >
-                            <div style="color:white;text-align: center" id="name0"></div>
-                        </div>
-                        <div class="img col-lg-3">
-                            <img id="face1" width="100%" height="100%"  >
-                            <div style="color:white;text-align: center" id="name1"></div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="img col-lg-3">
-                            <img id="face2"  width="100%" height="100%" >
-                            <div style="color:white;text-align: center" id="name2"></div>
-                        </div>
-                        <div class="img col-lg-3">
-                            <img id="face3" width="100%" height="100%" >
-                            <div style="color:white;text-align: center" id="name3"></div>
+        <div id="nameFacesContent" class="text-center" style="color : white;  display: none;" >
 
+
+            <div id="4faces" style="color : white;  display: none; justify-content: center;align-items: center;">
+                <div class="row">
+                    <div class="responsive col-lg-6 ">
+                        <div class="img">
+                            <img id="face0" class="face-left">
+                            <div class="name-left" id="name0"></div>
                         </div>
                     </div>
+                    <div class="responsive col-lg-6">
+                        <div class="img">
+                            <img id="face1" class="face-right">
+                            <div class="name-right" id="name1"></div>
+                        </div>
+                    </div>
+
                 </div>
+
+                <div class="row">
+                    <div class="responsive col-lg-6 ">
+                        <div class="img">
+                            <img id="face2"  class="face-left">
+                            <div class="name-left" id="name2"></div>
+                        </div>
+                    </div>
+                    <div class="responsive col-lg-6">
+                        <div class="img">
+                            <img id="face3" class="face-right">
+                            <div class="name-right" id="name3"></div>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+
+
+
                 <div id="testFaceDiv" class="text-center row col-lg-6 col-lg-offset-3" style="display: none;">
                     <div class="img col-lg-6">
                         <img id="testFace" width="70%" height="70%"  >
@@ -96,55 +92,55 @@
         <div id="trackTap" style="display: none"  class="text-center row ">
             <table class="col-lg-6 col-lg-offset-2">
                 <tr class="row"  >
-                    <td id="td[0]" class="col-lg-3" onclick="hit(0)"></td>
-                    <td id="td[1]" class="col-lg-3" onclick="hit(1)"></td>
+                    <td id="td[0]" class="col-xs-3" onclick="hit(0)"></td>
+                    <td id="td[1]" class="col-xs-3" onclick="hit(1)"></td>
                 </tr>
                 <tr  class="row"  >
-                    <td id="td[2]" class="col-lg-3" onclick="hit(2)"></td>
-                    <td id="td[3]" class="col-lg-3" onclick="hit(3)"></td>
+                    <td id="td[2]" class="col-xs-3" onclick="hit(2)"></td>
+                    <td id="td[3]" class="col-xs-3" onclick="hit(3)"></td>
                 </tr>
                 <tr  class="row" >
-                    <td id="td[4]" class="col-lg-3" onclick="hit(4)"></td>
-                    <td id="td[5]" class="col-lg-3" onclick="hit(5)"></td>
+                    <td id="td[4]" class="col-xs-3" onclick="hit(4)"></td>
+                    <td id="td[5]" class="col-xs-3" onclick="hit(5)"></td>
                 </tr>
             </table>
         </div>
-        <div  id="textContent" class ="row text-center" style=" padding-top:20%; display: none;width:100%; height:100% ;color: white; font: Arial; font-size: 30px; font-weight: bold;"  >
+        <div  id="textContent" class ="row text-center"   >
             <!-- Volume checker-->
                 Hear This ?
         </div>
         <div id="textShowAll" >
             <div  class="row" style="color:green">
-                <div id="word0" style="width:50%; text-align: center;" onclick=toggleHighlight(this)><b></b></div>
+                <div id="word0" class="word-left" onclick=toggleHighlight(this)><b></b></div>
             </div>
             <div  class="row" style="  color:green">
-                <div  id="word1" style="width:50%;float: right;text-align: center" onclick=toggleHighlight(this)><b></b></div>
+                <div  id="word1" class="word-right" onclick=toggleHighlight(this)><b></b></div>
             </div>
             <div  class="row" style="color:green">
-                <div  id="word2" style="width:50%; text-align: center" onclick=toggleHighlight(this)><b></b></div>
+                <div  id="word2" class="word-left" onclick=toggleHighlight(this)><b></b></div>
             </div>
             <div  class="row" style="  color:green">
-                <div  id="word3" style="width:50%;float: right;text-align: center" onclick=toggleHighlight(this)><b></b></div>
+                <div  id="word3" class="word-right" onclick=toggleHighlight(this)><b></b></div>
             </div>
             <div  class="row" style="  color:green">
-                <div  id="word4" style="width:50%;text-align: center" onclick=toggleHighlight(this)><b></b></div>
+                <div  id="word4" class="word-left" onclick=toggleHighlight(this)><b></b></div>
             </div>
             <div  class="row" style="  color:green">
-                <div  id="word5" style="width:50%;float: right;text-align: center" onclick=toggleHighlight(this)><b></b></div>
+                <div  id="word5" class="word-right" onclick=toggleHighlight(this)><b></b></div>
             </div>
         </div>
     </div>
     <div id="my_result"></div>
 
+
     <div id="bottom">
-        <div id="microphone"  class="row" >
-            <canvas id="analyser"  ></canvas>
-        </div>
+
+        <canvas id="analyser"  ></canvas>
+
         <div  id="footer" class="row" >
             <button id="nextButton" class="btn-primary btn-lg"style="height:100%;">Click Here To Start</button>
         </div>
     </div>
-
 
 
 
@@ -1038,7 +1034,7 @@
     function processMicrophoneChecker(stream, item) {
         var source = audioFolder + item.audio;
         audioGlobal.src = source;
-
+console.log("processMicrophoneChecker");
         JL("client").info("Entering processMicrophoneChecker for " +item.type+"."+item.item );
         instr.innerHTML="Name and Location";
         instr.style.display = "inline";
