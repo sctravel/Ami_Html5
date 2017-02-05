@@ -8,6 +8,7 @@
     <link rel="stylesheet" href="/css/main.css">
     <script src="/jquery/dist/jquery.min.js"></script>
     <script src="/bootstrap/dist/js/bootstrap.min.js"></script>
+    <script src="/underscore/underscore.js"></script>
     <script src="/jsnlog.js/jsnlog.js"></script>
     <script src="/webcamjs/webcam.js"></script>
     <script src="js/tracktap.js"></script>
@@ -41,7 +42,7 @@
 
     <div>
         <div id="videoContent" class="text-center row" style="display: none; width:'60%'; height:'60%'">
-            <video id="video"></video>
+            <video id="video" preload="auto"></video>
         </div>
         <div id="nameFacesContent" class="text-center" style="color : white;  display: none;" >
 
@@ -149,7 +150,7 @@
 <script src="js/camera.js"></script>
 
 <script>
-    var websiteUrl = "https://54.187.148.253:3000/";
+    var websiteUrl = "https://192.168.1.9:3000/";
     var audioFolder = websiteUrl + "/assets/Audio/items/"
     var videoFolder = websiteUrl + "/assets/Video/"
     var imageFolder = "assets/Images/"
@@ -216,9 +217,10 @@
                 JL("client").error(errorMessage);
             } else {
                 JL("client").error("Upload response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
-                processItem(stream);
+                //processItem(stream);
             }
         })
+        processItem(stream);
     }
 
     function postPictureResponseAndMarkEnd() {
@@ -758,8 +760,7 @@
         var audioList = item.audio.split(':');
         var vindex = 0;
         videoContent.style.display="inline";
-        video.src = videoFolder + item.video;
-        video.load();
+
         audioGlobal.src = audioFolder+audioList[vindex];
         JL('client').info("Start playing audio " + audioList[vindex]);
 
@@ -918,16 +919,17 @@
         itemResponse.itemType = "QuickLitResponse";
         itemResponse.item = item;
         itemResponse.words = [];
+        var intervalId = null;
         audioGlobal.onended = function() {
             JL('client').info("End playing audio " + audioList[0]);
             //show the word one by one
             var showWord = function() {
-                if(numWords!=wordsBlob.length) stopTimer();
+                //if(numWords!=wordsBlob.length) stopTimer();
                 console.log("numWords: "+numWords);
                 --numWords;
 
                 if(numWords<0) {
-                    JL('client').info("Start tapping all real words in QuickLit.");
+                    JL('client').info("Start tapping all real words in QuickLit at time：" + (new Date()-responseStartTime)/1000);
                     instr.style.display = "none";
                     var textShowAll =document.getElementById("textShowAll");
                     textShowAll.style.display="inline";
@@ -935,7 +937,8 @@
                        var word_slot =  document.getElementById("word" + i);
                         word_slot.innerHTML= wordsBlob[i].string;
                     }
-                    stopTimer();
+                    //stopTimer();
+                    clearInterval(intervalId);
                     stopRecording();
                     audioGlobal.src = audioFolder+audioList[1];
                     JL('client').info("Start playing audio "+audioList[1]);
@@ -974,6 +977,8 @@
                         }
                     }
                 } else {
+                    JL('client').info("Showing word " + (wordsBlob.length-numWords) + " at time：" + (new Date()-responseStartTime)/1000);
+
                     var wordBlob = wordsBlob[wordsBlob.length-numWords-1];
                     var wordShown = wordBlob.string;
                     instr.innerHTML = wordShown;
@@ -993,10 +998,14 @@
 
                     JL('client').info("Start showing word: "+wordShown);
                     instr.style.display = "inline";
-                    startTimer(0, item.mtimeout, null, showWord);
+                    //startTimer(0, item.mtimeout, null, showWord);
                 }
+
             }
+            JL('client').info("Showing word at interval: " + item.mtimeout);
             showWord();
+            intervalId = setInterval(showWord, item.mtimeout*1000);
+            //showWord();
             gotStream(stream);
             startRecording();
             JL('client').info("Start recording during word show in QuickLit.");
@@ -1034,7 +1043,6 @@
     function processMicrophoneChecker(stream, item) {
         var source = audioFolder + item.audio;
         audioGlobal.src = source;
-console.log("processMicrophoneChecker");
         JL("client").info("Entering processMicrophoneChecker for " +item.type+"."+item.item );
         instr.innerHTML="Name and Location";
         instr.style.display = "inline";
@@ -1080,7 +1088,7 @@ console.log("processMicrophoneChecker");
             itemSubResponse.extraInfo='the No. 2 recording';
 
             //startRecording();
-            startTimer(0, item.mTimeout, null, function() {
+            startTimer(0, item.mtimeout, null, function() {
                 stopRecording();
                 JL('client').info("Stop recording for microphone checker. Playing audio 2000.2.mp3.");
                 instr.style.display = "none";
@@ -1172,6 +1180,15 @@ console.log("processMicrophoneChecker");
         questionList = data;
         navigator.getUserMedia({audio: true, video: false}, function (stream) {
             nextButton.onclick = function () {
+                var videoItem = _.filter(data,function(item) {
+                    return item.type==2023;
+                });
+                if(videoItem.length>0) { //Assume there's only one video item;
+                    JL('client').info("Preloading video: " + videoItem[0].video);
+                    video.src = videoFolder + videoItem[0].video;
+                    video.load();
+                }
+
                 processItem(stream);
             }
         }, function (error) {

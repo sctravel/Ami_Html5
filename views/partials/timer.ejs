@@ -8,13 +8,16 @@
 <script>
     var timerId = null;
     var timer = document.getElementById('timer')
-
+    var timerStartTime = null;
+    var timerEndTime = null;
     function stopTimer() {
         timer.style.display = "none";
-        //if(timerId !=null) {
-            clearTimeout(timerId);
-            timerId = null;
-        //}
+        clearInterval(timerId);
+        timerId = null;
+        timerEndTime = new Date();
+        var duration = (timerStartTime-timerEndTime)/1000;
+        console.log("Stop timer after " + duration + " seconds at " + timerEndTime);
+        JL("client").info("Stop timer after " + duration + " seconds at " + timerEndTime);
     }
 
     function startTimer(initTimeout, maxTimeout, initTimeoutFunction, maxTimeoutFunction) {
@@ -23,23 +26,22 @@
         var loader = document.getElementById('loader')
         var border = document.getElementById('border')
         var π = Math.PI
-        var α = 0
-            , t = maxTimeout/ 2 / 360 * 1000; //draw 1 degree every t milli-seconds
+        var α = 0;
+        var t = maxTimeout/360 * 1000 * 3; //draw 3 degree every t milli-seconds
         var initA = initTimeout/maxTimeout*360;
         var initExecuted = false;
-
-        (function draw() {
-            α++;
+        timerStartTime = new Date();
+        console.log("Start timer with initTimeout: "+initTimeout+", and maxTimeout: " + maxTimeout + " at " + timerStartTime);
+        JL("client").info("Start timer with initTimeout: "+initTimeout+", and maxTimeout: " + maxTimeout+ " at " + timerStartTime);
+        function draw() {
+            α+=3;
             if(initTimeout>0 && α > initA && !initExecuted) {
                initTimeoutFunction();
-                initExecuted = true;
+               initExecuted = true;
             }
             if (α > 360) {
-                if(timerId!=null) {
-                    clearTimeout(timerId);
-                    timerId = null;
-                }
-             maxTimeoutFunction();
+                stopTimer();
+                maxTimeoutFunction();
                 return;
             }
             //α %= 360;
@@ -52,11 +54,13 @@
                 + x + ' '
                 + y + ' z';
 
-
             loader.setAttribute('d', anim);
             border.setAttribute('d', anim);
+        };
+        draw();
+        setTimeout(function(){
+            timerId = setInterval(draw, t);// Redraw
+        }, t);
 
-           timerId = setTimeout(draw, t); // Redraw
-        })();
     }
 </script>
