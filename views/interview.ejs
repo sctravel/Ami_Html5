@@ -177,6 +177,7 @@
     var responseStartTime, responseEndTime, subResponseStartTime, subResponseEndTime, subResponseStart,subResponseDuration;
     var index = -1;
     var pictureId = 0;
+    var picStartTime = null;
     var picItemResponse = {};
     var interviewStartTime, interviewEndTime;
     var audioGlobal = document.getElementById('audioGlobal');
@@ -272,7 +273,7 @@
                     picItemResponse.item = item;
                     picItemResponse.pictures=[];
                     picItemResponse.itemType="CameraPicture";
-                    picItemResponse.startTime = (new Date()).toUTCString();
+                    picItemResponse.startTime = (picStartTime == null ? (new Date()).toUTCString() : picStartTime);
                     picItemResponse.afilename = "";
                     takePictureIntervalInMilliSeconds = item.mtimeout*1000;
                     interviewStartTime = new Date();
@@ -1178,6 +1179,14 @@
 
     $.get("/api/remainingTest", function(data) {
         questionList = data;
+        if(data.length>2 && data[2].type!=2000) {
+            $.get("/api/currentPictureId", function(result) {
+                if(result!='failed' && result!='') {
+                    pictureId = result.maxPictureId;
+                    picStartTime = result.minStartTime;
+                }
+            });
+        }
         navigator.getUserMedia({audio: true, video: false}, function (stream) {
             nextButton.onclick = function () {
                 var videoItem = _.filter(data,function(item) {

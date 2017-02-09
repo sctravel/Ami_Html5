@@ -9,6 +9,25 @@ var dbPool = require("../db/createDBConnectionPool");
 var _=require('underscore');
 var xmlBuilder = require('../common/xmlBuilder');
 
+
+function getCurrentSessionPictureId(sessionId, callback) {
+    var sqlGetPictureId = 'select COUNT(1) AS maxPictureId, MIN(takenTime) AS minStartTime from sessionstates_camerapicture where sessionId = ?'
+    dbPool.runQueryWithParams(sqlGetPictureId, [sessionId], function (err, result) {
+        if (err) {
+            logger.error("getCurrentSessionPictureId() failed for sessionId: " + sessionId);
+            callback(err, null);
+            return;
+        }
+        if(result==null || result.length==0) {
+            callback(null, '');
+            return;
+        }
+
+        callback(null, {maxPictureId: result[0].maxPictureId, minStartTime: result[0].minStartTime.toUTCString()});
+    });
+}
+exports.getCurrentSessionPictureId = getCurrentSessionPictureId;
+
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
     var sqlGetFinishedItemsInSession = "select * from sessionstates where sessionId = ? order by endTime";
     dbPool.runQueryWithParams(sqlGetFinishedItemsInSession, [unfinishedSessionId], function (err, finishedItems) {
@@ -135,6 +154,8 @@ var getCompleteTestById = function(testId, callback) {
 }
 
 exports.getCompleteTestById = getCompleteTestById;
+
+
 
 
 var markSessionEnd = function(userSession, callback) {
