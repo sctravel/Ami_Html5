@@ -73,7 +73,7 @@ module.exports = function(app) {
             res.send(result);
         })
     })
-    /*app.get('/api/xml', function(req, res) {
+    app.get('/api/xml', function(req, res) {
 
         var session = {};
         session.testId=3;
@@ -102,6 +102,6 @@ module.exports = function(app) {
         });
 
 
-    })*/
+    })
 }
 

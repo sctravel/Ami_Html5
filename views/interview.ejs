@@ -19,12 +19,6 @@
 
     <link rel="stylesheet" href="/css/audioCss.css">
     <link rel="stylesheet" href="/css/trackTap.css">
-    <style>
-
-
-
-
-    </style>
 </head>
 <body >
 
@@ -45,8 +39,6 @@
             <video id="video" preload="auto"></video>
         </div>
         <div id="nameFacesContent" class="text-center" style="color : white;  display: none;" >
-
-
             <div id="4faces" style="color : white;  display: none; justify-content: center;align-items: center;">
                 <div class="row">
                     <div class="responsive col-lg-6 ">
@@ -63,7 +55,6 @@
                     </div>
 
                 </div>
-
                 <div class="row">
                     <div class="responsive col-lg-6 ">
                         <div class="img">
@@ -77,18 +68,13 @@
                             <div class="name-right" id="name3"></div>
                         </div>
                     </div>
-
                 </div>
             </div>
-
-
-
-
-                <div id="testFaceDiv" class="text-center row col-lg-6 col-lg-offset-3" style="display: none;">
-                    <div class="img col-lg-6">
-                        <img id="testFace" width="70%" height="70%"  >
-                    </div>
+            <div id="testFaceDiv" class="text-center row col-lg-6 col-lg-offset-3" style="display: none;">
+                <div class="img col-lg-6">
+                    <img id="testFace" width="70%" height="70%"  >
                 </div>
+            </div>
         </div>
         <div id="trackTap" style="display: none"  class="text-center row ">
             <table class="col-lg-6 col-lg-offset-2">
@@ -376,6 +362,11 @@
 
             startTimer(item.itimeout, item.mtimeout,
                 function () {
+                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
+                    else nextButton.innerHTML = 'Next';
+                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
+                    else nextButton.innerHTML = 'Next';
+
                     nextButton.style.display = "inline";
                     nextButton.onclick = function () {
                         JL("client").info("End Recording for question " + audioList[aindex] + ". Next button Clicked. ");
@@ -453,6 +444,10 @@
 
             startTimer(item.itimeout, item.mtimeout,
                 function(){
+
+                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
+                    else nextButton.innerHTML = 'Next';
+
                     nextButton.style.display="inline";
                     nextButton.onclick = function() {
                         JL('client').info("End Recording for No."+(aindex+1)+" question of " + item.type+"."+item.item +". Next button clicked.");
@@ -589,6 +584,9 @@
 
                             startTimer(item.itimeout, item.mtimeout,
                                 function(){
+                                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
+                                    else nextButton.innerHTML = 'Next';
+
                                     nextButton.style.display = "inline";
                                     nextButton.onclick = function () {
                                         JL('client').info("End timer/recording for interviewer to say the person's feeling. Next button touched.");
@@ -719,6 +717,8 @@
                 JL('client').info("Start Recording in RetellStory");
                 startTimer(item.itimeout, item.mtimeout,
                     function () {
+                        if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
+                        else nextButton.innerHTML = 'Next';
                         nextButton.style.display = "inline";
                         nextButton.onclick = function () {
                             JL('client').info("End Recording in RetellStory. Next button touched.");
@@ -780,9 +780,12 @@
             gotStream(stream);
             startRecording();
             JL('client').info("Start playing video " + item.video+" and recording.");
-            video.onended = function() {
+            var videoTimeout = video.duration + item.mtimeout;
+            video.play();
+            startTimer(0, videoTimeout, null, function() { //video.onend ?
                 analyser.style.display="none";
                 JL('client').info("End playing video " + item.video+" and recording.");
+                stopTimer();
                 pauseRecording();
 
                 subResponseEndTime = new Date();
@@ -796,8 +799,8 @@
 
 
                 playAudioInDescribeVideo(audioList, vindex+1, stream, item);
-            }
-            video.play();
+            })
+
         };
         audioGlobal.play();
 
@@ -834,6 +837,8 @@
             resumeRecording();
             startTimer(item.itimeout, item.mtimeout,
                 function(){
+                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
+                    else nextButton.innerHTML = 'Next';
                     nextButton.style.display="inline";
                     nextButton.onclick = function() {
                         JL('client').info("End recording for " + audioList[vindex]+". Next button touched.");

@@ -15,14 +15,17 @@ var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
 var recIndex = 0;
+var checkSilenceIntervalId=null;
 var uploadURL = "/upload/audio/";
 var isRecording = false, isAnalysing = false;
-
+var didFuncIfSilenceAfterSpeech = false;
 var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95;
 var noiseLevel, signalLevel;
 var latestSNR = 0;
 var currentMaxAudioPoint = 0;
 var audioData = [];
+var audioDataStartIndex = 0;
+var audioDataAverageForSeconds = [];
 var currentMaxAudioInDB = 0;
 var audioLevel;
 var audioLevelOptions = {
@@ -42,6 +45,17 @@ var blobToBase64 = function(blob, cb) {
     };
     reader.readAsDataURL(blob);
 };
+
+function hasUserStartedTalking(audioData) {
+    if(didFuncIfSilenceAfterSpeech) return true;
+    var len = audioData.length;
+    var sum = 0;
+    for (var i = audioDataStartIndex; i < len; ++i) {
+        sum += audioData[i];
+    }
+    var avg = sum/len;
+    return avg >= signalThreshold ? true : false;
+}
 
 function evaluateAudio(audioData, lowSignal, minSNR) {
     if(audioData.length<10) {
@@ -72,30 +86,61 @@ function stopAnalysing() {
     currentMaxAudioPoint=0;
 }
 
-function startRecording() {
+function doFuncIfSilenceAfterSpeech(silenceTime, funcAfterSilence) {
+    if(silenceTime==0) return;
+    if(!hasUserStartedTalking()) return;
+
+    var numDataPoints = silenceTime * 6000;
+    var currentLen = audioData.length;
+    numDataPoints = numDataPoints > currentLen ? currentLen : numDataPoints;
+    var sum = 0;
+    for(var i=currentLen-1; i>=0&&i>=currentLen-numDataPoints;--i) {
+        sum += audioData[i];
+    }
+    var avg = sum/numDataPoints;
+    var isSilence =  avg >= signalThreshold ? false : true;
+    if(isSilence) {
+        didFuncIfSilenceAfterSpeech = true;
+        funcAfterSilence();
+    }
+
+}
+
+//around 6000 data point in audio data per second
+function startRecording(silenceTime, funcAfterSilence) {
     console.log("Start recording");
     if (!audioRecorder)
         return;
     audioRecorder.clear();
     audioRecorder.record();
     isRecording = true;
+    didFuncIfSilenceAfterSpeech = false;
     startAnalysing();
-
+    if(silenceTime>0) {
+        checkSilenceIntervalId = setInterval(doFuncIfSilenceAfterSpeech,500, silenceTime, funcAfterSilence);
+    }
 }
 
 function pauseRecording(){
     audioRecorder.stop();
+    clearInterval(checkSilenceIntervalId);
     isRecording = false;
     stopAnalysing();
 }
 
-function resumeRecording(){
+function resumeRecording(silenceTime, funcAfterSilence){
+    audioDataStartIndex = audioData.length;
+    didFuncIfSilenceAfterSpeech = false;
     audioRecorder.record();
     isRecording = true;
     startAnalysing();
+    if(silenceTime>0) {
+        checkSilenceIntervalId = setInterval(doFuncIfSilenceAfterSpeech,500, silenceTime, funcAfterSilence);
+    }
 }
 
 function stopRecording() {
+    clearInterval(checkSilenceIntervalId);
     var flac_encoder_worker = new Worker('js/recorderjs/flac/EmsWorkerProxy.js');
     console.log("stop recording")
 
@@ -165,8 +210,8 @@ function updateAnalysers(time) {
         var BAR_WIDTH = 1;
         var numBars = Math.round(canvasWidth / SPACING);
         var freqByteData = new Uint8Array(analyserNode.frequencyBinCount);
-        var freqFloatData = new Float32Array(analyserNode.frequencyBinCount); // Float32Array should be the same length as the frequencyBinCount
-        analyserNode.getFloatFrequencyData(freqFloatData); // fill the Float32Array with data returned from getFloatFrequencyData()
+        //var freqFloatData = new Float32Array(analyserNode.frequencyBinCount); // Float32Array should be the same length as the frequencyBinCount
+        //analyserNode.getFloatFrequencyData(freqFloatData); // fill the Float32Array with data returned from getFloatFrequencyData()
         analyserNode.getByteFrequencyData(freqByteData);
 
         analyserContext.clearRect(0, 0, canvasWidth, canvasHeight);
@@ -215,8 +260,6 @@ function gotStream(stream) {
     realAudioInput = audioContext.createMediaStreamSource(stream);
     audioInput = realAudioInput;
     audioInput.connect(inputPoint);
-
-//    audioInput = convertToMono( input );
 
     analyserNode = audioContext.createAnalyser();
     analyserNode.fftSize = 2048;
