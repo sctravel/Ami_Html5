@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Bootstrap Example</title>
+    <title>AMI PACES</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
@@ -38,7 +38,10 @@
     </div>
 
     <div style="display: none"><audio id="audioGlobal"></audio></div>
-
+    <% if(userId && sessionId) { %>
+        <div style="display: none" id="sessionId"><%=sessionId%></div>
+        <div style="display: none" id="userId"><%=userId%></div>
+    <%}%>
     <div>
         <div id="videoContent" class="text-center row" style="display: none; width:'60%'; height:'60%'">
             <video id="video"></video>
@@ -146,10 +149,11 @@
 
 </div>
 
+
 <script src="js/camera.js"></script>
 
 <script>
-    var websiteUrl = "https://54.187.148.253:3000/";
+    var websiteUrl = "https://localhost:3000/";
     var audioFolder = websiteUrl + "/assets/Audio/items/"
     var videoFolder = websiteUrl + "/assets/Video/"
     var imageFolder = "assets/Images/"
@@ -157,7 +161,6 @@
     var postFlacUrl = "/api/upload/audio/"
     var takePictureIntervalInMilliSeconds = 120000;
     var takePictureIntervalId = null;
-
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
     var camera = document.getElementById("camera");
@@ -166,6 +169,10 @@
     var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
     var nameFacesContent = document.getElementById("nameFacesContent");
+
+
+    var sessionId = document.getElementById("sessionId").innerHTML;
+    var userId = document.getElementById("userId").innerHTML;
 
     var selectedWords = new Set();
     var wordTouchMap = {};
