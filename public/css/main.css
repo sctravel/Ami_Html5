@@ -282,7 +282,7 @@ svg {
 }
 @media only screen and (max-width: 999px) {
     #timer_div{
-        float:none;
+
     }
     .face-left{
         width:100%;
