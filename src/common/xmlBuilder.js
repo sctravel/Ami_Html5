@@ -32,8 +32,7 @@ var buildSessionXml = function(session, callback) {
             'startTime':stringUtil.toUTCDateTimeString(session.startTime),
             'endTime':stringUtil.toUTCDateTimeString(session.endTime),
             'status':'COMPLETED'
-        },
-        '');
+        });
     root.ele('device')
             .ele('uid',{},'00000000-0000-0000-0000-000000000000')
             .insertAfter('model',{},'Html5')
@@ -78,17 +77,16 @@ var buildSessionXml = function(session, callback) {
         results.forEach(function(result) {
             var responseElement = responses.ele('response', {'type': result.type, 'item': result.item,
                 'itemType': result.itemType==null ? "Missing" :result.itemType, 'status': result.status,
-                'startTime': stringUtil.toUTCDateTimeString(result.startTime), 'endTime': stringUtil.toUTCDateTimeString(result.endTime)},
-                '');
+                'startTime': stringUtil.toUTCDateTimeString(result.startTime), 'endTime': stringUtil.toUTCDateTimeString(result.endTime)});
             if(result.afilename!=null && result.afilename!="") responseElement.ele('afilename',{}, result.afilename);
             if(result.subresponses!=null && result.subresponses!="") {
                 var subresponses = JSON.parse(result.subresponses);
                 for (var idx in subresponses) {
-                    responseElement.ele('subresponse', subresponses[idx],'');
+                    responseElement.ele('subresponse', subresponses[idx]);
                 }
             }
             if(result.snrDB!=null && result.snrDB!="") {
-                responseElement.ele('snrDB', JSON.parse(result.snrDB),'');
+                responseElement.ele('snrDB', JSON.parse(result.snrDB));
             }
             if(result.score!=null && result.score!=-999) responseElement.ele('score',{}, result.score);
             console.log('build XML - result foreach ongoing');
@@ -110,13 +108,13 @@ var buildSessionXml = function(session, callback) {
                     var sequencesElement = responseElement.ele('sequence');
 
                     words.forEach(function(wordItem){
-                        wordsElement.ele('flash', {'word': wordItem.word, 'real': wordItem.isWord,'level': wordItem.level+'', 'duration': wordItem.duration+''},'');
+                        wordsElement.ele('flash', {'word': wordItem.word, 'real': wordItem.isWord,'level': wordItem.level+'', 'duration': wordItem.duration+''});
                         if(wordItem.isTouched!=null && wordItem.isTouched == 'Y') {
                             sequencesElement.ele('touch',{
                                 'timestamp': stringUtil.toUTCDateTimeString(wordItem.touchTimeStamp),
                                 'index': wordItem.wordIndex,
                                 'correct' : wordItem.isCorrect=='Y' ? 'YES' : 'NO'
-                            },'');
+                            });
                         }
                     })
                     callback();
@@ -133,7 +131,7 @@ var buildSessionXml = function(session, callback) {
                     var actionsElement = responseElement.ele('actions')
                     var sum = 0;
                     taps.forEach(function(tap){
-                        actionsElement.ele('action',{'latency': tap.latency+'', 'distance': tap.distance+''},'');
+                        actionsElement.ele('action',{'latency': tap.latency+'', 'distance': tap.distance+''});
                         sum += tap.latency;
                     })
                     responseElement.ele('latency', {}, Math.round(sum/taps.length));
