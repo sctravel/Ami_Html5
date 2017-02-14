@@ -56,7 +56,6 @@
                             <div class="name-right" id="name1"></div>
                         </div>
                     </div>
-
                 </div>
                 <div class="row">
                     <div class="responsive col-lg-6 ">
@@ -120,19 +119,15 @@
             </div>
         </div>
     </div>
+
     <div id="my_result"></div>
 
-
     <div id="bottom">
-
         <canvas id="analyser"  ></canvas>
-
         <div  id="footer" class="row" >
             <button id="nextButton" class="btn-primary btn-lg"style="height:100%;">Click Here To Start</button>
         </div>
     </div>
-
-
 
 </div>
 
@@ -363,41 +358,45 @@
             JL("client").info("End Playing audio: " + audioList[aindex]+". Start Recording. ");
             analyser.style.display = "inline";
             //gotStream(stream);
-            resumeRecording();
+            var popUpNextButton = function(){
+                nextButton.style.display = "inline";
+                nextButton.onclick = function () {
+                    JL("client").info("End Recording for question " + audioList[aindex] + ". Next button Clicked. ");
+                    stopTimer();
+                    if (aindex == audioList.length - 1) {
+                        stopRecording();
+                    } else {
+                        pauseRecording();
+                    }
+                    subResponseEndTime = new Date();
+                    itemResponse.status = "NEXT_TOUCHED";
+                    itemSubResponse.status = "NEXT_TOUCHED";
+                    itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
+                    itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
+                    itemSubResponse.start=subResponseStart+subResponseDuration; //start equals last subresponse end;
+                    subResponseStart = itemSubResponse.start;
+                    subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.duration = subResponseDuration;
+                    itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
+
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
+                };
+            };
+            resumeRecording(item.etimeout, function() {
+                nextButton.innerHTML = 'Next';
+
+            });
             subResponseStartTime = new Date();
             itemSubResponse.extraInfo='the No. '+(aindex+1) +' recording';
 
             startTimer(item.itimeout, item.mtimeout,
                 function () {
-                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
-                    else nextButton.innerHTML = 'Next';
-                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
-                    else nextButton.innerHTML = 'Next';
-
-                    nextButton.style.display = "inline";
-                    nextButton.onclick = function () {
-                        JL("client").info("End Recording for question " + audioList[aindex] + ". Next button Clicked. ");
-                        stopTimer();
-                        if (aindex == audioList.length - 1) {
-                            stopRecording();
-                        } else {
-                            pauseRecording();
-                        }
-                        subResponseEndTime = new Date();
-                        itemResponse.status = "NEXT_TOUCHED";
-                        itemSubResponse.status = "NEXT_TOUCHED";
-                        itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
-                        itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
-                        itemSubResponse.start=subResponseStart+subResponseDuration; //start equals last subresponse end;
-                        subResponseStart = itemSubResponse.start;
-                        subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
-                        itemSubResponse.duration = subResponseDuration;
-                        itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
-
-                        nextButton.style.display = "none";
-                        analyser.style.display = "none";
-                        processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
-                    };
+                    if(!hasUserStartedTalking()) {
+                        nextButton.innerHTML = 'Speak';
+                        popUpNextButton();
+                    }
                 },
                 function () {
                     JL("client").info("End Recording for question " + audioList[aindex]+". Max Timeout reached. ");
@@ -444,41 +443,48 @@
 
             analyser.style.display = "inline";
             gotStream(stream);
-            startRecording();
+            var popUpNextButton = function(){
+                nextButton.style.display="inline";
+                nextButton.onclick = function() {
+                    JL('client').info("End Recording for No."+(aindex+1)+" question of " + item.type+"."+item.item +". Next button clicked.");
+                    stopTimer();
+                    if (aindex == audioFileList.length - 1) {
+                        stopRecording();
+                    } else {
+                        pauseRecording();
+                    }
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+
+                    subResponseEndTime = new Date();
+                    itemResponse.status = "NEXT_TOUCHED";
+                    itemSubResponse.status = "NEXT_TOUCHED";
+                    itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
+                    itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
+                    subResponseStart = itemSubResponse.start= 0;
+                    subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.duration = subResponseDuration;
+                    itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
+
+                    processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
+                };
+            };
+            startRecording(item.etimeout, function(){
+                nextButton.innerHTML = 'Next';
+                popUpNextButton();
+            });
 
             responseStartTime = subResponseStartTime = new Date();
             itemSubResponse.extraInfo='the No. '+(aindex+1) +' recording';
 
             startTimer(item.itimeout, item.mtimeout,
                 function(){
-
-                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
-                    else nextButton.innerHTML = 'Next';
-
-                    nextButton.style.display="inline";
-                    nextButton.onclick = function() {
-                        JL('client').info("End Recording for No."+(aindex+1)+" question of " + item.type+"."+item.item +". Next button clicked.");
-                        stopTimer();
-                        if (aindex == audioFileList.length - 1) {
-                            stopRecording();
-                        } else {
-                            pauseRecording();
-                        }
-                        nextButton.style.display = "none";
-                        analyser.style.display = "none";
-
-                        subResponseEndTime = new Date();
-                        itemResponse.status = "NEXT_TOUCHED";
-                        itemSubResponse.status = "NEXT_TOUCHED";
-                        itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
-                        itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
-                        subResponseStart = itemSubResponse.start= 0;
-                        subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
-                        itemSubResponse.duration = subResponseDuration;
-                        itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
-
-                        processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
-                    };
+                    if(!hasUserStartedTalking()) {
+                        nextButton.innerHTML = 'Speak';
+                        popUpNextButton();
+                    }else {
+                        nextButton.innerHTML = 'Next';
+                    }
                 },
                 function() {
                     stopTimer();
