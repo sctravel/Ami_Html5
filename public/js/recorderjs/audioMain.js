@@ -18,7 +18,7 @@ var recIndex = 0;
 var checkSilenceIntervalId=null;
 var uploadURL = "/upload/audio/";
 var isRecording = false, isAnalysing = false;
-var didFuncIfSilenceAfterSpeech = false;
+var didFuncIfSilenceAfterSpeech = false, userStartedTalking =false;
 var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95;
 var noiseLevel, signalLevel;
 var latestSNR = 0;
@@ -46,15 +46,21 @@ var blobToBase64 = function(blob, cb) {
     reader.readAsDataURL(blob);
 };
 
-function hasUserStartedTalking(audioData) {
-    if(didFuncIfSilenceAfterSpeech) return true;
+function hasUserStartedTalking() {
+    if(userStartedTalking) return true;
     var len = audioData.length;
+    var startIndex = len > 10000 ? len-10000: 0;
     var sum = 0;
-    for (var i = audioDataStartIndex; i < len; ++i) {
+    for (var i = startIndex; i < len; ++i) {
         sum += audioData[i];
     }
-    var avg = sum/len;
-    return avg >= signalThreshold ? true : false;
+    var avg = sum/(len-startIndex);
+    console.log("SUM: "+ sum +"; Average: " + avg +"; Threshold: " + signalThreshold);
+
+    userStartedTalking = avg >= signalThreshold ? true : false;
+    //if(startedTalking) console.log("user started talking");
+    //else console.log("user no talk");
+    return userStartedTalking;
 }
 
 function evaluateAudio(audioData, lowSignal, minSNR) {
@@ -90,7 +96,7 @@ function doFuncIfSilenceAfterSpeech(silenceTime, funcAfterSilence) {
     if(silenceTime==0) return;
     if(!hasUserStartedTalking()) return;
 
-    var numDataPoints = silenceTime * 6000;
+    var numDataPoints = silenceTime * 10000;
     var currentLen = audioData.length;
     numDataPoints = numDataPoints > currentLen ? currentLen : numDataPoints;
     var sum = 0;
@@ -114,10 +120,11 @@ function startRecording(silenceTime, funcAfterSilence) {
     audioRecorder.clear();
     audioRecorder.record();
     isRecording = true;
+    userStartedTalking = false;
     didFuncIfSilenceAfterSpeech = false;
     startAnalysing();
     if(silenceTime>0) {
-        checkSilenceIntervalId = setInterval(doFuncIfSilenceAfterSpeech,500, silenceTime, funcAfterSilence);
+        checkSilenceIntervalId = setInterval(doFuncIfSilenceAfterSpeech,1000, silenceTime, funcAfterSilence);
     }
 }
 
@@ -125,12 +132,15 @@ function pauseRecording(){
     audioRecorder.stop();
     clearInterval(checkSilenceIntervalId);
     isRecording = false;
+    didFuncIfSilenceAfterSpeech = false;
+    userStartedTalking = false;
     stopAnalysing();
 }
 
 function resumeRecording(silenceTime, funcAfterSilence){
     audioDataStartIndex = audioData.length;
     didFuncIfSilenceAfterSpeech = false;
+    userStartedTalking = false;
     audioRecorder.record();
     isRecording = true;
     startAnalysing();
@@ -143,7 +153,8 @@ function stopRecording() {
     clearInterval(checkSilenceIntervalId);
     var flac_encoder_worker = new Worker('js/recorderjs/flac/EmsWorkerProxy.js');
     console.log("stop recording")
-
+    userStartedTalking = false;
+    didFuncIfSilenceAfterSpeech = false;
     if (audioRecorder) {
         audioRecorder.stop();
         isRecording = false;

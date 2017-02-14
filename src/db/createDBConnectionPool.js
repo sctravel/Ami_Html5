@@ -1,20 +1,13 @@
 var mysql=require('mysql');
 var config = require('config');
-
 //parameters for connecting to DB
-config.dbOptions.password = process.env.MYSQL_PASS
 var dbOptions = config.get('dbOptions');
-
 const util = require('util')
-
 dbOptions.password = process.env.MYSQL_PASS
-console.dir("dbOptions.password:"+ dbOptions.password)
-console.log(util.inspect(dbOptions, {showHidden: false, depth: null}))
-
 var pool = mysql.createPool({
     host     : dbOptions.host,
     user     : dbOptions.user,
-    password :  "sctravel",
+    password :  dbOptions.password,
     database : dbOptions.database,
     waitForConnections : false
 });
@@ -32,7 +25,6 @@ exports.runQueryWithParams = function(sql, params, callback) {
     console.log("start runQueryWithParams");
 
     pool.getConnection(function(err,conn){
-        console.log("got connection in runQueryWithParams");
         if(err){
             logger.error("Get connection from pool failed in runQueryWithParams." + err);
             callback(err,null);
@@ -45,7 +37,6 @@ exports.runQueryWithParams = function(sql, params, callback) {
                 callback(err,null);
                 return;
             }
-            console.log("got results in runQueryWithParams");
             conn.release();
             callback(null,results);
         })

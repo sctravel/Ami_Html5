@@ -565,7 +565,23 @@
                 analyser.style.display = "inline";
                 responseStartTime = subResponseStartTime = new Date();
                 gotStream(stream);
-                startRecording();
+                startRecording(item.etimeout, function(){
+                    stopTimer();
+                    pauseRecording();
+
+                    subResponseEndTime = new Date();
+                    itemSubResponse.extraInfo = facePictureFiles.join(':')+','+namesArray.join(':')+','+selectedName;
+                    itemSubResponse.status = "END_TIMEOUT";
+                    itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
+                    itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
+                    subResponseStart = itemSubResponse.start= 0;
+                    itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.audioFileName = item.type+"."+item.item+".1.flac";
+                    itemResponse.subresponses.push(itemSubResponse);
+
+                    JL('client').info("End timer and recording for interviewer to say the name.");
+                    processSayFeelingInNameTheFace(stream, item);
+                });
                 startTimer(0, item.mtimeout,
                     null,
                     function () {
@@ -582,77 +598,80 @@
                         itemSubResponse.audioFileName = item.type+"."+item.item+".1.flac";
                         itemResponse.subresponses.push(itemSubResponse);
 
-
-
                         JL('client').info("End timer and recording for interviewer to say the name.");
-                        audioGlobal.src = audioFolder+item.type+"."+sex+".mp3"
-                        audioGlobal.play();
-                        JL('client').info("Start playing audio: " + item.type+"."+sex+".mp3"+ ". Asking what is he/she feeling. Start Recording.");
-                        audioGlobal.onended = function() {
-                            //gotStream(stream);
-                            resumeRecording();
-                            itemSubResponse = {};
-                            itemSubResponse.extraInfo = item.namefacePicPicked.filename+":"+item.type+"."+sex+".mp3"
-                            subResponseStartTime = new Date();
+                        processSayFeelingInNameTheFace(stream, item);
 
-                            startTimer(item.itimeout, item.mtimeout,
-                                function(){
-                                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
-                                    else nextButton.innerHTML = 'Next';
-
-                                    nextButton.style.display = "inline";
-                                    nextButton.onclick = function () {
-                                        JL('client').info("End timer/recording for interviewer to say the person's feeling. Next button touched.");
-                                        stopTimer();
-                                        stopRecording();
-
-                                        itemResponse.status = itemSubResponse.status = "NEXT_TOUCHED";
-                                        itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
-                                        responseEndTime = subResponseEndTime = new Date();
-                                        itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
-                                        itemSubResponse.start = subResponseStart = subResponseDuration + subResponseStart;
-                                        itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
-                                        itemSubResponse.audioFileName = item.type+"."+item.item+".2.flac";
-
-                                        itemResponse.subresponses.push(itemSubResponse);
-                                        itemResponse.startTime = responseStartTime.toUTCString();
-                                        itemResponse.endTime = responseEndTime.toUTCString();
-
-                                        nameFacesContent.style.display="none";
-                                        nextButton.style.display = "none";
-                                        analyser.style.display = "none";
-                                        postItemResponse(stream);
-                                    };
-                                },
-                                function() {
-                                    JL('client').info("End timer/recording for interviewer to say the person's feeling. Max timeout reached.");
-                                    stopTimer();
-                                    stopRecording();
-                                    itemResponse.status = itemSubResponse.status = "MAX_TIMEOUT";
-                                    responseEndTime = subResponseEndTime = new Date();
-
-                                    itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
-                                    itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
-                                    itemSubResponse.start = subResponseStart = subResponseDuration + subResponseStart;
-                                    itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
-                                    itemSubResponse.audioFileName = item.type+"."+item.item+".2.flac";
-
-                                    itemResponse.subresponses.push(itemSubResponse);
-                                    itemResponse.startTime = responseStartTime.toUTCString();
-                                    itemResponse.endTime = responseEndTime.toUTCString();
-
-                                    nameFacesContent.style.display="none";
-                                    nextButton.style.display = "none";
-                                    analyser.style.display = "none";
-                                    postItemResponse(stream);
-                                }
-                            );
-                        }
                     }
                 );
             }
 
         });
+    }
+
+    function processSayFeelingInNameTheFace(stream, item) {
+        audioGlobal.src = audioFolder+item.type+"."+sex+".mp3"
+        audioGlobal.play();
+        JL('client').info("Start playing audio: " + item.type+"."+sex+".mp3"+ ". Asking what is he/she feeling. Start Recording.");
+        audioGlobal.onended = function() {
+            //gotStream(stream);
+            resumeRecording();
+            itemSubResponse = {};
+            itemSubResponse.extraInfo = item.namefacePicPicked.filename+":"+item.type+"."+sex+".mp3"
+            subResponseStartTime = new Date();
+
+            startTimer(item.itimeout, item.mtimeout,
+                function(){
+                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
+                    else nextButton.innerHTML = 'Next';
+
+                    nextButton.style.display = "inline";
+                    nextButton.onclick = function () {
+                        JL('client').info("End timer/recording for interviewer to say the person's feeling. Next button touched.");
+                        stopTimer();
+                        stopRecording();
+
+                        itemResponse.status = itemSubResponse.status = "NEXT_TOUCHED";
+                        itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
+                        responseEndTime = subResponseEndTime = new Date();
+                        itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
+                        itemSubResponse.start = subResponseStart = subResponseDuration + subResponseStart;
+                        itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                        itemSubResponse.audioFileName = item.type+"."+item.item+".2.flac";
+
+                        itemResponse.subresponses.push(itemSubResponse);
+                        itemResponse.startTime = responseStartTime.toUTCString();
+                        itemResponse.endTime = responseEndTime.toUTCString();
+
+                        nameFacesContent.style.display="none";
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        postItemResponse(stream);
+                    };
+                },
+                function() {
+                    JL('client').info("End timer/recording for interviewer to say the person's feeling. Max timeout reached.");
+                    stopTimer();
+                    stopRecording();
+                    itemResponse.status = itemSubResponse.status = "MAX_TIMEOUT";
+                    responseEndTime = subResponseEndTime = new Date();
+
+                    itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
+                    itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
+                    itemSubResponse.start = subResponseStart = subResponseDuration + subResponseStart;
+                    itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.audioFileName = item.type+"."+item.item+".2.flac";
+
+                    itemResponse.subresponses.push(itemSubResponse);
+                    itemResponse.startTime = responseStartTime.toUTCString();
+                    itemResponse.endTime = responseEndTime.toUTCString();
+
+                    nameFacesContent.style.display="none";
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    postItemResponse(stream);
+                }
+            );
+        }
     }
 
     function processTrackTap(stream, item) {
@@ -963,6 +982,7 @@
                     JL('client').info("Start playing audio "+audioList[1]);
                     audioGlobal.play();
                     audioGlobal.onended = function() {
+                        //TODO add timer
                         nextButton.style.display = "inline";
                         nextButton.onclick = function () {
                             nextButton.style.display = "none";
@@ -1079,12 +1099,12 @@
 
 
         gotStream(stream);
-        startRecording();
+        startRecording(0,null);
         audioGlobal.play();
         audioGlobal.onended = function() {
             document.getElementById("analyser").style.display="inline";
             JL('client').info("Start recording for microphone checker. Playing audio 2000.2.mp3.");
-            //stopRecording();
+            pauseRecording();
 
             subResponseEndTime = new Date();
             itemSubResponse.extraInfo='the No. 1 recording';
@@ -1106,9 +1126,9 @@
             subResponseStartTime = new Date();
             itemSubResponse.extraInfo='the No. 2 recording';
 
-            //startRecording();
-            startTimer(0, item.mtimeout, null, function() {
+            var nextButtonClicked = function() {
                 stopRecording();
+                stopTimer();
                 JL('client').info("Stop recording for microphone checker. Playing audio 2000.2.mp3.");
                 instr.style.display = "none";
                 document.getElementById("analyser").style.display = "none";
@@ -1168,8 +1188,9 @@
                         audioGlobal.play();
                         break;
                 }
-
-            })
+            }
+            resumeRecording(item.etimeout, nextButtonClicked);
+            startTimer(0, item.mtimeout, null, nextButtonClicked);
         };
 
     }
