@@ -19,7 +19,7 @@ var checkSilenceIntervalId=null;
 var uploadURL = "/upload/audio/";
 var isRecording = false, isAnalysing = false;
 var didFuncIfSilenceAfterSpeech = false, userStartedTalking =false;
-var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95;
+var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95, speakThreshold=15;
 var noiseLevel, signalLevel;
 var latestSNR = 0;
 var currentMaxAudioPoint = 0;
@@ -55,7 +55,7 @@ function hasUserStartedTalking() {
         sum += audioData[i];
     }
     var avg = sum/(len-startIndex);
-    console.log("SUM: "+ sum +"; Average: " + avg +"; Threshold: " + signalThreshold);
+    console.log("hasUserStartedTalking --- SUM: "+ sum +"; Average: " + avg +"; Threshold: " + signalThreshold);
 
     userStartedTalking = avg >= signalThreshold ? true : false;
     //if(startedTalking) console.log("user started talking");
@@ -94,7 +94,7 @@ function stopAnalysing() {
 
 function doFuncIfSilenceAfterSpeech(silenceTime, funcAfterSilence) {
     if(silenceTime==0) return;
-    if(!hasUserStartedTalking()) return;
+    if(!hasUserStartedTalking() || didFuncIfSilenceAfterSpeech) return;
 
     var numDataPoints = silenceTime * 10000;
     var currentLen = audioData.length;
@@ -104,9 +104,13 @@ function doFuncIfSilenceAfterSpeech(silenceTime, funcAfterSilence) {
         sum += audioData[i];
     }
     var avg = sum/numDataPoints;
-    var isSilence =  avg >= signalThreshold ? false : true;
+
+    var isSilence =  avg >= speakThreshold ? false : true;
+    console.log("doFuncIfSilenceAfterSpeech --- numDataPoints: " + numDataPoints +"; SUM: "+ sum +"; Average: " + avg +"; isSilence: " + isSilence);
+
     if(isSilence) {
         didFuncIfSilenceAfterSpeech = true;
+        clearInterval(checkSilenceIntervalId);
         funcAfterSilence();
     }
 
@@ -145,7 +149,7 @@ function resumeRecording(silenceTime, funcAfterSilence){
     isRecording = true;
     startAnalysing();
     if(silenceTime>0) {
-        checkSilenceIntervalId = setInterval(doFuncIfSilenceAfterSpeech,500, silenceTime, funcAfterSilence);
+        checkSilenceIntervalId = setInterval(doFuncIfSilenceAfterSpeech,1000, silenceTime, funcAfterSilence);
     }
 }
 

@@ -386,7 +386,7 @@
             };
             resumeRecording(item.etimeout, function() {
                 nextButton.innerHTML = 'Next';
-
+                popUpNextButton();
             });
             subResponseStartTime = new Date();
             itemSubResponse.extraInfo='the No. '+(aindex+1) +' recording';
@@ -482,8 +482,6 @@
                     if(!hasUserStartedTalking()) {
                         nextButton.innerHTML = 'Speak';
                         popUpNextButton();
-                    }else {
-                        nextButton.innerHTML = 'Next';
                     }
                 },
                 function() {
@@ -614,39 +612,45 @@
         JL('client').info("Start playing audio: " + item.type+"."+sex+".mp3"+ ". Asking what is he/she feeling. Start Recording.");
         audioGlobal.onended = function() {
             //gotStream(stream);
-            resumeRecording();
+
             itemSubResponse = {};
             itemSubResponse.extraInfo = item.namefacePicPicked.filename+":"+item.type+"."+sex+".mp3"
             subResponseStartTime = new Date();
+            var popUpNextButton = function(){
+                nextButton.style.display = "inline";
+                nextButton.onclick = function () {
+                    JL('client').info("End timer/recording for interviewer to say the person's feeling. Next button touched.");
+                    stopTimer();
+                    stopRecording();
 
+                    itemResponse.status = itemSubResponse.status = "NEXT_TOUCHED";
+                    itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
+                    responseEndTime = subResponseEndTime = new Date();
+                    itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
+                    itemSubResponse.start = subResponseStart = subResponseDuration + subResponseStart;
+                    itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.audioFileName = item.type+"."+item.item+".2.flac";
+
+                    itemResponse.subresponses.push(itemSubResponse);
+                    itemResponse.startTime = responseStartTime.toUTCString();
+                    itemResponse.endTime = responseEndTime.toUTCString();
+
+                    nameFacesContent.style.display="none";
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    postItemResponse(stream);
+                };
+            }
+            resumeRecording(item.etimeout, function(){
+                nextButton.innerHTML = 'Next';
+                popUpNextButton();
+            });
             startTimer(item.itimeout, item.mtimeout,
                 function(){
-                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
-                    else nextButton.innerHTML = 'Next';
-
-                    nextButton.style.display = "inline";
-                    nextButton.onclick = function () {
-                        JL('client').info("End timer/recording for interviewer to say the person's feeling. Next button touched.");
-                        stopTimer();
-                        stopRecording();
-
-                        itemResponse.status = itemSubResponse.status = "NEXT_TOUCHED";
-                        itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
-                        responseEndTime = subResponseEndTime = new Date();
-                        itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
-                        itemSubResponse.start = subResponseStart = subResponseDuration + subResponseStart;
-                        itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
-                        itemSubResponse.audioFileName = item.type+"."+item.item+".2.flac";
-
-                        itemResponse.subresponses.push(itemSubResponse);
-                        itemResponse.startTime = responseStartTime.toUTCString();
-                        itemResponse.endTime = responseEndTime.toUTCString();
-
-                        nameFacesContent.style.display="none";
-                        nextButton.style.display = "none";
-                        analyser.style.display = "none";
-                        postItemResponse(stream);
-                    };
+                    if(!hasUserStartedTalking()) {
+                        nextButton.innerHTML = 'Speak';
+                        popUpNextButton();
+                    }
                 },
                 function() {
                     JL('client').info("End timer/recording for interviewer to say the person's feeling. Max timeout reached.");
@@ -745,26 +749,33 @@
 
                 analyser.style.display = "inline";
                 gotStream(stream);
-                startRecording();
+                var popUpNextButton = function(){
+                    nextButton.style.display = "inline";
+                    nextButton.onclick = function () {
+                        JL('client').info("End Recording in RetellStory. Next button touched.");
+                        responseEndTime = new Date();
+                        itemResponse.startTime = responseStartTime.toUTCString();
+                        itemResponse.endTime = responseEndTime.toUTCString();
+                        itemResponse.status = "NEXT_TOUCHED";
+
+                        stopTimer();
+                        stopRecording();
+                        nextButton.style.display = "none";
+                        analyser.style.display = "none";
+                        playAudioInRetellStory(audioList, rsindex + 1, stream, item);
+                    };
+                }
+                startRecording(item.etimeout, function(){
+                    nextButton.innerHTML = 'Next';
+                    popUpNextButton();
+                });
                 JL('client').info("Start Recording in RetellStory");
                 startTimer(item.itimeout, item.mtimeout,
                     function () {
-                        if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
-                        else nextButton.innerHTML = 'Next';
-                        nextButton.style.display = "inline";
-                        nextButton.onclick = function () {
-                            JL('client').info("End Recording in RetellStory. Next button touched.");
-                            responseEndTime = new Date();
-                            itemResponse.startTime = responseStartTime.toUTCString();
-                            itemResponse.endTime = responseEndTime.toUTCString();
-                            itemResponse.status = "NEXT_TOUCHED";
-
-                            stopTimer();
-                            stopRecording();
-                            nextButton.style.display = "none";
-                            analyser.style.display = "none";
-                            playAudioInRetellStory(audioList, rsindex + 1, stream, item);
-                        };
+                        if(!hasUserStartedTalking()) {
+                            nextButton.innerHTML = 'Speak';
+                            popUpNextButton();
+                        }
                     },
                     function () {
                         JL('client').info("End Recording in RetellStory. Max timeout reached.");
@@ -1046,7 +1057,7 @@
             intervalId = setInterval(showWord, item.mtimeout*1000);
             //showWord();
             gotStream(stream);
-            startRecording();
+            startRecording(0, null);
             JL('client').info("Start recording during word show in QuickLit.");
             //startTimer(0, item.mtimeout, null, showWord);
         }

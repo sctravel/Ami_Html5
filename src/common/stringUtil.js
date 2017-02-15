@@ -146,3 +146,13 @@ exports.generateUniqueId = function(customerId) {
 
     return dateString+customerId+letters[Math.floor(Math.random()*10)];
 }
+
+exports.shuffle = function(array) {
+    var j, temp, i;
+    for (i = array.length; i>0; --i) {
+        j = Math.floor(Math.random() * i);
+        temp = array[i - 1];
+        array[i - 1] = array[j];
+        array[j] = temp;
+    }
+}

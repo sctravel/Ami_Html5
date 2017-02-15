@@ -87,57 +87,56 @@ var getCompleteTestWithBaseTestItems = function (testItems, callback) {
     }
 
     var allWordsResults = memoryCache.get(constants.cache.QUICKLIT_WORDS);
-        var wordSetIndex = 0;
-        //May need to select words by level later
-        var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10),
-            allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
+    stringUtil.shuffle(allWordsResults)
+    var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10),
+        allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
 
-                var picResults=memoryCache.get(constants.cache.NAMEFACES_PHOTOES);
+    var picResults=memoryCache.get(constants.cache.NAMEFACES_PHOTOES);
 
-                var nameResults = memoryCache.get(constants.cache.NAMEFACES_NAMES);
+    var nameResults = memoryCache.get(constants.cache.NAMEFACES_NAMES);
 
-                var femaleFacesSet = ["FE1_Neutral.jpg", "FE2_Neutral.jpg", "FE3_Neutral.jpg", "FE4_Neutral.jpg"];
-                var maleFacesSet = ["MA1_Neutral.jpg", "MA2_Neutral.jpg", "MA3_Neutral.jpg", "MA4_Neutral.jpg"];
+    var femaleFacesSet = ["FE1_Neutral.jpg", "FE2_Neutral.jpg", "FE3_Neutral.jpg", "FE4_Neutral.jpg"];
+    var maleFacesSet = ["MA1_Neutral.jpg", "MA2_Neutral.jpg", "MA3_Neutral.jpg", "MA4_Neutral.jpg"];
 
-                var maleRandIndex = Math.floor(4*Math.random());
-                var femaleRandIndex = Math.floor(4*Math.random());
-                var femaleSubjectId = femaleRandIndex+1; //1-4
-                var maleSubjectId = maleRandIndex+5;  //5-8
-                console.log("maleSubjectId-"+maleSubjectId+"; femaleSubjectId-"+femaleSubjectId);
-                var maleNames = _.filter(nameResults, function(name){
-                    return name.nameset == maleSubjectId;
-                });
-                var femaleNames = _.filter(nameResults, function(name){
-                    return name.nameset == femaleSubjectId;
-                });
-                var maleNamePicked = maleNames[maleRandIndex];
-                var femaleNamePicked = femaleNames[femaleRandIndex];
+    var maleRandIndex = Math.floor(4*Math.random());
+    var femaleRandIndex = Math.floor(4*Math.random());
+    var femaleSubjectId = femaleRandIndex+1; //1-4
+    var maleSubjectId = maleRandIndex+5;  //5-8
+    console.log("maleSubjectId-"+maleSubjectId+"; femaleSubjectId-"+femaleSubjectId);
+    var maleNames = _.filter(nameResults, function(name){
+        return name.nameset == maleSubjectId;
+    });
+    var femaleNames = _.filter(nameResults, function(name){
+        return name.nameset == femaleSubjectId;
+    });
+    var maleNamePicked = maleNames[maleRandIndex];
+    var femaleNamePicked = femaleNames[femaleRandIndex];
 
-                var femalePicPicked = _.filter(picResults, function(photo){
-                    return photo.subjectid == femaleSubjectId;
-                })[maleRandIndex]; //use maleRandIndex here to increase random
-                var malePicPicked = _.filter(picResults, function(photo){
-                    return photo.subjectid == maleSubjectId;
-                })[femaleRandIndex];//use femaleRandIndex here to increase random
+    var femalePicPicked = _.filter(picResults, function(photo){
+        return photo.subjectid == femaleSubjectId;
+    })[maleRandIndex]; //use maleRandIndex here to increase random
+    var malePicPicked = _.filter(picResults, function(photo){
+        return photo.subjectid == maleSubjectId;
+    })[femaleRandIndex];//use femaleRandIndex here to increase random
 
-                for (var i = 0; i < testItems.length; i++) {
-                    var testItem = testItems[i];
-                    if(testItem.type == 2064) {
-                        testItem.wordsBlob = wordSet[testItem.item-1];
-                    }
-                    else if(testItem.type == 2062 && testItem.item==1){
-                        testItem.namefacePicBlob = femaleFacesSet;
-                        testItem.namefaceNameBlob = femaleNames;
-                        testItem.namefaceNamePicked = femaleNamePicked;
-                        testItem.namefacePicPicked = femalePicPicked;
-                    } else if(testItem.type == 2062 && testItem.item==2) {
-                        testItem.namefacePicBlob = maleFacesSet;
-                        testItem.namefaceNameBlob = maleNames;
-                        testItem.namefaceNamePicked = maleNamePicked;
-                        testItem.namefacePicPicked = malePicPicked;
-                    }
-                }
-                callback(null, testItems);
+    for (var i = 0; i < testItems.length; i++) {
+        var testItem = testItems[i];
+        if(testItem.type == 2064) {
+            testItem.wordsBlob = wordSet[testItem.item-1];
+        }
+        else if(testItem.type == 2062 && testItem.item==1){
+            testItem.namefacePicBlob = femaleFacesSet;
+            testItem.namefaceNameBlob = femaleNames;
+            testItem.namefaceNamePicked = femaleNamePicked;
+            testItem.namefacePicPicked = femalePicPicked;
+        } else if(testItem.type == 2062 && testItem.item==2) {
+            testItem.namefacePicBlob = maleFacesSet;
+            testItem.namefaceNameBlob = maleNames;
+            testItem.namefaceNamePicked = maleNamePicked;
+            testItem.namefacePicPicked = malePicPicked;
+        }
+    }
+    callback(null, testItems);
 }
 exports.getCompleteTestWithBaseTestItems = getCompleteTestWithBaseTestItems;
 
