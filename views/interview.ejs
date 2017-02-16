@@ -607,6 +607,7 @@
     }
 
     function processSayFeelingInNameTheFace(stream, item) {
+        var sex = item.item==1 ? 'F' : 'M';
         audioGlobal.src = audioFolder+item.type+"."+sex+".mp3"
         audioGlobal.play();
         JL('client').info("Start playing audio: " + item.type+"."+sex+".mp3"+ ". Asking what is he/she feeling. Start Recording.");
@@ -821,7 +822,7 @@
 
             analyser.style.display="inline";
             gotStream(stream);
-            startRecording();
+            startRecording(0,null);
             JL('client').info("Start playing video " + item.video+" and recording.");
             var videoTimeout = video.duration + item.mtimeout;
             video.play();
@@ -876,39 +877,45 @@
             subResponseStartTime = new Date();
 
             analyser.style.display = "inline";
-            //gotStream(stream);
-            resumeRecording();
+            var popUpNextButton = function(){
+                nextButton.style.display="inline";
+                nextButton.onclick = function() {
+                    JL('client').info("End recording for " + audioList[vindex]+". Next button touched.");
+
+                    subResponseEndTime = new Date();
+                    itemSubResponse.extraInfo='the No. '+(vindex+1) +' recording';
+                    itemSubResponse.status = "NEXT_TOUCH";
+                    itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
+                    itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
+                    itemSubResponse.start=subResponseStart+subResponseDuration; //start equals last subresponse end;
+                    subResponseStart = itemSubResponse.start;
+                    subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
+                    itemSubResponse.duration = subResponseDuration;
+                    itemSubResponse.audioFileName = item.type+"."+item.item+"."+(vindex+1)+".flac";
+
+
+
+                    stopTimer();
+                    if(vindex==audioList.length-1) {
+                        stopRecording();
+                    } else {
+                        pauseRecording();
+                    }
+                    nextButton.style.display = "none";
+                    analyser.style.display = "none";
+                    playAudioInDescribeVideo(audioList, vindex+1, stream, item);
+                };
+            }
+            resumeRecording(item.etimeout, function(){
+                nextButton.innerHTML = 'Next';
+                popUpNextButton();
+            });
             startTimer(item.itimeout, item.mtimeout,
                 function(){
-                    if(!hasUserStartedTalking())  nextButton.innerHTML = 'Speak';
-                    else nextButton.innerHTML = 'Next';
-                    nextButton.style.display="inline";
-                    nextButton.onclick = function() {
-                        JL('client').info("End recording for " + audioList[vindex]+". Next button touched.");
-
-                        subResponseEndTime = new Date();
-                        itemSubResponse.extraInfo='the No. '+(vindex+1) +' recording';
-                        itemSubResponse.status = "NEXT_TOUCH";
-                        itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
-                        itemSubResponse.endTime = toUTCDateTimeString(subResponseEndTime);
-                        itemSubResponse.start=subResponseStart+subResponseDuration; //start equals last subresponse end;
-                        subResponseStart = itemSubResponse.start;
-                        subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
-                        itemSubResponse.duration = subResponseDuration;
-                        itemSubResponse.audioFileName = item.type+"."+item.item+"."+(vindex+1)+".flac";
-
-
-
-                        stopTimer();
-                        if(vindex==audioList.length-1) {
-                            stopRecording();
-                        } else {
-                            pauseRecording();
-                        }
-                        nextButton.style.display = "none";
-                        analyser.style.display = "none";
-                        playAudioInDescribeVideo(audioList, vindex+1, stream, item);
-                    };
+                    if(!hasUserStartedTalking())  {
+                        nextButton.innerHTML = 'Speak';
+                        popUpNextButton();
+                    }
                 },
                 function() {
                     JL('client').info("End recording for " + audioList[vindex]+". Max timeout reached.");
