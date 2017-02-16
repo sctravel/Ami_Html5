@@ -180,6 +180,27 @@ function stopRecording() {
                     console.log(" adding audio files -- " + uploadId);
                     blobToBase64(e.data.values['dummy.flac'].blob, function (base64) { // encode
                         var update = {'blob': base64, "id": uploadId};
+
+                        var file = new File([base64], 'amipace/'+uploadId+'.flac', {
+                            lastModified: new Date(0), // optional - default = now
+                            type: "overide/mimetype" // optional - default = ''
+                        });
+                        console.log(" adding audio files -- " + uploadId);
+
+                        $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
+                            $.ajax({
+                                type : 'PUT',
+                                url : dataURL,
+                                data : file,
+                                processData: false,  // tell jQuery not to convert to form data
+                                contentType: file.type,
+                                success: function(json) { console.log('Upload complete!') },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    console.alert('S3 Upload error: ' + XMLHttpRequest.responseText);
+                                }
+                                });
+                            });
+
                         $.post(postFlacUrl, update, function (data) {
                             if (data == "ok") {
                                 console.log("UploadFlac succeeded");
