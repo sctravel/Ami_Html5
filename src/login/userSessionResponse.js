@@ -124,7 +124,6 @@ var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId,
 module.exports = {
 
     addItemResponseToSession : function (itemResponse, sessionId, callback) {
-        console.dir(itemResponse);
         if(itemResponse.item.type == 2032) {
             addTrackTapResponseToSession(itemResponse, sessionId,callback);
         } else if(itemResponse.item.type == 2064) {

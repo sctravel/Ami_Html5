@@ -140,8 +140,10 @@ exports.getCompleteTestById = getCompleteTestById;
 var markSessionEnd = function(userSession, callback) {
     var sqlMarkSessionEnd = 'update sessions set endtime = ? where sessionId= ? ';
     var endtime = new Date();
+    userSession.startTime = new Date(userSession.startTime);
     userSession.endTime = endtime;
     userSession.testName = memoryCache.get(userSession.testId)[0].testName;
+    logger.info("Mark userSession End for session: " + userSession);
     dbPool.runQueryWithParams(sqlMarkSessionEnd, [userSession.endTime, userSession.sessionId], function (err, results) {
         if (err) {
             logger.error('sqlMarkSessionEnd failed for session ' + userSession.sessionId);

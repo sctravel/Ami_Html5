@@ -42,11 +42,11 @@ module.exports = function(app) {
                 if(err){
                     logger.error("markSessionEnd failed with error: " + err);
                     res.send(constants.services.CALLBACK_FAILED);
-                    return;
+                    return;s
                 }
                 //TODO: write xml and upload to S3
                 console.log("Uploading session xml in /api/session/endSession");
-                var xmlFileName = constants.paths.UPLOAD_FOLDER + req.user.email + "_" + req.user.sessionId + "/"+req.user.sessionId+"_session.xml";
+                var xmlFileName = constants.paths.UPLOAD_FOLDER + req.user.email + "_" + req.user.sessionId + "/session.xml";
                 logger.info("uploading session xml - " + xmlFileName);
                 fs.writeFile(xmlFileName, xmlString, function(err) {
                     if(err) {
