@@ -131,7 +131,7 @@ svg {
 { border-color: #ffffff ;}*/
 
 html{
-    max-width:1000px;
+
     height:100%;
     margin:auto;
     background-color: #ffffff;
@@ -281,8 +281,9 @@ svg {
     float:right;
 }
 @media only screen and (max-width: 999px) {
+
     #timer_div{
-        float:none;
+
     }
     .face-left{
         width:100%;

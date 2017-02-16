@@ -3,7 +3,7 @@
 <head>
     <title>AMI PACES</title>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
     <link rel="stylesheet" href="/bootstrap/dist/css/bootstrap.css">
     <link rel="stylesheet" href="/css/main.css">
     <script src="/jquery/dist/jquery.min.js"></script>
@@ -124,8 +124,10 @@
 
     <div id="bottom">
         <canvas id="analyser"  ></canvas>
-        <div  id="footer" class="row" >
-            <button id="nextButton" class="btn-primary btn-lg"style="height:100%;">Click Here To Start</button>
+
+
+        <div  id="footer" >
+            <button id="nextButton" class="btn-primary btn-lg"style="height:100%; border-radius:0;">Click Here To Start</button>
         </div>
     </div>
 
@@ -135,7 +137,11 @@
 <script src="js/camera.js"></script>
 
 <script>
-    var websiteUrl = "https://localhost:3000/";
+
+
+    var websiteUrl = "https://10.0.0.210:3000";
+
+
     var audioFolder = websiteUrl + "/assets/Audio/items/"
     var videoFolder = websiteUrl + "/assets/Video/"
     var imageFolder = "assets/Images/"
@@ -225,7 +231,13 @@
                 JL("client").info("Upload picture response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
                 //end the interview
                 JL("client").info("Interview completed.")
-                window.location.href="/";
+                var instr = document.getElementById("textContent");
+                instr.innerHTML = "All reponse and images are uploaded. We are done. Thanks you.";
+                instr.style.display="flex";
+                setTimeout(function () {
+                   window.location.href= "/";
+                }, 5000);
+
             }
         })
     }
