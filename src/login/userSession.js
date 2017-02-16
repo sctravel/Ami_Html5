@@ -9,6 +9,25 @@ var dbPool = require("../db/createDBConnectionPool");
 var _=require('underscore');
 var xmlBuilder = require('../common/xmlBuilder');
 
+
+function getCurrentSessionPictureId(sessionId, callback) {
+    var sqlGetPictureId = 'select COUNT(1) AS maxPictureId, MIN(takenTime) AS minStartTime from sessionstates_camerapicture where sessionId = ?'
+    dbPool.runQueryWithParams(sqlGetPictureId, [sessionId], function (err, result) {
+        if (err) {
+            logger.error("getCurrentSessionPictureId() failed for sessionId: " + sessionId);
+            callback(err, null);
+            return;
+        }
+        if(result==null || result.length==0) {
+            callback(null, '');
+            return;
+        }
+
+        callback(null, {maxPictureId: result[0].maxPictureId, minStartTime: result[0].minStartTime.toUTCString()});
+    });
+}
+exports.getCurrentSessionPictureId = getCurrentSessionPictureId;
+
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
     var sqlGetFinishedItemsInSession = "select * from sessionstates where sessionId = ? order by endTime";
     dbPool.runQueryWithParams(sqlGetFinishedItemsInSession, [unfinishedSessionId], function (err, finishedItems) {
@@ -68,57 +87,56 @@ var getCompleteTestWithBaseTestItems = function (testItems, callback) {
     }
 
     var allWordsResults = memoryCache.get(constants.cache.QUICKLIT_WORDS);
-        var wordSetIndex = 0;
-        //May need to select words by level later
-        var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10),
-            allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
+    stringUtil.shuffle(allWordsResults)
+    var wordSet = [allWordsResults.slice(0, 4), allWordsResults.slice(4, 10),
+        allWordsResults.slice(10, 16), allWordsResults.slice(16, 22)];
 
-                var picResults=memoryCache.get(constants.cache.NAMEFACES_PHOTOES);
+    var picResults=memoryCache.get(constants.cache.NAMEFACES_PHOTOES);
 
-                var nameResults = memoryCache.get(constants.cache.NAMEFACES_NAMES);
+    var nameResults = memoryCache.get(constants.cache.NAMEFACES_NAMES);
 
-                var femaleFacesSet = ["FE1_Neutral.jpg", "FE2_Neutral.jpg", "FE3_Neutral.jpg", "FE4_Neutral.jpg"];
-                var maleFacesSet = ["MA1_Neutral.jpg", "MA2_Neutral.jpg", "MA3_Neutral.jpg", "MA4_Neutral.jpg"];
+    var femaleFacesSet = ["FE1_Neutral.jpg", "FE2_Neutral.jpg", "FE3_Neutral.jpg", "FE4_Neutral.jpg"];
+    var maleFacesSet = ["MA1_Neutral.jpg", "MA2_Neutral.jpg", "MA3_Neutral.jpg", "MA4_Neutral.jpg"];
 
-                var maleRandIndex = Math.floor(4*Math.random());
-                var femaleRandIndex = Math.floor(4*Math.random());
-                var femaleSubjectId = femaleRandIndex+1; //1-4
-                var maleSubjectId = maleRandIndex+5;  //5-8
-                console.log("maleSubjectId-"+maleSubjectId+"; femaleSubjectId-"+femaleSubjectId);
-                var maleNames = _.filter(nameResults, function(name){
-                    return name.nameset == maleSubjectId;
-                });
-                var femaleNames = _.filter(nameResults, function(name){
-                    return name.nameset == femaleSubjectId;
-                });
-                var maleNamePicked = maleNames[maleRandIndex];
-                var femaleNamePicked = femaleNames[femaleRandIndex];
+    var maleRandIndex = Math.floor(4*Math.random());
+    var femaleRandIndex = Math.floor(4*Math.random());
+    var femaleSubjectId = femaleRandIndex+1; //1-4
+    var maleSubjectId = maleRandIndex+5;  //5-8
+    console.log("maleSubjectId-"+maleSubjectId+"; femaleSubjectId-"+femaleSubjectId);
+    var maleNames = _.filter(nameResults, function(name){
+        return name.nameset == maleSubjectId;
+    });
+    var femaleNames = _.filter(nameResults, function(name){
+        return name.nameset == femaleSubjectId;
+    });
+    var maleNamePicked = maleNames[maleRandIndex];
+    var femaleNamePicked = femaleNames[femaleRandIndex];
 
-                var femalePicPicked = _.filter(picResults, function(photo){
-                    return photo.subjectid == femaleSubjectId;
-                })[maleRandIndex]; //use maleRandIndex here to increase random
-                var malePicPicked = _.filter(picResults, function(photo){
-                    return photo.subjectid == maleSubjectId;
-                })[femaleRandIndex];//use femaleRandIndex here to increase random
+    var femalePicPicked = _.filter(picResults, function(photo){
+        return photo.subjectid == femaleSubjectId;
+    })[maleRandIndex]; //use maleRandIndex here to increase random
+    var malePicPicked = _.filter(picResults, function(photo){
+        return photo.subjectid == maleSubjectId;
+    })[femaleRandIndex];//use femaleRandIndex here to increase random
 
-                for (var i = 0; i < testItems.length; i++) {
-                    var testItem = testItems[i];
-                    if(testItem.type == 2064) {
-                        testItem.wordsBlob = wordSet[testItem.item-1];
-                    }
-                    else if(testItem.type == 2062 && testItem.item==1){
-                        testItem.namefacePicBlob = femaleFacesSet;
-                        testItem.namefaceNameBlob = femaleNames;
-                        testItem.namefaceNamePicked = femaleNamePicked;
-                        testItem.namefacePicPicked = femalePicPicked;
-                    } else if(testItem.type == 2062 && testItem.item==2) {
-                        testItem.namefacePicBlob = maleFacesSet;
-                        testItem.namefaceNameBlob = maleNames;
-                        testItem.namefaceNamePicked = maleNamePicked;
-                        testItem.namefacePicPicked = malePicPicked;
-                    }
-                }
-                callback(null, testItems);
+    for (var i = 0; i < testItems.length; i++) {
+        var testItem = testItems[i];
+        if(testItem.type == 2064) {
+            testItem.wordsBlob = wordSet[testItem.item-1];
+        }
+        else if(testItem.type == 2062 && testItem.item==1){
+            testItem.namefacePicBlob = femaleFacesSet;
+            testItem.namefaceNameBlob = femaleNames;
+            testItem.namefaceNamePicked = femaleNamePicked;
+            testItem.namefacePicPicked = femalePicPicked;
+        } else if(testItem.type == 2062 && testItem.item==2) {
+            testItem.namefacePicBlob = maleFacesSet;
+            testItem.namefaceNameBlob = maleNames;
+            testItem.namefaceNamePicked = maleNamePicked;
+            testItem.namefacePicPicked = malePicPicked;
+        }
+    }
+    callback(null, testItems);
 }
 exports.getCompleteTestWithBaseTestItems = getCompleteTestWithBaseTestItems;
 
@@ -135,6 +153,8 @@ var getCompleteTestById = function(testId, callback) {
 }
 
 exports.getCompleteTestById = getCompleteTestById;
+
+
 
 
 var markSessionEnd = function(userSession, callback) {

@@ -120,30 +120,18 @@ app.get('/', function (req,res){
     res.render('index',{error: req.flash('error'), success: req.flash('success'), message:req.flash('message') });
 });
 
-app.get('/index2', function (req,res){
-    console.log(req.user);
-    req.session.lastPage = '/';
-
-    res.render('index2',{error: req.flash('error'), success: req.flash('success'), message:req.flash('message') });
-});
-
 app.get('/testpage', function (req,res){
     res.sendfile("public/test.html");
 });
 
 app.get('/interview', isLoggedIn, function (req,res){
-    console.log(req.user);
-    res.render('interview',{user: req.user});
+    res.render('interview',{userId: req.user.email, sessionId: req.user.sessionId});
 });
 
 app.get('/api/questionSet', function(req, res){
     console.info("####################")
     var questionSet = JSON.parse(fs.readFileSync('./document/questionSet.json', 'utf8'));
     res.send(questionSet);
-});
-
-app.get('/game', function (req,res){
-    res.render('game', {user: req.user});
 });
 
 app.post('/api/upload/picture/:name', function (req, res) {

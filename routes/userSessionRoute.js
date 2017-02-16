@@ -14,6 +14,7 @@ module.exports = function(app) {
         userSessionResponse.addItemResponseToSession(itemResponse, req.user.sessionId, function(err, results) {
            if(err) {
                logger.error("update session state failed with error: " + err);
+               res.send(constants.services.CALLBACK_FAILED);
                return;
            }
            res.send(constants.services.CALLBACK_SUCCESS);
@@ -25,6 +26,7 @@ module.exports = function(app) {
         userSessionResponse.addIndividualPictureResponseToSession(picture, req.user.sessionId, function(err, results) {
             if(err) {
                 logger.error("post cameraPictureSessionData failed with error: " + err);
+                res.send(constants.services.CALLBACK_FAILED);
                 return;
             }
             res.send(constants.services.CALLBACK_SUCCESS);
@@ -36,6 +38,7 @@ module.exports = function(app) {
         userSessionResponse.addItemResponseToSession(cameraPictureResponse, req.user.sessionId, function(err, results) {
             if(err) {
                 logger.error("post cameraPictureResponse failed with error: " + err);
+                res.send(constants.services.CALLBACK_FAILED);
                 return;
             }
             userSession.markSessionEnd(req.user, function(err, xmlString){
@@ -60,6 +63,16 @@ module.exports = function(app) {
         });
     });
 
+    app.get('/api/currentPictureId', isLoggedIn, function(req, res){
+        userSession.getCurrentSessionPictureId(req.user.sessionId, function(err, result) {
+            if(err) {
+                logger.error("post cameraPictureResponse failed with error: " + err);
+                res.send(constants.services.CALLBACK_FAILED);
+                return;
+            }
+            res.send(result);
+        })
+    })
     app.get('/api/xml', function(req, res) {
 
         var session = {};
