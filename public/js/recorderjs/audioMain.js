@@ -223,7 +223,7 @@ function stopRecording() {
                                 contentType: file.type,
                                 success: function(json) { console.log('Upload complete!') },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                    console.alert('S3 Upload error: ' + XMLHttpRequest.responseText);
+                                    //console.alert('S3 Upload error: ' + XMLHttpRequest.responseText);
                                 }
                                 });
                             });
