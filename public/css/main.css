@@ -204,6 +204,14 @@ body {
     max-height:50px;
     box-shadow: 0px 0px 10px #000000;
 }
+#analyserImg {
+    display: none;
+    background: #000000;
+    width:inherit;
+    min-height: 15px;
+    max-height:50px;
+    box-shadow: 0px 0px 10px #000000;
+}
 
 #textShowAll{
     display: none;

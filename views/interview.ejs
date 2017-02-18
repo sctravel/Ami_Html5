@@ -124,7 +124,7 @@
 
     <div id="bottom">
         <canvas id="analyser"  ></canvas>
-
+        <img id="analyserImg" src="images/SparklingStars.gif" width="100%" height="100%"/>
 
         <div  id="footer" >
             <button id="nextButton" class="btn-primary btn-lg"style="height:100%; border-radius:0;">Click Here To Start</button>
@@ -139,7 +139,7 @@
 <script>
 
 
-    var websiteUrl = "https://10.0.0.210:3000";
+    var websiteUrl = "https://localhost:3000";
 
 
     var audioFolder = websiteUrl + "/assets/Audio/items/"
@@ -158,7 +158,7 @@
     var trackTap = document.getElementById("trackTap");
     var nameFacesContent = document.getElementById("nameFacesContent");
 
-
+    var analyserImg = document.getElementById("analyserImg");
     var sessionId = document.getElementById("sessionId").innerHTML;
     var userId = document.getElementById("userId").innerHTML;
 
@@ -340,8 +340,10 @@
         var audioFileName = item.type+"."+(item.item==0 ? "mp3" : item.item+".mp3");
         audioGlobal.src = audioFolder + audioFileName;
         audioGlobal.play();
+        analyserImg.style.display="inline"
         audioGlobal.onended = function() {
             instr.style.display="none";
+            analyserImg.style.display="none"
             JL("client").info("Leave processInstruction for :"+item.type+", item:"+item.item);
             processItem(stream);
         }
@@ -367,6 +369,7 @@
         audioGlobal.src = audioFolder+audioList[aindex];
 
         audioGlobal.onended = function() {
+            analyserImg.style.display="none"
             JL("client").info("End Playing audio: " + audioList[aindex]+". Start Recording. ");
             analyser.style.display = "inline";
             //gotStream(stream);
@@ -437,6 +440,7 @@
 
         }
         audioGlobal.play();
+        analyserImg.style.display="inline"
     }
 
     function processAudioQuestion(stream, item) {
@@ -452,7 +456,7 @@
 
         audioGlobal.onended = function() {
             JL('client').info("End playing audio " + audioFileName+". Start Recording");
-
+            analyserImg.style.display="none"
             analyser.style.display = "inline";
             gotStream(stream);
             var popUpNextButton = function(){
@@ -523,6 +527,7 @@
             );
         }
         audioGlobal.play();
+        analyserImg.style.display="inline"
     }
 
     function processNameTheFace(stream, item) {

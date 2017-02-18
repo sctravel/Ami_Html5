@@ -153,6 +153,33 @@ function resumeRecording(silenceTime, funcAfterSilence){
     }
 }
 
+Date.prototype.hhmmss = function() {
+  var hh = this.getHours(); // getMonth() is zero-based
+  var mm = this.getMinutes();
+  var ss = this.getSeconds();
+
+  return [(hh>9 ? '' : '0') + hh,
+          (mm>9 ? '' : '0') + mm,
+          (ss>9 ? '' : '0') + ss
+         ].join('');
+};
+
+Date.prototype.yyyymmdd = function() {
+  var mm = this.getMonth() + 1; // getMonth() is zero-based
+  var dd = this.getDate();
+
+  return [this.getFullYear(),
+          (mm>9 ? '' : '0') + mm,
+          (dd>9 ? '' : '0') + dd
+         ].join('');
+};
+
+
+function getRandomArbitrary() {
+    return Math.floor(10000 + Math.random() * 90000);
+
+}
+
 function stopRecording() {
     clearInterval(checkSilenceIntervalId);
     var flac_encoder_worker = new Worker('js/recorderjs/flac/EmsWorkerProxy.js');
@@ -180,8 +207,8 @@ function stopRecording() {
                     console.log(" adding audio files -- " + uploadId);
                     blobToBase64(e.data.values['dummy.flac'].blob, function (base64) { // encode
                         var update = {'blob': base64, "id": uploadId};
-
-                        var file = new File([base64], 'amipace/'+uploadId+'.flac', {
+                        var date = new Date();
+                        var file = new File([base64], 'amipace/'+date.yyyymmdd()+'/'+date.hhmmss()+'/'+getRandomArbitrary()+'/'+uploadId+'.flac', {
                             lastModified: new Date(0), // optional - default = now
                             type: "overide/mimetype" // optional - default = ''
                         });
@@ -196,7 +223,7 @@ function stopRecording() {
                                 contentType: file.type,
                                 success: function(json) { console.log('Upload complete!') },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                    console.alert('S3 Upload error: ' + XMLHttpRequest.responseText);
+                                    //console.alert('S3 Upload error: ' + XMLHttpRequest.responseText);
                                 }
                                 });
                             });
