@@ -26,7 +26,7 @@ function timeStop(){
 }
 
 //随机循环显示老鼠图片
-function show(){
+function show(prev){
     if(playing)
     {
         showTime = new Date();
@@ -35,11 +35,22 @@ function show(){
             return;
         }
         var current = Math.floor(Math.random()*6);
+        while(current == prev){
+            current = Math.floor(Math.random()*6);
+        }
+
+        console.log(" show =" + current);
         //这里的路径也需要根据自己的实际文件路径来修改
         document.getElementById("td["+current+"]").innerHTML = '<img src="assets/Images/Target_Off.png" height="100%" width="100%">';
         ++total;
         //使用setTimeout()实现2秒后隐藏老鼠图片
+
+        console.log(" dispear =" + current );
         setTimeout("document.getElementById('td["+current+"]').innerHTML=''",1500);
+        prev = current;
+        return prev;
+
+
     }
 }
 
@@ -60,14 +71,17 @@ function hit(id){
     }
     else
     {
+
         beat +=1;
         if(document.getElementById("td["+id+"]").innerHTML!="")
         {
+
             score += 1;
             knock +=1;
             success = knock/beat;
             tap.latency = (new Date()) - showTime;
             tap.distance = 0;
+
             itemResponse.taps.push(tap);
             document.getElementById("td["+id+"]").innerHTML="";
         }
@@ -77,6 +91,7 @@ function hit(id){
 //游戏开始
 function GameStart(){
     playing = true;
-    show();
-    interId = setInterval("show()",1500);
+    prev = -1; //remember previous td,avoid conflict
+    prev = show(prev);
+    interId = setInterval("prev = show(prev)",1500);
 }
