@@ -1,0 +1,265 @@
+
+AMI AWS Installation Guide 
+
+There are three AWS services are used in AMI application,EC2, S3 and RDS, we need to create those instance on AWS first given any existing AWS subscription.  
+
+1 EC2 setup:
+
+log in into AWS console based on your AWS subscription credential, download perm file, rename it as "ec2.perm" and put it 
+under any path for ssh connection. 
+
+sample command for connect to ec2 host using ssh: 
+ssh -i "ec2.pem" ubuntu@ec2-XXXX.us-west-2.compute.amazonaws.com
+
+also you will need to open port for RDS connections from ec2. basically you will need to 
+got to Network & Security" -> Security Group settings in the left hand navigation, Create the following inbound rule: 
+Type Protocol Port RangeSource
+HTTP TCP      80   0.0.0.0/0
+
+Then we will make sure the following outbound rule is in place:
+Type         Protocol PortRange Destination
+AllTraffic   All      All       0.0.0.0/0
+
+
+2 S3 setup:
+In the AWS console, you can find accessKeyId and secretAccessKeyId
+accessKeyId: 'xxx'
+secretAccessKey: 'xxxxx'
+
+once you log into AWS EC2, you will need to eidt user proflie (~/.profile) to modify enviroment varialbes. Note that you will need to sudo first then edit the profile. 
+add the following lines(xxxxx are your AWS subscription credentials)
+export AWS_ACCESS_KEY_ID=xxxxx
+export AWS_SECRET_ACCESS_KEY=xxxxx
+
+Those credentials will be used in the backend API for s3 file upload, The idea is to construct a "pre-signed" request and encode it as a URL that an end-user's browser can retrieve.
+Additionally, we can limit a pre-signed request by specifying an expiration time.The purpse of keep those credentials in backend instead of frontend it to make the upload
+process secure, prevent any hackers from stealing the AWS credentials. 
+
+3 RDS (mysql on AWS) setup:
+
+First, you will need to log on to AWS credential to create RDS(mysql) instance, 
+current on test enviroment, the configuration is db.t2.micro with 1G memory, in production you might need at least db.t2.large with 8G memory for better performance to handle requests from 
+hundreads or thousands of users at the same time. 
+AWS RDS will back snapshot around mid-night on daily basis, Admin will be able to restore database from those snapshots.you could also configure Backup Retention Period in RDS settings. 
+
+In RDS, you will need to set the max connections(max_connections) to around 1000 in the parameter groups in RDS.  
+
+example RDS connection string from Mysql Bench(you can also directly query from Linux console after install MySQL client):
+mysql -h mysql.xxxx.amazonaws.com -P 3306 -u admin -p account
+
+4 DB migration 
+currently the data are stored in SQLite, which need to be migrated to RDS hosted on AWS 
+The first step is to create those table schemas on RDS:
+those SQL commands would be very similar as CreateTables.sqlite under AMIPACE\amipace\Assets\
+with slightly difference (the grammar of mysql and SQLLite are slightly different regarding)
+In addtion, here we created a couple of tables for session management: 
+
+CREATE TABLE `items` (
+  `type` int(10) unsigned NOT NULL,
+  `item` int(10) unsigned NOT NULL,
+  `itimeout` double DEFAULT NULL,
+  `etimeout` double DEFAULT NULL,
+  `mtimeout` double DEFAULT NULL,
+  `itext` varchar(1024) DEFAULT NULL,
+  `screen` varchar(1024) DEFAULT NULL,
+  `audio` varchar(1024) DEFAULT NULL,
+  `video` varchar(1024) DEFAULT NULL,
+  `initargs` varchar(1024) DEFAULT NULL,
+  `activenext` varchar(8) DEFAULT NULL,
+  `difficulty` double DEFAULT NULL,
+  `subtype` int(10) unsigned DEFAULT NULL,
+  `audiotext` varchar(1024) DEFAULT NULL,
+  `enabled` varchar(8) DEFAULT 'YES',
+  `flag` int(11) DEFAULT NULL,
+  `xrinfo` varchar(1024) DEFAULT NULL,
+  UNIQUE KEY `type` (`type`,`item`),
+  KEY `items_type` (`type`),
+  KEY `items_item` (`item`),
+  CONSTRAINT `items_ibfk_1` FOREIGN KEY (`type`) REFERENCES `types` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `names` (
+  `name` varchar(64) NOT NULL,
+  `gender` varchar(1) DEFAULT 'F',
+  `nameset` int(10) unsigned NOT NULL,
+  KEY `names_name` (`name`),
+  KEY `names_gender` (`gender`),
+  KEY `names_nameset` (`nameset`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `photoes` (
+  `subjectid` int(11) NOT NULL,
+  `filename` varchar(1024) NOT NULL,
+  `feeling` varchar(1024) NOT NULL,
+  KEY `subjectid` (`subjectid`),
+  KEY `photoes_filename` (`filename`(767)),
+  KEY `photoes_feeling` (`feeling`(767)),
+  CONSTRAINT `photoes_ibfk_1` FOREIGN KEY (`subjectid`) REFERENCES `photos` (`subjectid`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `photos` (
+  `subjectid` int(11) NOT NULL AUTO_INCREMENT,
+  `filename` varchar(1024) NOT NULL,
+  `gender` varchar(1) DEFAULT 'F',
+  `photoset` int(10) unsigned NOT NULL,
+  PRIMARY KEY (`subjectid`),
+  KEY `photos_filename` (`filename`(767)),
+  KEY `photos_gender` (`gender`),
+  KEY `photos_photoset` (`photoset`)
+) ENGINE=InnoDB AUTO_INCREMENT=9 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `quicklits` (
+  `string` varchar(64) NOT NULL,
+  `word` varchar(1) DEFAULT 'N',
+  `level` int(11) DEFAULT '0',
+  `used` varchar(1) DEFAULT 'N',
+  UNIQUE KEY `string` (`string`),
+  KEY `quicklits_string` (`string`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sessions` (
+  `sessionId` varchar(31) NOT NULL,
+  `userId` varchar(63) NOT NULL,
+  `email` varchar(127) NOT NULL,
+  `starttime` datetime NOT NULL,
+  `endtime` datetime DEFAULT NULL,
+  `testId` int(11) NOT NULL,
+  PRIMARY KEY (`sessionId`),
+  KEY `testId` (`testId`),
+  KEY `sessions_userId` (`userId`),
+  KEY `sessions_email` (`email`),
+  CONSTRAINT `sessions_ibfk_1` FOREIGN KEY (`testId`) REFERENCES `tests` (`test`) ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sessionstates` (
+  `sessionId` varchar(31) NOT NULL,
+  `testId` int(11) NOT NULL,
+  `type` int(10) unsigned NOT NULL,
+  `item` int(10) unsigned NOT NULL,
+  `seq` int(10) unsigned NOT NULL,
+  `itemType` varchar(31) NOT NULL,
+  `startTime` datetime NOT NULL,
+  `endTime` datetime NOT NULL,
+  `afilename` varchar(255) NOT NULL,
+  `score` int(11) DEFAULT NULL,
+  `status` varchar(31) NOT NULL,
+  `subResponses` blob,
+  `snrDB` blob,
+  UNIQUE KEY `sessionId` (`sessionId`,`testId`,`type`,`item`),
+  KEY `sessionstates_sessionId` (`sessionId`),
+  CONSTRAINT `sessionstates_ibfk_1` FOREIGN KEY (`sessionId`) REFERENCES `sessions` (`sessionId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sessionstates_camerapicture` (
+  `sessionId` varchar(31) NOT NULL,
+  `takenTime` datetime DEFAULT NULL,
+  `elapseTime` float DEFAULT NULL,
+  `takenType` int(11) DEFAULT NULL,
+  `takenItem` int(11) DEFAULT NULL,
+  `pngFileName` varchar(255) DEFAULT NULL,
+  KEY `sessionstates_camerapicture_sessionId` (`sessionId`),
+  CONSTRAINT `sessionstates_camerapicture_ibfk_1` FOREIGN KEY (`sessionId`) REFERENCES `sessions` (`sessionId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sessionstates_quicklit` (
+  `sessionId` varchar(31) NOT NULL,
+  `testId` int(11) NOT NULL,
+  `type` int(10) unsigned NOT NULL,
+  `item` int(10) unsigned NOT NULL,
+  `word` varchar(31) NOT NULL,
+  `isWord` varchar(1) NOT NULL,
+  `isUsed` varchar(1) NOT NULL,
+  `level` int(11) NOT NULL,
+  `duration` float NOT NULL,
+  `isTouched` varchar(1) NOT NULL,
+  `touchTimeStamp` datetime DEFAULT NULL,
+  `wordIndex` int(11) DEFAULT NULL,
+  `isCorrect` varchar(1) DEFAULT NULL,
+  UNIQUE KEY `sessionId` (`sessionId`,`testId`,`type`,`item`,`word`),
+  KEY `sessionstates_quicklit_sessionId` (`sessionId`),
+  CONSTRAINT `sessionstates_quicklit_ibfk_1` FOREIGN KEY (`sessionId`) REFERENCES `sessions` (`sessionId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `sessionstates_tracktap` (
+  `sessionId` varchar(31) NOT NULL,
+  `latency` float DEFAULT NULL,
+  `distance` float DEFAULT NULL,
+  KEY `sessionstates_tracktap_sessionId` (`sessionId`),
+  CONSTRAINT `sessionstates_tracktap_ibfk_1` FOREIGN KEY (`sessionId`) REFERENCES `sessions` (`sessionId`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+CREATE TABLE `testitems` (
+  `test` int(11) NOT NULL,
+  `type` int(10) unsigned NOT NULL,
+  `item` int(10) unsigned NOT NULL,
+  `seq` int(10) unsigned NOT NULL,
+  UNIQUE KEY `test` (`test`,`type`,`item`),
+  KEY `type` (`type`,`item`),
+  KEY `testitems_type` (`type`),
+  KEY `testitems_item` (`item`),
+  KEY `testitems_seq` (`seq`),
+  CONSTRAINT `testitems_ibfk_1` FOREIGN KEY (`test`) REFERENCES `tests` (`test`),
+  CONSTRAINT `testitems_ibfk_2` FOREIGN KEY (`type`) REFERENCES `types` (`type`),
+  CONSTRAINT `testitems_ibfk_3` FOREIGN KEY (`type`, `item`) REFERENCES `items` (`type`, `item`) ON DELETE CASCADE ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+CREATE TABLE `tests` (
+  `test` int(11) NOT NULL AUTO_INCREMENT,
+  `name` varchar(1024) DEFAULT NULL,
+  `note` varchar(1024) DEFAULT NULL,
+  PRIMARY KEY (`test`),
+  KEY `tests_name` (`name`(767))
+) ENGINE=InnoDB AUTO_INCREMENT=6 DEFAULT CHARSET=latin1;
+
+CREATE TABLE `types` (
+  `type` int(10) unsigned NOT NULL,
+  `format` varchar(255) DEFAULT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `itext` varchar(64) NOT NULL,
+  `audio` varchar(255) NOT NULL,
+  `video` varchar(255) DEFAULT NULL,
+  `timeout` double DEFAULT NULL,
+  `replay` int(11) DEFAULT '0',
+  `addition` varchar(1024) DEFAULT NULL,
+  `note` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`type`),
+  KEY `types_type` (`type`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
+Then we need to export the data from SQLite  
+The followings are the example commands:
+
+.open /home/test/Downloads/amiPACES/amiPACES/Assets/interviews.db
+
+sqlite> .headers on
+sqlite> .mode csv
+sqlite> .output data.csv
+sqlite> SELECT customerid,
+   ...>        firstname,
+   ...>        lastname,
+   ...>        company
+   ...>   FROM customers;
+sqlite> .quit
+
+items      photoes    quicklits  tests    
+names      photos     testitems  types 
+
+After those SQLLite tables had been exported as the csv files, you will need to log on RDS then
+run the command to load those files into RDS database: 
+for example: 
+LOAD DATA INFILE '/home/paul/items.csv' INTO TABLE items;
+
+5 code deployment:
+
+install nodeJS on EC2 host using Apt-get command:
+sudo apt-get install nodejs
+
+unzip the source code folder, deploy it in the specified directory 
+runing the following command will bring up the application: 
+sudo node /home/ubuntu/Ami_Html5/app.js 
+
+need to configure SuperviseD to make the application as service and keep running in the background
+the instruction for how to install and run supervised d could be found in the following link:
+http://manpages.ubuntu.com/manpages/precise/man8/supervise.8.html
