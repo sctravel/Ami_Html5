@@ -1,12 +1,13 @@
 {
-  "siteUrl" : "localhost:3000",
+   "siteUrl" : "localhost:3000",
    "dbOptions" : {
         "host" : "mysql.cohi5vfxnofi.us-west-2.rds.amazonaws.com",//process.env.MYSQL_HOST,
         "user" : "admin",//process.env.MYSQL_USER,
         "password" : "sctravel",//process.env.MYSQL_PASS,
         "database" : "AMIPACES",//process.env.MYSQL_DB,
-        "connectionLimit" : 500,
-        "supportBigNumbers" : true
+        "connectionLimit" : 1000,
+        "supportBigNumbers" : true,
+        "waitForConnections" : false
     }
 }
 

@@ -45,7 +45,7 @@ module.exports = function(app) {
                 if(err){
                     logger.error("markSessionEnd failed with error: " + err);
                     res.send(constants.services.CALLBACK_FAILED);
-                    return;s
+                    return;
                 }
                 //TODO: write xml and upload to S3
                 console.log("Uploading session xml in /api/session/endSession");
@@ -72,36 +72,7 @@ module.exports = function(app) {
             }
             res.send(result);
         })
-    })
-    app.get('/api/xml', function(req, res) {
+    });
 
-        var session = {};
-        session.testId=3;
-        session.email='test1@ami.com';
-        session.startTime = new Date('2017-01-24 17:49:32');
-        session.endTime = new Date('2017-01-24 17:59:32');
-        session.sessionId = '20170124-174932-70695';
-        session.testName = memoryCache.get(session.testId)[0].testName;
-
-        xmlBuilder.buildSessionXml(session, function(err, xmlString){
-            if(err) {
-                logger.error("Build Session XML error. " + err);
-                callback(err, null);
-                return;
-            }
-            var xmlFileName = constants.paths.UPLOAD_FOLDER + session.email+ "_" + session.sessionId + "/"+session.sessionId+"_session.xml";
-            logger.info("uploading session xml - " + xmlFileName);
-            fs.writeFile(xmlFileName, xmlString, function(err) {
-                if(err) {
-                    logger.error("Write xmlString to file failed. " + err);
-                    res.send(constants.services.CALLBACK_FAILED);
-                    return
-                }
-                res.send(constants.services.CALLBACK_SUCCESS);
-            });
-        });
-
-
-    })
 }
 

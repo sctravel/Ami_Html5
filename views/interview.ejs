@@ -138,12 +138,8 @@
 
 <script>
 
-
-    var websiteUrl = "https://localhost:3000";
-
-
-    var audioFolder = websiteUrl + "/assets/Audio/items/"
-    var videoFolder = websiteUrl + "/assets/Video/"
+    var audioFolder = "https://" + window.location.host + "/assets/Audio/items/"
+    var videoFolder = "https://" + window.location.host  + "/assets/Video/"
     var imageFolder = "assets/Images/"
     var nameFacesImageFolder = "assets/Images/2062/"
     var postFlacUrl = "/api/upload/audio/"
@@ -1017,7 +1013,8 @@
                     JL('client').info("Start playing audio "+audioList[1]);
                     audioGlobal.play();
                     audioGlobal.onended = function() {
-                        //TODO add timer
+
+                        itemResponse.status = "NEXT_TOUCHED";
                         nextButton.style.display = "inline";
                         nextButton.onclick = function () {
                             nextButton.style.display = "none";
@@ -1041,7 +1038,7 @@
                                 else if(it.isTouched=='N' && it.isWord=='Y') --touchScore;
                                 else if(it.isTouched=='Y' && it.isWord=='N') --touchScore;
                             })
-                            itemResponse.status = "NEXT_TOUCHED";
+
                             responseEndTime=new Date();
                             itemResponse.startTime = responseStartTime.toUTCString();
                             itemResponse.endTime = responseEndTime.toUTCString();
@@ -1049,6 +1046,10 @@
                             JL('client').info("End tapping all real words in QuickLit.");
                             postItemResponse(stream);
                         }
+                        startTimer(0, item.mtimeout, null, function(){
+                            itemResponse.status = "MAX_TIMEOUT";
+                            nextButton.click();
+                        })
                     }
                 } else {
                     JL('client').info("Showing word " + (wordsBlob.length-numWords) + " at time：" + (new Date()-responseStartTime)/1000);

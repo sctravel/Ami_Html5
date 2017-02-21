@@ -18,7 +18,14 @@ Session.prototype.createSessionFromExisting = function(userId, email, sessionId,
     return session;
 }
 
-Session.prototype.data = {}
+Session.prototype.getStartTime = function() {
+    return new Date(this.Data.startTime);
+}
+Session.prototype.getEndTime = function() {
+    if(this.Data.endTime == null) return null;
+    return new Date(this.Data.endTime);
+}
 
+Session.prototype.data = {}
 
 module.exports = Session;

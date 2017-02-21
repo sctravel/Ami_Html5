@@ -1,19 +1,10 @@
 var mysql=require('mysql');
 var config = require('config');
+
 //parameters for connecting to DB
 var dbOptions = config.get('dbOptions');
-const util = require('util')
 dbOptions.password = process.env.MYSQL_PASS
-var pool = mysql.createPool({
-    host     : dbOptions.host,
-    user     : dbOptions.user,
-    password :  dbOptions.password,
-    database : dbOptions.database,
-    waitForConnections : false
-});
-
-//exports.connection = mysql.createConnection(dbOptions);
-
+var pool = mysql.createPool(dbOptions);
 
 /**
  *
