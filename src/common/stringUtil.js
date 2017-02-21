@@ -1,7 +1,7 @@
 /**
  * Created by xitu on 12/27/2016.
  */
-exports.getDelimitedStringFromArray = function(array, delimiter) {
+function getDelimitedStringFromArray(array, delimiter) {
 
     if(array ==null || array.length==0) return null;
 
@@ -23,7 +23,7 @@ exports.getDelimitedStringFromArray = function(array, delimiter) {
  * @param num: number of times of repeatition
  * @returns the num times repeated string with delimiter
  */
-exports.getDelimitedRepeatString = function(string, delimiter, num) {
+function getDelimitedRepeatString(string, delimiter, num) {
 
     if(num<=0) {
         console.log("Number of repeated times: "+num+" is less than 1");
@@ -47,7 +47,7 @@ var padLeft = function(word, pad) {
     return pad.substring(0, pad.length - word.length) + word;
 }
 
-exports.toUTCDateTimeString = function(date) {
+function toUTCDateTimeString(date) {
     //Example: 2017-01-02 15:30:55.752 +0000
     var hour = date.getUTCHours();
     hour = (hour < 10 ? "0" : "") + hour;
@@ -71,7 +71,7 @@ exports.toUTCDateTimeString = function(date) {
     return date.getFullYear()+"-"+month+"-"+day+" "+hour+":"+min+":"+sec+"."+milliSec+" +0000";
 }
 
-exports.toDateTimeString = function(date) {
+function toDateTimeString(date) {
 
     var hour = date.getHours();
     hour = (hour < 10 ? "0" : "") + hour;
@@ -97,7 +97,7 @@ exports.toDateTimeString = function(date) {
 var letters = ['1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L','M','N',
     'O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
-exports.generateRandomNumbers=function(length) {
+function generateRandomNumbers(length) {
     var numbers = ['0','1','2','3','4','5','6','7','8','9'];
 
     function f(len) {
@@ -117,7 +117,7 @@ exports.generateRandomNumbers=function(length) {
  * Using Closure!
  * @len the length of the random string
  **/
-exports.generateRandomString=function(length) {
+function generateRandomString(length) {
     var letters = ['1','2','3','4','5','6','7','8','9','0','A','B','C','D','E','F','G','H','I','J','K','L','M','N',
         'O','P','Q','R','S','T','U','V','W','X','Y','Z'];
 
@@ -139,7 +139,7 @@ exports.generateRandomString=function(length) {
  * @param customerId
  * @returns {string}
  */
-exports.generateUniqueId = function(customerId) {
+function generateUniqueId(customerId) {
 
     var dateTime = new Date();
     var dateString = dateTime.getTime().toString().slice(1,10);
@@ -147,7 +147,7 @@ exports.generateUniqueId = function(customerId) {
     return dateString+customerId+letters[Math.floor(Math.random()*10)];
 }
 
-exports.shuffle = function(array) {
+function shuffle(array) {
     var j, temp, i;
     for (i = array.length; i>0; --i) {
         j = Math.floor(Math.random() * i);
@@ -155,4 +155,15 @@ exports.shuffle = function(array) {
         array[i - 1] = array[j];
         array[j] = temp;
     }
+}
+
+module.exports = {
+    getDelimitedStringFromArray : getDelimitedStringFromArray,
+    getDelimitedRepeatString : getDelimitedRepeatString,
+    toUTCDateTimeString : toUTCDateTimeString,
+    toDateTimeString : toDateTimeString,
+    generateRandomNumbers : generateRandomNumbers,
+    generateRandomString : generateRandomString,
+    generateUniqueId : generateUniqueId,
+    shuffle : shuffle
 }

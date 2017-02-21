@@ -14,8 +14,6 @@ function getTestCountFromDB(callback) {
     });
 }
 
-exports.getTestCountFromDB = getTestCountFromDB;
-
 function getAllBaseTestsFromDB(callback){
     var sqlGetTests = 'select *, i.audio,i.video, t.name AS testName, "" AS wordsBlob, ' +
         ' "" AS namefacePicBlob, "" AS namefaceNameBlob, "" AS namefaceNamePicked, "" AS namefacePicPicked ' +
@@ -31,7 +29,6 @@ function getAllBaseTestsFromDB(callback){
         callback(null, testResults);
     });
 }
-exports.getAllBaseTestsFromDB = getAllBaseTestsFromDB;
 
 
 function getAllNameFaceNamesFromDB(callback) {
@@ -45,7 +42,6 @@ function getAllNameFaceNamesFromDB(callback) {
         callback(null, nameFaceNames);
     });
 }
-exports.getAllNameFaceNamesFromDB = getAllNameFaceNamesFromDB;
 
 function getAllNameFacePhotoesFromDB(callback) {
     var sqlGetNameFacephotoes = 'select subjectid, filename, feeling from photoes';
@@ -58,7 +54,6 @@ function getAllNameFacePhotoesFromDB(callback) {
         callback(null, nameFacePhotoes);
     });
 }
-exports.getAllNameFacePhotoesFromDB = getAllNameFacePhotoesFromDB;
 
 function getAllQuickLitWordsFromDB(callback) {
     var sqlGetQuickLitWords = 'select * from quicklits';
@@ -71,4 +66,11 @@ function getAllQuickLitWordsFromDB(callback) {
         callback(null, allWords);
     });
 }
-exports.getAllQuickLitWordsFromDB = getAllQuickLitWordsFromDB;
+
+module.exports = {
+    getAllQuickLitWordsFromDB : getAllQuickLitWordsFromDB,
+    getAllNameFacePhotoesFromDB : getAllNameFacePhotoesFromDB,
+    getAllNameFaceNamesFromDB : getAllNameFaceNamesFromDB,
+    getAllBaseTestsFromDB : getAllBaseTestsFromDB,
+    getTestCountFromDB : getTestCountFromDB
+}

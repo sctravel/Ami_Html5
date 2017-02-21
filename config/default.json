@@ -1,11 +1,4 @@
 {
-  "emailCredentials" : {
-    "service" : "Gmail",
-    "auth" : {
-      "user" : "willgiveplatform@gmail.com",
-      "pass" : "WillGive2015"
-    }
-  },
   "siteUrl" : "localhost:3000",
    "dbOptions" : {
         "host" : "mysql.cohi5vfxnofi.us-west-2.rds.amazonaws.com",//process.env.MYSQL_HOST,

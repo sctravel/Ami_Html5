@@ -26,7 +26,6 @@ function getCurrentSessionPictureId(sessionId, callback) {
         callback(null, {maxPictureId: result[0].maxPictureId, minStartTime: result[0].minStartTime.toUTCString()});
     });
 }
-exports.getCurrentSessionPictureId = getCurrentSessionPictureId;
 
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
     var sqlGetFinishedItemsInSession = "select * from sessionstates where sessionId = ? order by endTime";
@@ -41,7 +40,7 @@ function getFinishedItemsInSession(unfinishedSessionId, callback) {
     });
 }
 //return null or empty array if there's no unFinished Item in Session
-var getUnFinishedTestItemsInSession = function(sessionId, testId, callback) { // or change to sessionID
+function getUnFinishedTestItemsInSession(sessionId, testId, callback) { // or change to sessionID
     //get status from sessionstates table to see whether there's any unfinished session
     var testItems = memoryCache.get(testId);
     console.warn("number of total items: " + testItems.length + " for sessionId: " + sessionId);
@@ -73,12 +72,8 @@ var getUnFinishedTestItemsInSession = function(sessionId, testId, callback) { //
         })
     });
 }
-exports.getUnFinishedTestItemsInSession = getUnFinishedTestItemsInSession;
 
-
-
-
-var getCompleteTestWithBaseTestItems = function (testItems, callback) {
+function getCompleteTestWithBaseTestItems(testItems, callback) {
     console.log("Entering getCompleteTestWithBaseTestItems() with testItems of " + testItems.length);
     if(testItems==null || testItems.length<1) {
         var err = "getCompleteTestWithBaseTestItems() failed. testItems is null or empty.";
@@ -138,9 +133,8 @@ var getCompleteTestWithBaseTestItems = function (testItems, callback) {
     }
     callback(null, testItems);
 }
-exports.getCompleteTestWithBaseTestItems = getCompleteTestWithBaseTestItems;
 
-var getCompleteTestById = function(testId, callback) {
+function getCompleteTestById(testId, callback) {
     var testItems = memoryCache.get(testId);
     getCompleteTestWithBaseTestItems(testItems, function(err, results) {
         if(err) {
@@ -152,12 +146,8 @@ var getCompleteTestById = function(testId, callback) {
     });
 }
 
-exports.getCompleteTestById = getCompleteTestById;
 
-
-
-
-var markSessionEnd = function(userSession, callback) {
+function markSessionEnd(userSession, callback) {
     var sqlMarkSessionEnd = 'update sessions set endtime = ? where sessionId= ? ';
     var endtime = new Date();
     userSession.startTime = new Date(userSession.startTime);
@@ -181,4 +171,11 @@ var markSessionEnd = function(userSession, callback) {
         });
     });
 }
-exports.markSessionEnd = markSessionEnd;
+
+module.exports = {
+    markSessionEnd : markSessionEnd,
+    getCompleteTestById : getCompleteTestById,
+    getCompleteTestWithBaseTestItems : getCompleteTestWithBaseTestItems,
+    getUnFinishedTestItemsInSession : getUnFinishedTestItemsInSession,
+    getCurrentSessionPictureId : getCurrentSessionPictureId
+}

@@ -14,19 +14,15 @@ var audioInput = null,
 var rafID = null;
 var analyserContext = null;
 var canvasWidth, canvasHeight;
-var recIndex = 0;
 var checkSilenceIntervalId=null;
 var uploadURL = "/upload/audio/";
 var isRecording = false, isAnalysing = false;
 var didFuncIfSilenceAfterSpeech = false, userStartedTalking =false;
 var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95, speakThreshold=15;
 var noiseLevel, signalLevel;
-var latestSNR = 0;
 var currentMaxAudioPoint = 0;
 var audioData = [];
 var audioDataStartIndex = 0;
-var audioDataAverageForSeconds = [];
-var currentMaxAudioInDB = 0;
 var audioLevel;
 var audioLevelOptions = {
     OK : 1,
@@ -58,8 +54,7 @@ function hasUserStartedTalking() {
     console.log("hasUserStartedTalking --- SUM: "+ sum +"; Average: " + avg +"; Threshold: " + signalThreshold);
 
     userStartedTalking = avg >= signalThreshold ? true : false;
-    //if(startedTalking) console.log("user started talking");
-    //else console.log("user no talk");
+
     return userStartedTalking;
 }
 
@@ -106,14 +101,11 @@ function doFuncIfSilenceAfterSpeech(silenceTime, funcAfterSilence) {
     var avg = sum/numDataPoints;
 
     var isSilence =  avg >= speakThreshold ? false : true;
-    console.log("doFuncIfSilenceAfterSpeech --- numDataPoints: " + numDataPoints +"; SUM: "+ sum +"; Average: " + avg +"; isSilence: " + isSilence);
-
     if(isSilence) {
         didFuncIfSilenceAfterSpeech = true;
         clearInterval(checkSilenceIntervalId);
         funcAfterSilence();
     }
-
 }
 
 //around 6000 data point in audio data per second

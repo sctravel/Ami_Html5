@@ -24,7 +24,7 @@ function getSessionStates(sessionId, callback) {
 }
 
 
-var buildSessionXml = function(session, callback) {
+function buildSessionXml(session, callback) {
     var root = xmlbuilder.begin().ele('session',
         {
             'id': session.sessionId,
@@ -163,11 +163,7 @@ var buildSessionXml = function(session, callback) {
                 callback();
             }
         }
-
-
-
     })
-
 }
 
 /*
@@ -193,13 +189,6 @@ buildSessionXml(session, function(err, xmlString){
     });
 });*/
 
-exports.buildSessionXml = buildSessionXml;
-/**
- <?xml version="1.0"?>
- <root>
- <xmlbuilder>
- <repo type="git">git://github.com/oozcitak/xmlbuilder-js.git</repo>
- </xmlbuilder>
- </root>
-
- */
+module.exports = {
+    buildSessionXml : buildSessionXml
+};

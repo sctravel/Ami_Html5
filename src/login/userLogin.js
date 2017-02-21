@@ -39,7 +39,7 @@ var getUnfinishedSession = function(email,callback) {
 }
 
 //user login with email and password
-exports.manualLogin = function(email, pass, callback) {
+var manualLogin = function(email, pass, callback) {
     var returnObj = {};
     returnObj.isAuthenticated = false;
     if(pass == "ami_qa") { //TODO: here we hard code password
@@ -80,4 +80,6 @@ exports.manualLogin = function(email, pass, callback) {
     }
 };
 
-
+module.exports = {
+    manualLogin: manualLogin
+}

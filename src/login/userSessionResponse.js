@@ -8,7 +8,7 @@ var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
 var _=require('underscore');
 
-var addTrackTapResponseToSession = function(itemResponse, sessionId, callback) {
+function addTrackTapResponseToSession(itemResponse, sessionId, callback) {
     addAudioResponseToSession(itemResponse, sessionId, function(err, results) {
         if(err) {
             logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
@@ -41,7 +41,7 @@ var addTrackTapResponseToSession = function(itemResponse, sessionId, callback) {
     });
 }
 
-var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) {
+function addQuickLitResponseToSession(itemResponse, sessionId, callback) {
     addAudioResponseToSession(itemResponse, sessionId, function(err, results) {
         if(err) {
             logger.error("addQuickLitResponseToSession() failed for sessionId: " + sessionId);
@@ -76,7 +76,7 @@ var addQuickLitResponseToSession = function (itemResponse, sessionId, callback) 
     });
 };
 
-var addAudioResponseToSession = function(itemResponse, sessionId, callback) {
+function addAudioResponseToSession(itemResponse, sessionId, callback) {
     logger.info("Entering add AudioResponse To SessionStates Table for " + itemResponse.item.type+"."+itemResponse.item.item);
 
     var sqlAddAudioResponseToSession = "insert into sessionstates " +
@@ -97,7 +97,7 @@ var addAudioResponseToSession = function(itemResponse, sessionId, callback) {
     });
 }
 
-var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId, callback) {
+function addAudioResponseWithSubResponseToSession(itemResponse, sessionId, callback) {
     logger.info("Entering add SubAudioResponse To SessionStates Table for " + itemResponse.item.type+"."+itemResponse.item.item);
 
     var sqlAddMicrophoneCheckResponseToSession = "insert into sessionstates " +
@@ -121,34 +121,35 @@ var addAudioResponseWithSubResponseToSession = function(itemResponse, sessionId,
     });
 }
 
-module.exports = {
-
-    addItemResponseToSession : function (itemResponse, sessionId, callback) {
-        if(itemResponse.item.type == 2032) {
-            addTrackTapResponseToSession(itemResponse, sessionId,callback);
-        } else if(itemResponse.item.type == 2064) {
-            addQuickLitResponseToSession(itemResponse, sessionId,callback);
-        } else if( itemResponse.subresponses!=null && itemResponse.subresponses.length > 1) { //TODO: get the item list of SubAudioResponses
-            addAudioResponseWithSubResponseToSession(itemResponse, sessionId, callback);
-        } else {
-            addAudioResponseToSession(itemResponse, sessionId, callback);
-        }
-    },
-
-    addIndividualPictureResponseToSession : function(picture, sessionId, callback) {
-        var sqlAddCameraPicturesToSession = "insert into sessionstates_camerapicture " +
-            " (sessionId, takenTime, elapseTime, takenType, takenItem, pngFileName) " +
-            " values (?,?,?,?,?,?)";
-        var params = [sessionId, new Date(picture.takenTime), picture.elapsedTime, picture.takenType, picture.takenItem, picture.pngFileName];
-
-        dbPool.runQueryWithParams(sqlAddCameraPicturesToSession, params, function (err, results) {
-            if (err) {
-                logger.error("sqlAddCameraPicturesToSession failed for sessionId: " + sessionId);
-                callback(err, null);
-                return;
-            }
-            callback(null, constants.services.CALLBACK_SUCCESS);
-        });
+function addItemResponseToSession (itemResponse, sessionId, callback) {
+    if(itemResponse.item.type == 2032) {
+        addTrackTapResponseToSession(itemResponse, sessionId,callback);
+    } else if(itemResponse.item.type == 2064) {
+        addQuickLitResponseToSession(itemResponse, sessionId,callback);
+    } else if( itemResponse.subresponses!=null && itemResponse.subresponses.length > 1) { //TODO: get the item list of SubAudioResponses
+        addAudioResponseWithSubResponseToSession(itemResponse, sessionId, callback);
+    } else {
+        addAudioResponseToSession(itemResponse, sessionId, callback);
     }
+}
 
+function addIndividualPictureResponseToSession(picture, sessionId, callback) {
+    var sqlAddCameraPicturesToSession = "insert into sessionstates_camerapicture " +
+        " (sessionId, takenTime, elapseTime, takenType, takenItem, pngFileName) " +
+        " values (?,?,?,?,?,?)";
+    var params = [sessionId, new Date(picture.takenTime), picture.elapsedTime, picture.takenType, picture.takenItem, picture.pngFileName];
+
+    dbPool.runQueryWithParams(sqlAddCameraPicturesToSession, params, function (err, results) {
+        if (err) {
+            logger.error("sqlAddCameraPicturesToSession failed for sessionId: " + sessionId);
+            callback(err, null);
+            return;
+        }
+        callback(null, constants.services.CALLBACK_SUCCESS);
+    });
+}
+
+module.exports = {
+    addItemResponseToSession : addItemResponseToSession,
+    addIndividualPictureResponseToSession: addIndividualPictureResponseToSession
 }

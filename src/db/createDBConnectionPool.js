@@ -21,7 +21,7 @@ var pool = mysql.createPool({
  * @param params: the values of the parameters in sql
  * @param callback: callback function to deal with the result
  */
-exports.runQueryWithParams = function(sql, params, callback) {
+function runQueryWithParams(sql, params, callback) {
     console.log("start runQueryWithParams");
 
     pool.getConnection(function(err,conn){
@@ -48,7 +48,7 @@ exports.runQueryWithParams = function(sql, params, callback) {
  * @param sql: the sql to run
  * @param callback: callback function to deal with the result
  */
-exports.runQuery = function(sql, callback) {
+function runQuery(sql, callback) {
     pool.getConnection(function(err,conn){
         if(err){
             logger.error("Get connection from pool failed in runQuery.");
@@ -66,4 +66,9 @@ exports.runQuery = function(sql, callback) {
             callback(null,results);
         })
     })
+}
+
+module.exports = {
+    runQueryWithParams : runQueryWithParams,
+    runQuery : runQuery
 }
