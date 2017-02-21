@@ -12,7 +12,6 @@
     <script src="/jsnlog.js/jsnlog.js"></script>
     <script src="/webcamjs/webcam.js"></script>
     <script src="js/tracktap.js"></script>
-    <script src="js/recorderjs/audiodisplay.js"></script>
     <script src="js/recorderjs/recorder.js"></script>
     <script src="js/recorderjs/audioMain.js"></script>
     <script src="js/utility.js"></script>
@@ -709,7 +708,7 @@
             responseStartTime = new Date();
             itemResponse.taps=[];
 
-            GameStart();
+            GameStart(15);
             startTimer(0, item.mtimeout, null, function() {
                 GameOver();
                 JL('client').info("End playing tracktap");

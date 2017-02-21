@@ -4,7 +4,8 @@
 var td = new Array(),      //保存每个格子的地鼠
     playing = false,       //游戏是否开始
     score = 0,             //分数
-    total = 0,
+    total = 15,
+    currentCount =0,
     beat = 0,              //鼠标点击次数
     success = 0,           //命中率
     showTime,
@@ -30,7 +31,7 @@ function show(prev){
     if(playing)
     {
         showTime = new Date();
-        if(total == 10) {
+        if(currentCount == total) {
             GameOver();
             return;
         }
@@ -42,7 +43,7 @@ function show(prev){
         console.log(" show =" + current);
         //这里的路径也需要根据自己的实际文件路径来修改
         document.getElementById("td["+current+"]").innerHTML = '<img src="assets/Images/Target_Off.png" height="100%" width="100%">';
-        ++total;
+        ++currentCount;
         //使用setTimeout()实现2秒后隐藏老鼠图片
 
         console.log(" dispear =" + current );
@@ -89,7 +90,8 @@ function hit(id){
 }
 
 //游戏开始
-function GameStart(){
+function GameStart(totalCount){
+    total = totalCount;
     playing = true;
     prev = -1; //remember previous td,avoid conflict
     prev = show(prev);
