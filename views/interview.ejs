@@ -138,8 +138,8 @@
 
 <script>
 
-    var audioFolder = "https://" + window.location.host + "/assets/Audio/items/"
-    var videoFolder = "https://" + window.location.host  + "/assets/Video/"
+    var audioFolder = window.location.origin + "/assets/Audio/items/"
+    var videoFolder = window.location.origin  + "/assets/Video/"
     var imageFolder = "assets/Images/"
     var nameFacesImageFolder = "assets/Images/2062/"
     var postFlacUrl = "/api/upload/audio/"
@@ -153,6 +153,7 @@
     var instr = document.getElementById("textContent");
     var trackTap = document.getElementById("trackTap");
     var nameFacesContent = document.getElementById("nameFacesContent");
+    var audioGlobal = document.getElementById('audioGlobal');
 
     var analyserImg = document.getElementById("analyserImg");
     var sessionId = document.getElementById("sessionId").innerHTML;
@@ -170,7 +171,6 @@
     var picStartTime = null;
     var picItemResponse = {};
     var interviewStartTime, interviewEndTime;
-    var audioGlobal = document.getElementById('audioGlobal');
     JL("client").info("Interview started");
 
 
