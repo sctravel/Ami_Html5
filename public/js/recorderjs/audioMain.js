@@ -78,6 +78,8 @@ function startAnalysing() {
     audioData=[];
     currentMaxAudioPoint = 0;
     isAnalysing = true;
+    analyser.style.display = "inline";
+    analyserImg.style.display = "none";
 }
 
 function stopAnalysing() {
@@ -85,6 +87,7 @@ function stopAnalysing() {
     isAnalysing = false;
     audioData=[];
     currentMaxAudioPoint=0;
+    analyser.style.display = "none";
 }
 
 function doFuncIfSilenceAfterSpeech(silenceTime, funcAfterSilence) {
