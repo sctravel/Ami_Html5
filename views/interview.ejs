@@ -226,7 +226,6 @@
     function postPictureResponseAndMarkEnd() {
         picItemResponse.endTime = (new Date()).toUTCString();
         picItemResponse.status = "MAX_TIMEOUT";
-        //TODO mark end and redirect to thank you page
         $.post("/api/session/endSession", {cameraPictureResponse : picItemResponse}, function(data) {
             if(data!="ok") {
                 var errorMessage = "Upload picture response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
@@ -349,19 +348,6 @@
         }
     }
 
-    function startResponse(item, hasSubResponse, type){
-
-    }
-    function endRespone(item, hasSubResponse, type) {
-
-    }
-
-    function startSubResponse(item) {
-
-    }
-    function endSubResponse(item, status) {
-
-    }
     function playAudioGlobalAndSetOnEndFunction(src, onendFunc) {
         JL("client").info("Enter playing audio for :"+src);
         nextButton.style.display = 'none';
