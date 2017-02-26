@@ -235,12 +235,8 @@
                 JL("client").info("Upload picture response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
                 //end the interview
                 JL("client").info("Interview completed.")
-                var instr = document.getElementById("textContent");
-                instr.innerHTML = "All reponse and images are uploaded. We are done. Thanks you.";
-                instr.style.display="inline";
-                setTimeout(function () {
-                   window.location.href= "/";
-                }, 5000);
+                   window.location.href= "/end";
+
 
             }
         })

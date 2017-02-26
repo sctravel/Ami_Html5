@@ -203,7 +203,7 @@ function stopRecording() {
                     blobToBase64(e.data.values['dummy.flac'].blob, function (base64) { // encode
                         var update = {'blob': base64, "id": uploadId};
                         var date = new Date();
-                        var file = new File([base64], 'amipace/'+date.yyyymmdd()+'/'+date.hhmmss()+'/'+getRandomArbitrary()+'/'+uploadId+'.flac', {
+                        var file = new File([base64], 'amipace/'+sessionId+'/'+uploadId+'.flac', {
                             lastModified: new Date(0), // optional - default = now
                             type: "overide/mimetype" // optional - default = ''
                         });
