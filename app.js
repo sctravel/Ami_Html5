@@ -124,6 +124,10 @@ app.get('/testpage', function (req,res){
     res.sendfile("public/test.html");
 });
 
+app.get('/end', function (req,res){
+    res.render("end");
+});
+
 app.get('/interview', isLoggedIn, function (req,res){
     res.render('interview',{userId: req.user.email, sessionId: req.user.sessionId});
 });
