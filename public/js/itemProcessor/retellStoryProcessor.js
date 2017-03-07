@@ -11,9 +11,10 @@ function processRetellStory(stream, item){
         playAudioInRetellStory(audioList, rsindex+1, stream, item);
     });
 }
+
 function playAudioInRetellStory(audioList, rsindex, stream, item){
     if(rsindex>=audioList.length) {
-        postItemResponse(stream);
+        processItem(stream);
         return;
     }
     JL("client").info("Entering  playAudioInRetellStory for " +item.type+"."+item.item );
@@ -36,10 +37,11 @@ function playAudioInRetellStory(audioList, rsindex, stream, item){
                 itemResponse.startTime = responseStartTime.toUTCString();
                 itemResponse.endTime = responseEndTime.toUTCString();
                 itemResponse.status = status;
+                nextButton.style.display = "none";
 
                 stopTimer();
-                stopRecording();
-                nextButton.style.display = "none";
+                stopRecording(itemResponse);
+
                 playAudioInRetellStory(audioList, rsindex + 1, stream, item);
             }
             startRecording(item.etimeout, function(){

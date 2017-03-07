@@ -34,7 +34,7 @@ function processQuickLit(stream, item) {
                 }
                 //stopTimer();
                 clearInterval(intervalId);
-                stopRecording();
+                pauseRecording();
                 playAudioGlobalAndSetOnEndFunction(audioFolder+audioList[1],function() {
                     analyserImg.style.display = "none";
                     var proceedToNext = function(status){
@@ -67,7 +67,9 @@ function processQuickLit(stream, item) {
                         itemResponse.endTime = responseEndTime.toUTCString();
                         itemResponse.score = touchScore;
                         JL('client').info("End tapping all real words in QuickLit.");
-                        postItemResponse(stream);
+                        resumeRecording(0,null); //fake; stop immediately after resume for upload itemResponse together with audio
+                        stopRecording(itemResponse);
+                        processItem(stream);
                     }
                     nextButton.style.display = "inline";
                     nextButton.onclick = function () {

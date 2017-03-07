@@ -206,21 +206,6 @@
 
     }
 
-    function postItemResponse(stream) {
-        console.log("start postItemResponse");
-        $.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
-            if(data!="ok") {
-                var errorMessage = "Upload response for testItem type:"+item.type+", item:"+item.item + " failed with message: " + data;
-                console.error(errorMessage);
-                JL("client").error(errorMessage);
-            } else {
-                JL("client").error("Upload response for testItem type:"+item.type+", item:"+item.item + " succeeded.");
-                //processItem(stream);
-            }
-        })
-        processItem(stream);
-    }
-
     function postPictureResponseAndMarkEnd() {
         picItemResponse.endTime = (new Date()).toUTCString();
         picItemResponse.status = "MAX_TIMEOUT";

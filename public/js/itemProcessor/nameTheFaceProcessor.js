@@ -48,9 +48,6 @@ function processNameTheFace(stream, item) {
                     responseStartTime = subResponseStartTime = new Date();
                     gotStream(stream);
                     var proceedToNext = function (status) {
-                        stopTimer();
-                        pauseRecording();
-
                         subResponseEndTime = new Date();
                         itemSubResponse.extraInfo = facePictureFiles.join(':') + ',' + namesArray.join(':') + ',' + selectedName;
                         itemSubResponse.status = status;
@@ -60,8 +57,11 @@ function processNameTheFace(stream, item) {
                         itemSubResponse.duration = subResponseDuration = (subResponseEndTime - subResponseStartTime) / 1000;
                         itemSubResponse.audioFileName = item.type + "." + item.item + ".1.flac";
                         itemResponse.subresponses.push(itemSubResponse);
-
                         JL('client').info("End timer and recording for interviewer to say the name.");
+
+                        stopTimer();
+                        pauseRecording();
+
                         processSayFeelingInNameTheFace(stream, item);
                     };
                     startRecording(item.etimeout, function () {
@@ -91,8 +91,7 @@ function processSayFeelingInNameTheFace(stream, item) {
 
             var proceedToNext = function (status) {
                 JL('client').info("End timer/recording for interviewer to say the person's feeling with status: " + status);
-                stopTimer();
-                stopRecording();
+
 
                 itemResponse.status = itemSubResponse.status = status;
                 itemSubResponse.startTime = toUTCDateTimeString(subResponseStartTime);
@@ -108,7 +107,9 @@ function processSayFeelingInNameTheFace(stream, item) {
 
                 nameFacesContent.style.display = "none";
                 nextButton.style.display = "none";
-                postItemResponse(stream);
+                stopTimer();
+                stopRecording(itemResponse);
+                processItem(stream);
             }
             resumeRecording(item.etimeout, function () {
                 nextButton.innerHTML = 'Next';

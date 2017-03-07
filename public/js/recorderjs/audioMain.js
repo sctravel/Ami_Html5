@@ -32,6 +32,10 @@ var audioLevelOptions = {
     UnKnown : 5
 }
 
+var audioItemResponseArray = [];
+var audioUploadIndex = -1;
+
+
 var blobToBase64 = function(blob, cb) {
     var reader = new FileReader();
     reader.onload = function() {
@@ -148,35 +152,9 @@ function resumeRecording(silenceTime, funcAfterSilence){
     }
 }
 
-Date.prototype.hhmmss = function() {
-  var hh = this.getHours(); // getMonth() is zero-based
-  var mm = this.getMinutes();
-  var ss = this.getSeconds();
-
-  return [(hh>9 ? '' : '0') + hh,
-          (mm>9 ? '' : '0') + mm,
-          (ss>9 ? '' : '0') + ss
-         ].join('');
-};
-
-Date.prototype.yyyymmdd = function() {
-  var mm = this.getMonth() + 1; // getMonth() is zero-based
-  var dd = this.getDate();
-
-  return [this.getFullYear(),
-          (mm>9 ? '' : '0') + mm,
-          (dd>9 ? '' : '0') + dd
-         ].join('');
-};
-
-
-function getRandomArbitrary() {
-    return Math.floor(10000 + Math.random() * 90000);
-
-}
-
-function stopRecording() {
+function stopRecording(itemResponse) {
     clearInterval(checkSilenceIntervalId);
+    stopAnalysing();
     var flac_encoder_worker = new Worker('js/recorderjs/flac/EmsWorkerProxy.js');
     console.log("stop recording")
     userStartedTalking = false;
@@ -184,8 +162,7 @@ function stopRecording() {
     if (audioRecorder) {
         audioRecorder.stop();
         isRecording = false;
-        stopAnalysing();
-        var uploadId = item.type+"."+item.item;
+        audioItemResponseArray.push(itemResponse);
         audioRecorder.getData(function(s) {
             // convert wav to flac
             var args = [ 'dummy.wav' ];
@@ -199,8 +176,12 @@ function stopRecording() {
             // Listen for messages by the flac_encoder_worker
             flac_encoder_worker.onmessage = function(e) {
                 if (e.data && e.data.reply === 'done') {
-                    console.log(" adding audio files -- " + uploadId);
+
                     blobToBase64(e.data.values['dummy.flac'].blob, function (base64) { // encode
+                        ++audioUploadIndex;
+                        var currentItemResponse = audioItemResponseArray[audioUploadIndex];
+                        var uploadId = currentItemResponse.item.type+"."+currentItemResponse.item.item;
+                        console.log(" adding audio files -- " + uploadId);
                         var update = {'blob': base64, "id": uploadId};
                         var date = new Date();
                         var file = new File([base64], 'amipace/'+sessionId+'/'+uploadId+'.flac', {
@@ -216,13 +197,14 @@ function stopRecording() {
                                 data : file,
                                 processData: false,  // tell jQuery not to convert to form data
                                 contentType: file.type,
-                                success: function(json) { console.log('Upload complete!') },
+                                success: function(json) { postItemResponse(currentItemResponse); },
                                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                    //console.alert('S3 Upload error: ' + XMLHttpRequest.responseText);
+                                    alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
+                                    window.location.href = '/interview';
                                 }
-                                });
                             });
-
+                        });
+                        /*
                         $.post(postFlacUrl, update, function (data) {
                             if (data == "ok") {
                                 console.log("UploadFlac succeeded");
@@ -230,13 +212,28 @@ function stopRecording() {
                             } else {
                                 console.error("Upload flac file failed for id: " + uploadId)
                             }
-                        });
+                        });*/
 
                     });
                 }
             }
         });
     }
+}
+
+function postItemResponse(itemResponse) {
+    console.log("start postItemResponse");
+    $.post("/api/session/updateSessionState", {itemResponse : itemResponse}, function(data) {
+        if(data!="ok") {
+            var errorMessage = "Upload response for testItem type:"+itemResponse.item.type+", item:"+itemResponse.item.item + " failed with message: " + data;
+            console.error(errorMessage);
+            JL("client").error(errorMessage);
+            alert('Opps, uploading audio response failed! Refreshing the page and try it again. Thank you for your patient.');
+            window.location.href = '/interview';
+        } else {
+            JL("client").error("Upload response for testItem type:"+itemResponse.item.type+", item:"+itemResponse.item.item + " succeeded.");
+        }
+    })
 }
 
 function convertToMono( input ) {

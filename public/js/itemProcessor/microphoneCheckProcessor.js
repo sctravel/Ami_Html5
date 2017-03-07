@@ -47,8 +47,7 @@ function processMicrophoneChecker(stream, item) {
         itemSubResponse.extraInfo='the No. 2 recording';
 
         var nextButtonClicked = function() {
-            stopRecording();
-            stopTimer();
+
             JL('client').info("Stop recording for microphone checker. Playing audio 2000.2.mp3.");
             instr.style.display = "none";
 
@@ -74,8 +73,10 @@ function processMicrophoneChecker(stream, item) {
                     source = audioFolder + '2000.2.OK.mp3';
                     audioGlobal.src = source;
                     itemResponse.snrDB.level = 'OK'
+                    stopTimer();
+                    stopRecording(itemResponse);
                     audioGlobal.onended = function () {
-                        postItemResponse(stream);
+                        processItem(stream);
                     }
                     audioGlobal.play();
                     break;
@@ -83,8 +84,10 @@ function processMicrophoneChecker(stream, item) {
                     source = audioFolder + '2000.2.Low.mp3';
                     audioGlobal.src = source;
                     itemResponse.snrDB.level = 'LowVolume'
+                    stopTimer();
+                    stopRecording(itemResponse);
                     audioGlobal.onended = function () {
-                        postItemResponse(stream);
+                        processItem(stream);
                     }
                     audioGlobal.play();
                     break;
@@ -92,6 +95,8 @@ function processMicrophoneChecker(stream, item) {
                     source = audioFolder + '2000.2.Noise.mp3';
                     audioGlobal.src = source;
                     itemResponse.snrDB.level = 'LowSNR'
+                    stopTimer();
+                    stopRecording(null);
                     audioGlobal.onended = function () {
                         window.location.href = "/?error=Make sure you are in a quiet place.";
                     }
@@ -101,6 +106,8 @@ function processMicrophoneChecker(stream, item) {
                     source = audioFolder + '2000.2.MoreSpeech.mp3';
                     audioGlobal.src = source;
                     itemResponse.snrDB.level = 'UnKnown'
+                    stopTimer();
+                    stopRecording(null);
                     audioGlobal.onended = function () {
                         processMicrophoneChecker(stream, item); //repeat the item again.
                     }

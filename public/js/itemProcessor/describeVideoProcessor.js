@@ -46,17 +46,7 @@ function processDescribeSilentVideo(stream, item) {
 }
 
 function playAudioInDescribeVideo(audioList, vindex, stream, item){
-    if(vindex>=audioList.length) {
-        videoContent.style.display="none";
 
-        itemResponse.status = "MAX_TIMEOUT";
-        responseEndTime=new Date();
-        itemResponse.startTime = responseStartTime.toUTCString();
-        itemResponse.endTime = responseEndTime.toUTCString();
-
-        postItemResponse(stream);
-        return;
-    }
     JL("client").info("Entering playAudioInDescribeVideo for " +item.type+"."+item.item );
 
     itemResponse.subresponses.push(itemSubResponse);
@@ -80,15 +70,23 @@ function playAudioInDescribeVideo(audioList, vindex, stream, item){
             subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
             itemSubResponse.duration = subResponseDuration;
             itemSubResponse.audioFileName = item.type+"."+item.item+"."+(vindex+1)+".flac";
+            nextButton.style.display = "none";
 
             stopTimer();
             if(vindex==audioList.length-1) {
-                stopRecording();
+                videoContent.style.display="none";
+
+                itemResponse.status = "MAX_TIMEOUT";
+                responseEndTime=new Date();
+                itemResponse.startTime = responseStartTime.toUTCString();
+                itemResponse.endTime = responseEndTime.toUTCString();
+                stopRecording(itemResponse);
+                processItem(stream);
+                return;
             } else {
+                playAudioInDescribeVideo(audioList, vindex+1, stream, item);
                 pauseRecording();
             }
-            nextButton.style.display = "none";
-            playAudioInDescribeVideo(audioList, vindex+1, stream, item);
         }
 
         resumeRecording(item.etimeout, function(){

@@ -29,7 +29,8 @@ function processTrackTap(stream, item) {
             itemResponse.score = score;
             itemResponse.latency = 0; //"dummy" for now
             //itemResponse.scoreInfo = scoreInfo;
-            postItemResponse(stream);
+            postItemResponse(itemResponse);
+            processItem(stream)
         });
     });
 }

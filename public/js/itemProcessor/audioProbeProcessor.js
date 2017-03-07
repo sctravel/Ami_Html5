@@ -34,11 +34,11 @@ function processNextAudioProbe(audioList, pindex, stream, item) {
                 itemResponse.startTime = responseStartTime.toUTCString();
                 itemResponse.endTime = responseEndTime.toUTCString();
                 itemResponse.status = status;
-
-                stopTimer();
-                stopRecording();
                 nextButton.style.display = "none";
-                postItemResponse(stream);
+                stopTimer();
+                stopRecording(itemResponse);
+
+                processItem(stream);
             }
             startRecording(item.etimeout, function(){
                 nextButton.innerHTML = 'Next';

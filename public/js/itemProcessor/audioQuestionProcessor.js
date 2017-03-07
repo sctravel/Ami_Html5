@@ -2,18 +2,6 @@
  * Created by xitu on 2/23/2017.
  */
 function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
-    if(aindex>=audioList.length) {
-        //End of the item, process next item
-        responseEndTime=new Date();
-        itemResponse.startTime = responseStartTime.toUTCString();
-        itemResponse.endTime = responseEndTime.toUTCString();
-        if(aindex>1) {
-            itemResponse.subresponses.push(itemSubResponse);
-        }
-        postItemResponse(stream);
-        return;
-    }
-
     itemResponse.subresponses.push(itemSubResponse);
     itemSubResponse = {};
     JL("client").info("Enter processNextAudioInAudioQuestions for :"+item.type+"."+item.item+". Start Playing audio: " + audioList[aindex]);
@@ -26,11 +14,7 @@ function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
         var proceedToNext = function(status){
             JL("client").info("End Recording for question " + audioList[aindex] + " with status: " + status);
             stopTimer();
-            if (aindex == audioList.length - 1) {
-                stopRecording();
-            } else {
-                pauseRecording();
-            }
+
             subResponseEndTime = new Date();
             itemResponse.status = status;
             itemSubResponse.status = status;
@@ -43,7 +27,21 @@ function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
             itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
 
             nextButton.style.display = "none";
-            processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
+
+            if (aindex == audioList.length - 1) {
+                responseEndTime=new Date();
+                itemResponse.startTime = responseStartTime.toUTCString();
+                itemResponse.endTime = responseEndTime.toUTCString();
+                if(aindex>=1) {
+                    itemResponse.subresponses.push(itemSubResponse);
+                }
+                stopRecording(itemResponse);
+                processItem(stream);
+                return;
+            } else {
+                pauseRecording();
+                processNextAudioInAudioQuestions(audioList, aindex + 1, stream, item);
+            }
         }
 
         resumeRecording(item.etimeout, function() {
@@ -89,11 +87,7 @@ function processAudioQuestion(stream, item) {
         var proceedToNext = function(status) {
             JL('client').info("End Recording for No."+(aindex+1)+" question of " + item.type+"."+item.item +" with status: "+status);
             stopTimer();
-            if (aindex == audioFileList.length - 1) {
-                stopRecording();
-            } else {
-                pauseRecording();
-            }
+
             nextButton.style.display = "none";
 
             subResponseEndTime = new Date();
@@ -106,7 +100,20 @@ function processAudioQuestion(stream, item) {
             itemSubResponse.duration = subResponseDuration;
             itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
 
-            processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
+            if (aindex == audioFileList.length - 1) {
+                responseEndTime=new Date();
+                itemResponse.startTime = responseStartTime.toUTCString();
+                itemResponse.endTime = responseEndTime.toUTCString();
+                if(aindex>=1) {
+                    itemResponse.subresponses.push(itemSubResponse);
+                }
+                stopRecording(itemResponse);
+                processItem(stream);
+                return;
+            } else {
+                pauseRecording();
+                processNextAudioInAudioQuestions(audioFileList, aindex+1, stream, item);
+            }
         };
 
         startRecording(item.etimeout, function(){
