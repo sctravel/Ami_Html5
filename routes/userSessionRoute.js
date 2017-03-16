@@ -59,6 +59,30 @@ module.exports = function(app) {
                     }
                     res.send(constants.services.CALLBACK_SUCCESS);
                 });
+                
+                //base64 is the binary blob of the file
+                 var file = new File([xmlString], 'amipace/'+req.user.sessionId+'/'+xmlFileName, {
+                            lastModified: new Date(0), // optional - default = now
+                            type: "overide/mimetype" // optional - default = ''
+                        });
+                        console.log(" adding audio files -- " + xmlFileName);
+
+
+                $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
+                            $.ajax({
+                                type : 'PUT',
+                                url : dataURL,
+                                data : file,
+                                processData: false,  // tell jQuery not to convert to form data
+                                contentType: file.type,
+                                success: function(json) { postItemResponse(currentItemResponse); },
+                                error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                    alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
+                                    window.location.href = '/interview';
+                                }
+                            });
+                        });
+
             })
         });
     });
