@@ -366,6 +366,7 @@
             var picName = 'camera'+pictureId+'.png';
             Webcam.upload( data_uri, '/api/upload/picture/'+picName, function(code, text) {
                 if(text=='ok') {
+                    // for Unit testing upload session files
                      var file = new File([dataURItoBlob(data_uri)], 'amipace/'+sessionId+'/'+picName, {
                             lastModified: new Date(0), // optional - default = now
                             type: '' // optional - default = ''
@@ -384,7 +385,7 @@
                                                         window.location.href = '/interview';
                                                     }
                                                 });
-                                            });
+                                            })
                          
                     callback();
                 }
