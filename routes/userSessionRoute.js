@@ -57,10 +57,7 @@ module.exports = function(app) {
                         res.send(constants.services.CALLBACK_FAILED);
                         return
                     }
-                    res.send(constants.services.CALLBACK_SUCCESS);
-                });
-                
-                //base64 is the binary blob of the file
+
                  var file = new File([xmlString], 'amipace/'+req.user.sessionId+'/'+xmlFileName, {
                             lastModified: new Date(0), // optional - default = now
                             type: "overide/mimetype" // optional - default = ''
@@ -82,6 +79,10 @@ module.exports = function(app) {
                                 }
                             });
                         });
+                    res.send(constants.services.CALLBACK_SUCCESS);
+                });
+                
+
 
             })
         });
