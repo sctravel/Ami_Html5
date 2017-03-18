@@ -346,12 +346,51 @@
     });
     Webcam.attach('#cameraDiv');
 
+    function dataURItoBlob(dataURI) {
+            // convert base64 to raw binary data held in a string
+            // doesn't handle URLEncoded DataURIs - see SO answer #6850276 for code that does this
+            var byteString = atob(dataURI.split(',')[1]);
+            // separate out the mime component
+            var mimeString = dataURI.split(',')[0].split(':')[1].split(';')[0]
+
+            // write the bytes of the string to an ArrayBuffer
+            var ab = new ArrayBuffer(byteString.length);
+            var ia = new Uint8Array(ab);
+            for (var i = 0; i < byteString.length; i++) {
+                ia[i] = byteString.charCodeAt(i);
+            }
+            // write the ArrayBuffer to a blob, and you're done
+            var blob = new Blob([ab], {type: mimeString});
+            return blob;
+    }   
+
     function takeSnapshot(callback) {
         Webcam.snap( function(data_uri) {
             // snap complete, image data is in 'data_uri'
             var picName = 'camera'+pictureId+'.png';
             Webcam.upload( data_uri, '/api/upload/picture/'+picName, function(code, text) {
                 if(text=='ok') {
+                    // for Unit testing upload session files
+                     var file = new File([dataURItoBlob(data_uri)], 'amipace/'+sessionId+'/'+picName, {
+                            lastModified: new Date(0), // optional - default = now
+                            type: '' // optional - default = ''
+                        });
+                       
+                    $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
+                                                $.ajax({
+                                                    type : 'PUT',
+                                                    url : dataURL,
+                                                    data : file,
+                                                    processData: false,  // tell jQuery not to convert to form data
+                                                    contentType: file.type,
+                                                    success: function(json) {console.info('Picuture uploading succeeded')},
+                                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                        alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
+                                                        window.location.href = '/interview';
+                                                    }
+                                                });
+                                            })
+                         
                     callback();
                 }
             } );
