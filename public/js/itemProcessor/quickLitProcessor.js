@@ -38,7 +38,7 @@ function processQuickLit(stream, item) {
                 playAudioGlobalAndSetOnEndFunction(audioFolder+audioList[1],function() {
                     analyserImg.style.display = "none";
                     var proceedToNext = function(status){
-                        nextButton.style.display = "none";
+                        nextButton.style.display = "hidden";
                         itemResponse.status = status;
                         stopTimer();
                         for (var wordDiv of selectedWords) {

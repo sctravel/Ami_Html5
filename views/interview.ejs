@@ -13,9 +13,9 @@
     <script src="/webcamjs/webcam.js"></script>
     <script src="js/tracktap.js"></script>
     <script src="js/recorderjs/recorder.js"></script>
+    <script src="js/retry.js"></script>
     <script src="js/recorderjs/audioMain.js"></script>
     <script src="js/utility.js"></script>
-
     <link rel="stylesheet" href="/css/audioCss.css">
     <link rel="stylesheet" href="/css/trackTap.css">
 </head>
@@ -120,11 +120,12 @@
     </div>
 
     <div id="my_result"></div>
+   <div id="af" class="bottom"  >
+       <canvas id="analyser"></canvas>
+       <img id="analyserImg" src="images/SparklingStars.gif" width="100%" height="100%"/>
+   </div>
 
-    <div id="bottom">
-        <canvas id="analyser"  ></canvas>
-        <img id="analyserImg" src="images/SparklingStars.gif" width="100%" height="100%"/>
-
+    <div class="bottom">
         <div  id="footer" >
             <button id="nextButton" class="btn-primary btn-lg"style="height:100%; border-radius:0;">Click Here To Start</button>
         </div>
@@ -145,6 +146,9 @@
 
 
 <script>
+
+    var footer_height = $('#footer').height();
+    $('#af').css("margin-bottom",footer_height);
     var audioFolder = window.location.origin + "/assets/Audio/items/"
     var videoFolder = window.location.origin  + "/assets/Video/"
     var imageFolder = "assets/Images/"

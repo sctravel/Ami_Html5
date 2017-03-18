@@ -70,7 +70,7 @@ function playAudioInDescribeVideo(audioList, vindex, stream, item){
             subResponseDuration = (subResponseEndTime - subResponseStartTime)/1000;
             itemSubResponse.duration = subResponseDuration;
             itemSubResponse.audioFileName = item.type+"."+item.item+"."+(vindex+1)+".flac";
-            nextButton.style.display = "none";
+            nextButton.style.display = "hidden";
 
             stopTimer();
             if(vindex==audioList.length-1) {

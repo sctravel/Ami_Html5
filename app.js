@@ -138,7 +138,7 @@ app.get('/api/questionSet', function(req, res){
     res.send(questionSet);
 });
 
-app.post('/api/upload/picture/:name', function (req, res) {
+app.post('e:name', function (req, res) {
     var webcam = req.files.webcam;
     var filename = constants.paths.UPLOAD_FOLDER + req.user.userId + "_" + req.user.sessionId + "/"+req.params.name; //"+req.user+"_"+req.sessionId+"\\
     fs.writeFile(filename, webcam.data, function(err) {

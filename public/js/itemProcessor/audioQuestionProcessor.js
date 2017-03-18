@@ -26,7 +26,7 @@ function processNextAudioInAudioQuestions(audioList, aindex, stream, item) {
             itemSubResponse.duration = subResponseDuration;
             itemSubResponse.audioFileName = item.type+"."+item.item+"."+(aindex+1)+".flac";
 
-            nextButton.style.display = "none";
+            nextButton.style.display = "hidden";
 
             if (aindex == audioList.length - 1) {
                 responseEndTime=new Date();
@@ -88,7 +88,7 @@ function processAudioQuestion(stream, item) {
             JL('client').info("End Recording for No."+(aindex+1)+" question of " + item.type+"."+item.item +" with status: "+status);
             stopTimer();
 
-            nextButton.style.display = "none";
+            nextButton.style.display = "hidden";
 
             subResponseEndTime = new Date();
             itemResponse.status = status;

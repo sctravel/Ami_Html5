@@ -175,7 +175,7 @@ body {
     left: 50%;
     transform: translate(-50%,-50%);
 }
-#bottom {
+.bottom {
     position: absolute;
     right: 0;
     bottom: 0;
@@ -314,7 +314,7 @@ svg {
         margin-right:0;
 
     }
-    #bottom {
+    .bottom {
         position: absolute;
         right: 0;
         bottom: 0;

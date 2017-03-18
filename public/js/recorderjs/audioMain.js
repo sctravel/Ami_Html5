@@ -55,7 +55,7 @@ function hasUserStartedTalking() {
         sum += audioData[i];
     }
     var avg = sum/(len-startIndex);
-    console.log("hasUserStartedTalking --- SUM: "+ sum +"; Average: " + avg +"; Threshold: " + signalThreshold);
+    //console.log("hasUserStartedTalking --- SUM: "+ sum +"; Average: " + avg +"; Threshold: " + signalThreshold);
 
     userStartedTalking = avg >= signalThreshold ? true : false;
 
@@ -188,21 +188,30 @@ function stopRecording(itemResponse) {
                             lastModified: new Date(0), // optional - default = now
                             type: "overide/mimetype" // optional - default = ''
                         });
-                        console.log(" adding audio files -- " + uploadId);
+                     //   console.log(" adding audio files -- " + uploadId);
 
                         $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
+                           var  tryCount = 0;
                             $.ajax({
                                 type : 'PUT',
                                 url : dataURL,
                                 data : file,
                                 processData: false,  // tell jQuery not to convert to form data
                                 contentType: file.type,
-                                success: function(json) { postItemResponse(currentItemResponse); },
+
                                 error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                    alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
-                                    window.location.href = '/interview';
+                                    console.log(tryCount);
+                                    tryCount ++;
+                                      if(tryCount == 3){
+                                          alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
+                                          window.location.href = '/interview';
+                                      }
+
                                 }
+                            }).retry({times:3, timeout:20000}).then(function(json){
+                                postItemResponse(currentItemResponse);
                             });
+
                         });
                         /*
                         $.post(postFlacUrl, update, function (data) {

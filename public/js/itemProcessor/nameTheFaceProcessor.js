@@ -17,7 +17,7 @@ function processNameTheFace(stream, item) {
     var fourFacesDiv = document.getElementById("4faces");
     var testFaceDiv = document.getElementById("testFaceDiv");
     var testFace = document.getElementById("testFace");
-    nextButton.style.display = "none";
+    nextButton.style.display = "hidden";
     nameFacesContent.style.display = "inline";
     var namesArray = [];
     for(var p in facePictureFiles) {
@@ -106,7 +106,7 @@ function processSayFeelingInNameTheFace(stream, item) {
                 itemResponse.endTime = responseEndTime.toUTCString();
 
                 nameFacesContent.style.display = "none";
-                nextButton.style.display = "none";
+                nextButton.style.display = "hidden";
                 stopTimer();
                 stopRecording(itemResponse);
                 processItem(stream);

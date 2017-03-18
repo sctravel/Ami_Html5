@@ -37,7 +37,7 @@ function playAudioInRetellStory(audioList, rsindex, stream, item){
                 itemResponse.startTime = responseStartTime.toUTCString();
                 itemResponse.endTime = responseEndTime.toUTCString();
                 itemResponse.status = status;
-                nextButton.style.display = "none";
+                nextButton.style.display = "hidden";
 
                 stopTimer();
                 stopRecording(itemResponse);
