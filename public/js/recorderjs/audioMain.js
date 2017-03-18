@@ -206,7 +206,6 @@ function stopRecording(itemResponse) {
                                           alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
                                           window.location.href = '/interview';
                                       }
-
                                 }
                             }).retry({times:3, timeout:20000}).then(function(json){
                                 postItemResponse(currentItemResponse);
