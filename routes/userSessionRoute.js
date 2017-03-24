@@ -94,6 +94,26 @@ module.exports = function(app) {
                 }
                 });
 
+                /////////////upload log files//////////
+                logfilename = 'logs/client/'+req.user.sessionId+'.log';
+                var fileStream = fs.createReadStream(logfilename);
+                fileStream.on('error', function(err) {
+                console.log('log file File Error', err);
+                });
+                uploadParams.Body = fileStream;
+
+                var path = require('path');
+                uploadParams.Key = "amipace/logs/" + req.user.sessionId + ".log";
+
+                // call S3 to retrieve upload file to specified bucket
+                s3.upload (uploadParams, function (err, data) {
+                if (err) {
+                    console.log("Error", err);
+                } if (data) {
+                    console.log("Upload Success", data.Location);
+                }
+                });
+
                 //S3 upload method from frontend UI
                 /* //path.basename(file);
                 var parts = [

@@ -71,6 +71,7 @@ module.exports = function(app) {
         winston.loggers.get(req.user.sessionId).close();
         userLogin.finishSession();
         //upload zip to s3;
+        console.log(" now upload log file to s3");
         filename = 'logs/client/'+req.user.sessionId+'.log';
         var AWS = require('aws-sdk');
         AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY})
@@ -86,7 +87,7 @@ module.exports = function(app) {
 
         var fileStream = fs.createReadStream(file);
         fileStream.on('error', function(err) {
-        console.log('File Error', err);
+        console.log('log file File Error', err);
         });
         uploadParams.Body = fileStream;
 
