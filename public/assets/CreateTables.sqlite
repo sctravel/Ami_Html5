@@ -178,4 +178,20 @@ FOREIGN KEY(sessionId) REFERENCES sessions (sessionId) ON DELETE CASCADE ON UPDA
 );
 CREATE INDEX sessionstates_camerapicture_sessionId ON sessionstates_camerapicture (sessionId);
 
+CREATE TABLE passwords (
+  id                       integer unsigned NOT NULL PRIMARY KEY AUTO_INCREMENT,
+  name                     varchar(255) NOT NULL,
+  password                 varchar(255) NOT NULL,
+  email                    varchar(255) DEFAULT NULL,
+  note                     varchar(255) DEFAULT NULL,
+  starttime                datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  expiretime               datetime DEFAULT NULL,
+  UNIQUE KEY               nameu (name),
+  UNIQUE KEY               emailu (email),
+  INDEX                    namei (name),
+  INDEX                    passwordi (password),
+  INDEX                    emaili (email)
+);
+
+
 

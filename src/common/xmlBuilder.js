@@ -75,23 +75,41 @@ function buildSessionXml(session, callback) {
 
         //array.forEach is synchronous and so is the function insde, so you can simply put your callback after your call to foreach:
         results.forEach(function(result) {
-            var responseElement = responses.ele('response', {'type': result.type, 'item': result.item,
-                'itemType': result.itemType==null ? "Missing" :result.itemType, 'status': result.status,
-                'startTime': stringUtil.toUTCDateTimeString(result.startTime), 'endTime': stringUtil.toUTCDateTimeString(result.endTime)});
-            if(result.afilename!=null && result.afilename!="") responseElement.ele('afilename',{}, result.afilename);
-            if(result.subresponses!=null && result.subresponses!="") {
-                var subresponses = JSON.parse(result.subresponses);
-                for (var idx in subresponses) {
-                    responseElement.ele('subresponse', subresponses[idx]);
+            if(result.type!=999) {
+                var responseElement = responses.ele('response', {
+                    'type': result.type,
+                    'item': result.item,
+                    'itemType': result.itemType == null ? "Missing" : result.itemType,
+                    'status': result.status,
+                    'startTime': stringUtil.toUTCDateTimeString(result.startTime),
+                    'endTime': stringUtil.toUTCDateTimeString(result.endTime)
+                });
+                if (result.afilename != null && result.afilename != "") responseElement.ele('afilename', {}, result.afilename);
+                if (result.subresponses != null && result.subresponses != "" && result.type < 999) {
+                    var subresponses = JSON.parse(result.subresponses);
+                    for (var idx in subresponses) {
+                        responseElement.ele('subresponse', subresponses[idx]);
+                    }
                 }
-            }
-            if(result.snrDB!=null && result.snrDB!="") {
-                responseElement.ele('snrDB', JSON.parse(result.snrDB));
-            }
-            if(result.score!=null && result.score!=-999) responseElement.ele('score',{}, result.score);
-            console.log('build XML - result foreach ongoing');
+                if (result.snrDB != null && result.snrDB != "") {
+                    responseElement.ele('snrDB', JSON.parse(result.snrDB));
+                }
+                if (result.score != null && result.score != -999) responseElement.ele('score', {}, result.score);
+                console.log('build XML - result foreach ongoing');
+                addExtraResponsesInfoAsync(result, responseElement, finish); //call finish after each entry
 
-            addExtraResponsesInfoAsync(result, responseElement, finish); //call finish after each entry
+            } else {
+                var responseElement = responses.ele('response', {
+                    'type': result.type,
+                    'item': result.item,
+                    'itemType': result.itemType == null ? "Missing" : result.itemType,
+                    'status': result.status,
+                    'origTypeItem': result.subresponses,
+                    'startTime': stringUtil.toUTCDateTimeString(result.startTime),
+                    'endTime': stringUtil.toUTCDateTimeString(result.endTime)
+                });
+                addExtraResponsesInfoAsync(result, responseElement, finish); //call finish after each entry
+            }
         });
 
         function addExtraResponsesInfoAsync(result, responseElement, callback) {

@@ -7,7 +7,7 @@ var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
 var _=require('underscore');
 var xmlBuilder = require('../common/xmlBuilder');
-
+var sessionResponse = require('./userSessionResponse');
 
 function getCurrentSessionPictureId(sessionId, callback) {
     var sqlGetPictureId = 'select COUNT(1) AS maxPictureId, MIN(takenTime) AS minStartTime from sessionstates_camerapicture where sessionId = ?'
@@ -27,7 +27,7 @@ function getCurrentSessionPictureId(sessionId, callback) {
 }
 
 function getFinishedItemsInSession(unfinishedSessionId, callback) {
-    var sqlGetFinishedItemsInSession = "select * from sessionstates where sessionId = ? order by endTime";
+    var sqlGetFinishedItemsInSession = "select * from sessionstates where sessionId = ? and type!=999 order by endTime";
     dbPool.runQueryWithParams(sqlGetFinishedItemsInSession, [unfinishedSessionId], function (err, finishedItems) {
         if (err) {
             logger.error("getFinishedItemsInSession() failed for sessionId: " + unfinishedSessionId);
@@ -49,6 +49,7 @@ function getUnFinishedTestItemsInSession(sessionId, testId, callback) { // or ch
             callback(err, null);
             return;
         }
+
         var remainingItems = testItems;
         if(finishedItems==null || finishedItems.length==0) {
             logger.info("finishedItems is null or empty");
@@ -58,8 +59,16 @@ function getUnFinishedTestItemsInSession(sessionId, testId, callback) { // or ch
             var lastFinishedItem = finishedItems[finishedItems.length-1];
             logger.info("last finished item's seq is: " + lastFinishedItem.seq);
             remainingItems = _.filter(testItems, function(testItem) {
-                return (testItem.type==2000 &&testItem.item!=2) || testItem.seq > lastFinishedItem.seq;
+                return (testItem.type==2000 && testItem.item!=2) || testItem.seq > lastFinishedItem.seq;
             })
+            if(remainingItems.length>2) {
+                //add pause response is not critical
+                sessionResponse.addPauseResponseToSession(remainingItems[2], sessionId, function (err, result) {
+                    if (result != constants.services.CALLBACK_SUCCESS) {
+                        logger.error("addPauseResponseToSession failed with error: " + err);
+                    }
+                })
+            }
         }
 
         getCompleteTestWithBaseTestItems(remainingItems, function(err, cItems) {

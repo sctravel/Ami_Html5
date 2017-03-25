@@ -3,7 +3,7 @@ var constants = require('./../common/constants');
 var Session = require("../model/Session.js")
 var dbPool = require("../db/createDBConnectionPool");
 
-var createUserSession = function(session, callback) {
+function createUserSession(session, callback) {
     var sqlCreateSession = 'insert into sessions ( sessionId, userId, email, starttime, testId) VALUES (?, ?, ?, ?, ?)';
 
     var params = [session.sessionId, session.userId, session.email, session.startTime, session.testId];
@@ -18,7 +18,7 @@ var createUserSession = function(session, callback) {
     });
 };
 
-var getUnfinishedSession = function(email,callback) {
+function getUnfinishedSession(email,callback) {
     var sqlUnfinishedSession = "select sessionId, testId, email, startTime from sessions where email = ? and endtime is null order by startTime desc";
     dbPool.runQueryWithParams(sqlUnfinishedSession, [email], function (err, results) {
         if (err) {
@@ -37,11 +37,45 @@ var getUnfinishedSession = function(email,callback) {
 
 }
 
+function checkEmailAndPassword(email, pass, callback) {
+    var sqlCheckEmailAndPassword = 'select email from passwords where password = ? and starttime < ? and (expiretime is null or expiretime > ?)';
+    var currentTime = new Date();
+
+    dbPool.runQueryWithParams(sqlCheckEmailAndPassword, [pass, currentTime, currentTime], function(err, result){
+        if(err) {
+            logger.error("checkEmailAndPassword failed for email: " + email);
+            callback(err, null);
+            return;
+        }
+        if(result==null || result.length==0) {
+            logger.error("can't find password for email: " + email);
+            callback(err, null);
+            return;
+        }
+        var emailInDB = result[0].email;
+        if(emailInDB=='' || emailInDB==email) {
+            callback(null, constants.services.CALLBACK_SUCCESS);
+            return;
+        } else {
+            var errorMsg = 'email or passowrd is incorrect for : ' + email;
+            logger.error(errorMsg);
+            callback(errorMsg, constants.services.CALLBACK_FAILED);
+            return;
+        }
+    })
+}
 //user login with email and password
 var manualLogin = function(email, pass, callback) {
     var returnObj = {};
     returnObj.isAuthenticated = false;
-    if(pass == "ami_qa") { //TODO: here we hard code password
+
+    checkEmailAndPassword(email, pass, function(err, result){
+        if(result!=constants.services.CALLBACK_SUCCESS) {
+            logger.error("email-"+email+" logged in failed. The password is incorrect. Please try it again. ");
+            returnObj.errorMessage = "Email or password is incorrect. Please try it again.";
+            callback(err, returnObj);
+            return;
+        }
         getUnfinishedSession(email, function(err, unfinishedSession){
             if(err) {
                 logger.error(err);
@@ -70,13 +104,8 @@ var manualLogin = function(email, pass, callback) {
                 });
             }
         })
+    })
 
-
-    } else {
-        logger.error("email-"+email+" logged in failed. The password is incorrect. Please try it again. ");
-        returnObj.errorMessage = "Email or password is incorrect. Please try it again.";
-        callback(null, returnObj);
-    }
 };
 
 module.exports = {

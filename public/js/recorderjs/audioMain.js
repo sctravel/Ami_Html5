@@ -79,7 +79,7 @@ function evaluateAudio(audioData, lowSignal, minSNR) {
 }
 
 function startAnalysing() {
-    audioData=[];
+    audioData = [];
     currentMaxAudioPoint = 0;
     isAnalysing = true;
     analyser.style.display = "inline";
@@ -90,6 +90,7 @@ function stopAnalysing() {
     evaluateAudio(audioData, signalThreshold, snrThreshold);
     isAnalysing = false;
     audioData=[];
+    audioData = null;
     currentMaxAudioPoint=0;
     analyser.style.display = "none";
 }
@@ -141,7 +142,7 @@ function pauseRecording(){
 }
 
 function resumeRecording(silenceTime, funcAfterSilence){
-    audioDataStartIndex = audioData.length;
+    audioDataStartIndex = audioData==null ? 0 : audioData.length;
     didFuncIfSilenceAfterSpeech = false;
     userStartedTalking = false;
     audioRecorder.record();
@@ -210,7 +211,6 @@ function stopRecording(itemResponse) {
                             }).retry({times:3, timeout:20000}).then(function(json){
                                 postItemResponse(currentItemResponse);
                             });
-
                         });
                         /*
                         $.post(postFlacUrl, update, function (data) {
