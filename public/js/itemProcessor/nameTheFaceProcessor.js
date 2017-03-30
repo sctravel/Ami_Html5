@@ -38,7 +38,7 @@ function processNameTheFace(stream, item) {
             //var selectedInex = names.indexOf(selectedName);
             // Show the selected name/photo ,and play audio "who is this"
             testFace.src = nameFacesImageFolder + item.namefacePicPicked.filename
-            testFaceDiv.style.display = "inline";
+            testFaceDiv.style.display = "block";
             fourFacesDiv.style.display = "none";
 
             playAudioGlobalAndSetOnEndFunction(audioFolder + audioList[1],
@@ -65,12 +65,12 @@ function processNameTheFace(stream, item) {
                         processSayFeelingInNameTheFace(stream, item);
                     };
                     startRecording(item.etimeout, function () {
-                        proceedToNext("END_TIMEOUT");
+                      //  proceedToNext("END_TIMEOUT");
                     });
                     startTimer(0, item.mtimeout,
                         null,
                         function () {
-                            proceedToNext("MAX_TIMEOUT");
+                    //        proceedToNext("MAX_TIMEOUT");
                         }
                     );
                 }

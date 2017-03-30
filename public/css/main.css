@@ -212,6 +212,14 @@ body {
     max-height:50px;
     box-shadow: 0px 0px 10px #000000;
 }
+#testFace{
+    display:block;
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 100px;
+    width:30%;
+    height:30%;
+}
 
 #textShowAll{
     display: none;
@@ -288,6 +296,9 @@ svg {
 #timer_div{
     float:right;
 }
+#af{
+    padding-top: 5%;
+}
 @media only screen and (max-width: 999px) {
 
     #timer_div{
@@ -313,6 +324,10 @@ svg {
     .name-right{
         margin-right:0;
 
+    }
+    #testFace{
+        width:60%;
+        height:60%;
     }
     .bottom {
         position: absolute;

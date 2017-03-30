@@ -57,6 +57,7 @@
 <script src="/jquery-validation/dist/jquery.validate.js"></script>
 <script>
     (function($) {
+
         $.QueryString = (function(a) {
             if (a == "") return {};
             var b = {};
@@ -86,8 +87,9 @@
             },
             username: {
                 required : true,
-                email : true
-            }
+                email: true
+                }
+
         },
         messages: {
             password: {
@@ -106,6 +108,7 @@
     $("#userSignInForm").validate(
         formValidateParams
     );
+
 </script>
 
 
