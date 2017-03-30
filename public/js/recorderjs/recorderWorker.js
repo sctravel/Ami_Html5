@@ -103,6 +103,10 @@ function getBuffers() {
 
 function clear(){
   recLength = 0;
+  recBuffersL = null;
+  recBuffersR = null;
+  console.log("recBuffersL: "+recBuffersL);
+  console.log("recBuffersR: "+recBuffersR);
   recBuffersL = [];
   recBuffersR = [];
 }
