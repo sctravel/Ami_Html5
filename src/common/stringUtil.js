@@ -157,6 +157,11 @@ function shuffle(array) {
     }
 }
 
+function getUTCNow() {
+    var now = new Date();
+    return new Date(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate(),  now.getUTCHours(), now.getUTCMinutes(), now.getUTCSeconds());
+}
+
 module.exports = {
     getDelimitedStringFromArray : getDelimitedStringFromArray,
     getDelimitedRepeatString : getDelimitedRepeatString,
@@ -165,5 +170,6 @@ module.exports = {
     generateRandomNumbers : generateRandomNumbers,
     generateRandomString : generateRandomString,
     generateUniqueId : generateUniqueId,
-    shuffle : shuffle
+    shuffle : shuffle,
+    getUTCNow : getUTCNow
 }

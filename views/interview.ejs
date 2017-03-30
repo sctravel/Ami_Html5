@@ -154,7 +154,7 @@
     var imageFolder = "assets/Images/"
     var nameFacesImageFolder = "assets/Images/2062/"
     var postFlacUrl = "/api/upload/audio/"
-    var takePictureIntervalInMilliSeconds = 120000;
+    var takePictureIntervalInMilliSeconds;//
     var takePictureIntervalId = null;
     var analyser = document.getElementById("analyser");
     var video = document.getElementById("video");
@@ -169,9 +169,9 @@
     var analyserImg = document.getElementById("analyserImg");
     var sessionId = document.getElementById("sessionId").innerHTML;
     var userId = document.getElementById("userId").innerHTML;
-
     var selectedWords = new Set();
     var wordTouchMap = {};
+
     var questionList;
 
     var item,itemStatus;
@@ -185,16 +185,29 @@
     JL("client").info("Interview started");
 
 
+    var toggleHighlight = function(div) {
+        var key = div.id;
+        if(div.classList.contains('highlight')) {
+            div.classList.remove('highlight');
+            wordTouchMap[key] = null;
+            selectedWords.delete(div.id);
+        } else {
+            div.classList.add('highlight');
+            selectedWords.add(div.id);
+            wordTouchMap[key] = new Date();
+        }
+    }
+
     function takePictureAndUpload() {
         JL("client").info("Taking picture for the interviewer with pictureId: " + (++pictureId));
-
+        //randomize the interval of taking picture based on the settings in db
+        var randomTakePictureIntervalInMilliSeconds = Math.random() * 2 * takePictureIntervalInMilliSeconds * 2 / 3 + takePictureIntervalInMilliSeconds/3;
         var picture = {};
         picture.takenItem = item.item;
         picture.takenType = item.type;
         picture.takenTime = (new Date()).toUTCString();
         picture.pngFileName = 'camera'+pictureId+'.png';
         picture.elapsedTime = (new Date() - interviewStartTime)/1000;
-        //TODO: upload picture to S3
         takeSnapshot(function(){
             JL("client").info("Uploaded picture for the interviewer with pictureId: " + pictureId);
             $.post('/api/session/cameraPictureSessionData', {pictureInfo: picture}, function(data) {
@@ -207,7 +220,7 @@
                 }
             });
         })
-
+        takePictureIntervalId = setTimeout(takePictureAndUpload, randomTakePictureIntervalInMilliSeconds);
     }
 
     function postPictureResponseAndMarkEnd() {
@@ -263,7 +276,6 @@
                     takePictureIntervalInMilliSeconds = item.mtimeout*1000;
                     interviewStartTime = new Date();
                     takePictureAndUpload();
-                    takePictureIntervalId = setInterval(takePictureAndUpload, takePictureIntervalInMilliSeconds);
                     processInstruction(stream, item);
                 }
                 break;
@@ -368,32 +380,28 @@
         Webcam.snap( function(data_uri) {
             // snap complete, image data is in 'data_uri'
             var picName = 'camera'+pictureId+'.png';
-            Webcam.upload( data_uri, '/api/upload/picture/'+picName, function(code, text) {
-                if(text=='ok') {
-                    // for Unit testing upload session files
-                     var file = new File([dataURItoBlob(data_uri)], 'amipace/'+sessionId+'/'+picName, {
-                            lastModified: new Date(0), // optional - default = now
-                            type: '' // optional - default = ''
-                        });
-                       
-                    $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
-                                                $.ajax({
-                                                    type : 'PUT',
-                                                    url : dataURL,
-                                                    data : file,
-                                                    processData: false,  // tell jQuery not to convert to form data
-                                                    contentType: file.type,
-                                                    success: function(json) {console.info('Picuture uploading succeeded')},
-                                                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                                                        alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
-                                                        window.location.href = '/interview';
-                                                    }
-                                                });
-                                            })
-                         
-                    callback();
-                }
-            } );
+            var file = new File([dataURItoBlob(data_uri)], 'amipace/'+sessionId+'/'+picName, {
+                    lastModified: new Date(0), // optional - default = now
+                    type: '' // optional - default = ''
+                });
+
+            $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
+                $.ajax({
+                    type : 'PUT',
+                    url : dataURL,
+                    data : file,
+                    processData: false,  // tell jQuery not to convert to form data
+                    contentType: file.type,
+                    success: function(json) {console.info('Picuture uploading succeeded')},
+                    error: function (XMLHttpRequest, textStatus, errorThrown) {
+                        alert('Opps, uploading picture failed! Refreshing the page and try it again. Thank you for your patient.');
+                        window.location.href = '/interview';
+                    }
+                });
+            })
+
+            callback();
+
 
         } );
     }

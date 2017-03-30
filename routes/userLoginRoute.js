@@ -25,7 +25,7 @@ module.exports = function(app) {
                 }
                 if(results.isAuthenticated == true ) {
                     //create a session dir for uploading files
-                    fs.mkdir(constants.paths.UPLOAD_FOLDER+results.session.data.userId+"_"+results.session.data.sessionId+"/", function(e){});
+                    fs.mkdir(constants.paths.UPLOAD_FOLDER+results.session.data.email+"_"+results.session.data.sessionId+"/", function(e){});
                     return done(null, {email:results.session.data.email,
                         userId : results.session.data.userId,
                         sessionId: results.session.data.sessionId,

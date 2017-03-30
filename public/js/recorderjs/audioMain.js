@@ -18,7 +18,7 @@ var checkSilenceIntervalId=null;
 var uploadURL = "/upload/audio/";
 var isRecording = false, isAnalysing = false;
 var didFuncIfSilenceAfterSpeech = false, userStartedTalking =false;
-var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95, speakThreshold=15;
+var snrThreshold=15, signalThreshold=30, noiseLevelPercentile=0.05, signalLevelPercentile=0.95, speakThreshold=25;
 var noiseLevel, signalLevel;
 var currentMaxAudioPoint = 0;
 var audioData = [];
@@ -34,7 +34,7 @@ var audioLevelOptions = {
 
 var audioItemResponseArray = [];
 var audioUploadIndex = -1;
-
+var audioRecorderList = [];
 
 var blobToBase64 = function(blob, cb) {
     var reader = new FileReader();
@@ -156,13 +156,14 @@ function resumeRecording(silenceTime, funcAfterSilence){
 function stopRecording(itemResponse) {
     clearInterval(checkSilenceIntervalId);
     stopAnalysing();
-    var flac_encoder_worker = new Worker('js/recorderjs/flac/EmsWorkerProxy.js');
     console.log("stop recording")
     userStartedTalking = false;
     didFuncIfSilenceAfterSpeech = false;
     if (audioRecorder) {
         audioRecorder.stop();
-        isRecording = false;
+        var flac_encoder_worker = new Worker('js/recorderjs/flac/EmsWorkerProxy.js');
+         isRecording = false;
+
         audioItemResponseArray.push(itemResponse);
         audioRecorder.getData(function(s) {
             // convert wav to flac
@@ -189,10 +190,10 @@ function stopRecording(itemResponse) {
                             lastModified: new Date(0), // optional - default = now
                             type: "overide/mimetype" // optional - default = ''
                         });
-                     //   console.log(" adding audio files -- " + uploadId);
+                        //   console.log(" adding audio files -- " + uploadId);
 
                         $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
-                           var  tryCount = 0;
+                            var  tryCount = 0;
                             $.ajax({
                                 type : 'PUT',
                                 url : dataURL,
@@ -203,24 +204,30 @@ function stopRecording(itemResponse) {
                                 error: function (XMLHttpRequest, textStatus, errorThrown) {
                                     console.log(tryCount);
                                     tryCount ++;
-                                      if(tryCount == 3){
-                                          alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
-                                          window.location.href = '/interview';
-                                      }
+                                    if(tryCount == 3){
+                                        alert('Opps, uploading audio failed! Refreshing the page and try it again. Thank you for your patient.');
+                                        window.location.href = '/interview';
+                                    }
                                 }
                             }).retry({times:3, timeout:20000}).then(function(json){
+                                audioRecorder.clear();
+                                s=null;
+                                e.data.values['dummy.flac'].blob=null;
+                                e.data.values['dummy.flac']=null;
+                                e.data=null;
+                                e=null;
+                                //audioRecorderList[audioUploadIndex]=null;
+                                inData['dummy.wav']=null;
+                                outData['dummy.flac']=null;
+                                inData=null;
+                                outData=null;
+                                base64=null;
+                                file=null;
+                                flac_encoder_worker=null;
                                 postItemResponse(currentItemResponse);
                             });
                         });
-                        /*
-                        $.post(postFlacUrl, update, function (data) {
-                            if (data == "ok") {
-                                console.log("UploadFlac succeeded");
-                                //callback();
-                            } else {
-                                console.error("Upload flac file failed for id: " + uploadId)
-                            }
-                        });*/
+
 
                     });
                 }
@@ -327,9 +334,11 @@ function gotStream(stream) {
     analyserNode = audioContext.createAnalyser();
     analyserNode.fftSize = 2048;
     inputPoint.connect( analyserNode );
-
+    audioRecorder = null;
+    console.log(audioRecorder);
     audioRecorder = new Recorder( inputPoint );
-
+    //audioRecorderList.push(audioRecorderCurr);
+    //audioRecorder = audioRecorderCurr;
     zeroGain = audioContext.createGain();
     zeroGain.gain.value = 0.0;
     inputPoint.connect( zeroGain );

@@ -26,6 +26,7 @@ function processQuickLit(stream, item) {
             if(numWords<0) {
                 JL('client').info("Start tapping all real words in QuickLit at time：" + (new Date()-responseStartTime)/1000);
                 instr.style.display = "none";
+                nextButton.innerHTML = 'Next';
                 var textShowAll =document.getElementById("textShowAll");
                 textShowAll.style.display="inline";
                 for(var i =0; i <wordsBlob.length; i++ ){
@@ -115,17 +116,4 @@ function processQuickLit(stream, item) {
         //startTimer(0, item.mtimeout, null, showWord);
     });
 
-}
-
-var toggleHighlight = function(div) {
-    var key = div.id;
-    if(div.classList.contains('highlight')) {
-        div.classList.remove('highlight');
-        wordTouchMap[key] = null;
-        selectedWords.delete(div.id);
-    } else {
-        div.classList.add('highlight');
-        selectedWords.add(div.id);
-        wordTouchMap[key] = new Date();
-    }
 }

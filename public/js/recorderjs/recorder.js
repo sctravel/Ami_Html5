@@ -21,7 +21,9 @@
       var recording = false, currCallback;
 
       this.node.onaudioprocess = function(e){
-        if (!recording) return;
+        if (!recording) {
+            return;
+        }
         worker.postMessage({
           command: 'record',
           buffer: [

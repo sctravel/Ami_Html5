@@ -51,14 +51,14 @@ module.exports = function(app) {
                 //TODO: write xml and upload to S3
                 console.log("Uploading session xml in /api/session/endSession");
                 var xmlFileName = constants.paths.UPLOAD_FOLDER + req.user.email + "_" + req.user.sessionId + "/session.xml";
-                logger.info("uploading session xml - " + xmlFileName);
-                fs.writeFile(xmlFileName, xmlString, function(err) {
+                //logger.info("uploading session xml - " + xmlFileName);
+                /*fs.writeFile(xmlFileName, xmlString, function(err) {
                     if(err) {
                         logger.error("Write xmlString to file failed. " + err);
                         res.send(constants.services.CALLBACK_FAILED);
                         return
                     }
-
+                */
                 console.log("Uploading session xml in for local server finished, now upload file to s3");
                 
                 //upload files from server side directly
@@ -139,9 +139,10 @@ module.exports = function(app) {
                                     window.location.href = '/interview';
                                 }
                             });
-                });*/
-                    res.send(constants.services.CALLBACK_SUCCESS);
-                })
+                });
+                })*/
+                res.send(constants.services.CALLBACK_SUCCESS);
+
             })
         });
     });

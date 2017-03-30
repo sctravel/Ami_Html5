@@ -46,7 +46,7 @@ function buildSessionXml(session, callback) {
             .insertAfter('longitude',{},'0.000000')
             .insertAfter('altitude',{},'0.000000')
     root.ele('email',{},session.email)
-    root.ele('pindex',{},1)
+    root.ele('pindex',{}, session.userId)
     var responses = root.ele('responses');
     console.log('build XML - start get session states');
     getSessionStates(session.sessionId, function(err, results){
@@ -186,6 +186,7 @@ function buildSessionXml(session, callback) {
 
 /*
  var session={}
+ session.userId = 1
  session.sessionId = '20170120-015740-66604'
  session.email = 'tx3@gmail.com'
  session.startTime = new Date('2017-01-20 01:57:40')
