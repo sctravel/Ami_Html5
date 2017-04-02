@@ -65,12 +65,12 @@ function processNameTheFace(stream, item) {
                         processSayFeelingInNameTheFace(stream, item);
                     };
                     startRecording(item.etimeout, function () {
-                      //  proceedToNext("END_TIMEOUT");
+                        proceedToNext("END_TIMEOUT");
                     });
                     startTimer(0, item.mtimeout,
                         null,
                         function () {
-                    //        proceedToNext("MAX_TIMEOUT");
+                            proceedToNext("MAX_TIMEOUT");
                         }
                     );
                 }
