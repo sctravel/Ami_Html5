@@ -1,0 +1,1 @@
+node /home/ubuntu/Ami_Html5/app.js

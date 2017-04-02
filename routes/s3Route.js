@@ -14,6 +14,10 @@ module.exports = function(app) {
         var AWS = require('aws-sdk');
 
         AWS.config.update({accessKeyId: process.env.AWS_ACCESS_KEY_ID, secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY})
+        console.log('Start getting env ', process.env);
+        console.log('Start getting AWS_ACCESS_KEY_ID: ', process.env.AWS_ACCESS_KEY_ID);
+        console.log('Start getting AWS_SECRET_ACCESS_KEY: ', process.env.AWS_SECRET_ACCESS_KEY);
+
         var s3 = new AWS.S3();
         console.log('Start getting presigned URL: ', fileName);
         const util = require('util')
@@ -21,7 +25,7 @@ module.exports = function(app) {
         // think it should be necessary.
         // AWS.config.update({region: 'us-west-2'})
 
-        const myBucket = 'amipaces'
+        const myBucket = 'amipaces' //switch to new subscription
         //file name from post request
         const myKey = fileName
         const signedUrlExpireSeconds = 60 * 100

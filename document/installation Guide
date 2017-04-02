@@ -31,6 +31,11 @@ add the following lines(xxxxx are your AWS subscription credentials)
 export AWS_ACCESS_KEY_ID=xxxxx
 export AWS_SECRET_ACCESS_KEY=xxxxx
 
+and /etc/environment(for Ubuntu server), you will need to set the following:
+AWS_ACCESS_KEY_ID=AKIAIQBLNPSQ463GG54A
+AWS_SECRET_ACCESS_KEY=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
+
+
 Those credentials will be used in the backend API for s3 file upload, The idea is to construct a "pre-signed" request and encode it as a URL that an end-user's browser can retrieve.
 Additionally, we can limit a pre-signed request by specifying an expiration time.The purpse of keep those credentials in backend instead of frontend it to make the upload
 process secure, prevent any hackers from stealing the AWS credentials. 
@@ -255,11 +260,21 @@ LOAD DATA INFILE '/home/paul/items.csv' INTO TABLE items;
 
 install nodeJS on EC2 host using Apt-get command:
 sudo apt-get install nodejs
+sudo apt install nodejs-legacy
 
 unzip the source code folder, deploy it in the specified directory 
 runing the following command will bring up the application: 
 sudo node /home/ubuntu/Ami_Html5/app.js 
 
-need to configure SuperviseD to make the application as service and keep running in the background
+need to configure SuperviseD to make the application as service and keep running in the background.
+run the following command to install:
+sudo apt install daemontools
+sudo apt-get install supervisor
+
 the instruction for how to install and run supervised d could be found in the following link:
-http://manpages.ubuntu.com/manpages/precise/man8/supervise.8.html
+https://www.digitalocean.com/community/tutorials/how-to-install-and-manage-supervisor-on-ubuntu-and-debian-vps
+
+double check wesite.sh file exists in the folder with the following line(run chmod make sure its executable):
+node /home/ubuntu/Ami_Html5/app.js
+
+
