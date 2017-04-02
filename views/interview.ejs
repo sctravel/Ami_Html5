@@ -388,7 +388,6 @@
                 });
                 
             $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
-                                        alert('start posting snapshot with url:' + dataURL);
                                          console.info('start posting snapshot with url:' + dataURL);
                                         $.ajax({
                                             type : 'PUT',

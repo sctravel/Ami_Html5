@@ -1,7 +1,7 @@
 {
    "siteUrl" : "localhost:3000",
    "dbOptions" : {
-        "host" : "mysql.cohi5vfxnofi.us-west-2.rds.amazonaws.com",//process.env.MYSQL_HOST,
+        "host" : "mysql.cbcwdscsgece.us-west-2.rds.amazonaws.com",//process.env.MYSQL_HOST,mysql.cohi5vfxnofi.us-west-2.rds.amazonaws.com
         "user" : "admin",//process.env.MYSQL_USER,
         "password" : "sctravel",//process.env.MYSQL_PASS,
         "database" : "AMIPACES",//process.env.MYSQL_DB,
