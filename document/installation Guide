@@ -22,6 +22,8 @@ AllTraffic   All      All       0.0.0.0/0
 
 
 2 S3 setup:
+
+install and configure AWS CLI
 In the AWS console, you can find accessKeyId and secretAccessKeyId
 accessKeyId: 'xxx'
 secretAccessKey: 'xxxxx'
@@ -34,6 +36,21 @@ export AWS_SECRET_ACCESS_KEY=xxxxx
 and /etc/environment(for Ubuntu server), you will need to set the following:
 AWS_ACCESS_KEY_ID=AKIAIQBLNPSQ463GG54A
 AWS_SECRET_ACCESS_KEY=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
+
+Cors setup for S3: 
+
+<?xml version="1.0" encoding="UTF-8"?>
+<CORSConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">
+<CORSRule>
+    <AllowedOrigin>*</AllowedOrigin>
+    <AllowedMethod>HEAD</AllowedMethod>
+    <AllowedMethod>GET</AllowedMethod>
+    <AllowedMethod>PUT</AllowedMethod>
+    <AllowedMethod>POST</AllowedMethod>
+    <AllowedMethod>DELETE</AllowedMethod>
+    <AllowedHeader>*</AllowedHeader>
+</CORSRule>
+</CORSConfiguration>
 
 
 Those credentials will be used in the backend API for s3 file upload, The idea is to construct a "pre-signed" request and encode it as a URL that an end-user's browser can retrieve.
@@ -276,5 +293,33 @@ https://www.digitalocean.com/community/tutorials/how-to-install-and-manage-super
 
 double check wesite.sh file exists in the folder with the following line(run chmod make sure its executable):
 node /home/ubuntu/Ami_Html5/app.js
+
+add ami.conf into the following directory  
+/etc/supervisor/conf.d
+
+the content of ami.conf:
+
+[program:ami]
+command=sudo /home/ubuntu/Ami_Html5/website.sh
+directory=/home/ubuntu/Ami_Html5
+autostart=true
+autorestart=true
+stderr_logfile=/var/log/ami.err.log
+stdout_logfile=/var/log/ami.out.log
+
+below is the example for running supervisorctl: 
+
+sudo supervisorctl
+
+ubuntu@ip-172-31-41-109:/etc/supervisor/conf.d$ sudo supervisorctl
+supervisor> reread
+ami: changed
+supervisor> update
+ami: stopped
+ami: updated process group
+supervisor> status
+ami                              RUNNING    pid 2029, uptime 0:00:05
+
+
 
 

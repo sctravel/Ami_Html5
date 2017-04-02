@@ -376,35 +376,41 @@
             return blob;
     }   
 
+
     function takeSnapshot(callback) {
         Webcam.snap( function(data_uri) {
             // snap complete, image data is in 'data_uri'
             var picName = 'camera'+pictureId+'.png';
-            var file = new File([dataURItoBlob(data_uri)], 'amipace/'+sessionId+'/'+picName, {
+            // for Unit testing upload session files
+                var file = new File([dataURItoBlob(data_uri)], 'amipace/'+sessionId+'/'+picName, {
                     lastModified: new Date(0), // optional - default = now
                     type: '' // optional - default = ''
                 });
-
+                
             $.get( "/getPresignedURL", { fileName: file.name, type: file.type}, function( dataURL ) {
-                $.ajax({
-                    type : 'PUT',
-                    url : dataURL,
-                    data : file,
-                    processData: false,  // tell jQuery not to convert to form data
-                    contentType: file.type,
-                    success: function(json) {console.info('Picuture uploading succeeded')},
-                    error: function (XMLHttpRequest, textStatus, errorThrown) {
-                        alert('Opps, uploading picture failed! Refreshing the page and try it again. Thank you for your patient.');
-                        window.location.href = '/interview';
-                    }
-                });
-            })
-
-            callback();
-
-
+                                        alert('start posting snapshot with url:' + dataURL);
+                                         console.info('start posting snapshot with url:' + dataURL);
+                                        $.ajax({
+                                            type : 'PUT',
+                                            url : dataURL,
+                                            data : file,
+                                            processData: false,  // tell jQuery not to convert to form data
+                                            contentType: file.type,
+                                            success: function(json) {
+                                                console.info('Picuture uploading succeeded')},
+                                            error: function (XMLHttpRequest, textStatus, errorThrown) {
+                                                alert('Opps, uploading snapshot failed! Refreshing the page and try it again. Thank you for your patient.');
+                                                window.location.href = '/interview';
+                                            }
+                                        });
+                                    })
+                    
+                 callback();
         } );
     }
+
+
+
 
     $.get("/api/remainingTest", function(data) {
         questionList = data;
